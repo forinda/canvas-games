@@ -1,0 +1,48 @@
+import type { EnemyDef, EnemyType } from '../types';
+
+export const ENEMY_DEFS: Record<EnemyType, EnemyDef> = {
+  goblin: {
+    type: 'goblin',
+    name: 'Goblin',
+    baseHp: 30,
+    baseSpeed: 2.0,
+    reward: 10,
+    color: '#6abf45',
+    icon: '👺',
+    immuneToSlow: false,
+    size: 0.28,
+  },
+  orc: {
+    type: 'orc',
+    name: 'Orc',
+    baseHp: 80,
+    baseSpeed: 1.0,
+    reward: 25,
+    color: '#4e8c40',
+    icon: '👹',
+    immuneToSlow: false,
+    size: 0.36,
+  },
+  ghost: {
+    type: 'ghost',
+    name: 'Ghost',
+    baseHp: 50,
+    baseSpeed: 2.5,
+    reward: 20,
+    color: 'rgba(200,200,255,0.85)',
+    icon: '👻',
+    immuneToSlow: true,
+    size: 0.30,
+  },
+  boss: {
+    type: 'boss',
+    name: 'BOSS',
+    baseHp: 500,
+    baseSpeed: 0.5,
+    reward: 100,
+    color: '#c0392b',
+    icon: '💀',
+    immuneToSlow: false,
+    size: 0.44,
+  },
+};
