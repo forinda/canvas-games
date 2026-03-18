@@ -415,7 +415,7 @@ export class PlatformMenu {
     // Card clicks
     const { cards } = this.getGridLayout();
     for (const card of cards) {
-      if (x >= card.x && x <= card.x + card.w && y >= card.y && y <= card.y + card.h && card.y > CONTENT_TOP) {
+      if (x >= card.x && x <= card.x + card.w && y >= card.y && y <= card.y + card.h && card.y >= CONTENT_TOP - 1) {
         this.onSelect(card.game);
         return;
       }
@@ -442,7 +442,7 @@ export class PlatformMenu {
     const { cards } = this.getGridLayout();
     for (let i = 0; i < cards.length; i++) {
       const card = cards[i];
-      if (x >= card.x && x <= card.x + card.w && y >= card.y && y <= card.y + card.h && card.y > CONTENT_TOP) {
+      if (x >= card.x && x <= card.x + card.w && y >= card.y && y <= card.y + card.h && card.y >= CONTENT_TOP - 1) {
         this.hoveredIndex = i;
         this.canvas.style.cursor = 'pointer';
         return;
