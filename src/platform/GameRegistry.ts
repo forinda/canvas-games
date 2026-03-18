@@ -43,6 +43,12 @@ import { SimonSaysGame } from '@games/simon-says';
 import { ReactionTimerGame } from '@games/reaction-timer';
 import { BrickBuilderGame } from '@games/brick-builder';
 import { BalloonPopGame } from '@games/balloon-pop';
+import { ColorSwitchGame } from '@games/color-switch';
+import { TypingSpeedGame } from '@games/typing-speed';
+import { ConnectFourGame } from '@games/connect-four';
+import { FroggerGame } from '@games/frogger';
+import { GolfGame } from '@games/golf';
+import { PixelArtGame } from '@games/pixel-art';
 
 export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
   arcade: [
@@ -59,6 +65,10 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
     DoodleJumpGame,
     RhythmTapGame,
     ReactionTimerGame,
+    BalloonPopGame,
+    ColorSwitchGame,
+    TypingSpeedGame,
+    FroggerGame,
   ],
   action: [
     TowerDefenseGame,
@@ -69,6 +79,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
     FruitNinjaGame,
     LavaFloorGame,
     BasketballGame,
+    GolfGame,
   ],
   puzzle: [
     PhysicsPuzzleGame,
@@ -91,12 +102,14 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
     CardBattleGame,
     AntColonyGame,
     TicTacToeGame,
+    ConnectFourGame,
   ],
   chill: [
     FishingGame,
     IdleClickerGame,
     ParticleSandGame,
     BrickBuilderGame,
+    PixelArtGame,
   ],
 };
 
