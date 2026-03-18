@@ -1,6 +1,7 @@
 # Canvas Game Arcade — Implementation Plan
 
 ## Project Overview
+
 A multi-game arcade platform built with TypeScript and HTML5 Canvas (Vite).
 Each game is fully isolated, follows SOLID principles, and plugs into the platform via a shared adapter interface.
 
@@ -9,79 +10,85 @@ Each game is fully isolated, follows SOLID principles, and plugs into the platfo
 ## 🎓 Tutorial Completion Tracker
 
 ### Progress Summary
+
 - **Games Implemented:** 50/50 ✅
 - **Tutorial READMEs:** 50/50 ✅
-- **Tutorial Steps Written:** 3/270 ⏳ (1.1%)
+- **Tutorial Steps Written:** 7/270 ⏳ (2.6%)
 
 ### Tier 1: Foundations (10 games)
-| Game | Steps | Status | Last Updated |
-|------|-------|--------|--------------|
-| 01. Reaction Timer | 3 | ✅ Complete | 2026-03-19 |
-| 02. Lights Out | 4 | ⏳ Pending | - |
-| 03. Memory Match | 5 | ⏳ Pending | - |
-| 04. Tic-Tac-Toe | 5 | ⏳ Pending | - |
-| 05. Hangman | 4 | ⏳ Pending | - |
-| 06. 2048 | 5 | ⏳ Pending | - |
-| 07. Simon Says | 4 | ⏳ Pending | - |
-| 08. Whack-a-Mole | 4 | ⏳ Pending | - |
-| 09. Balloon Pop | 4 | ⏳ Pending | - |
-| 10. Snake | 5 | ⏳ Pending | - |
+
+| Game               | Steps | Status      | Last Updated |
+| ------------------ | ----- | ----------- | ------------ |
+| 01. Reaction Timer | 3     | ✅ Complete | 2026-03-19   |
+| 02. Lights Out     | 4     | ✅ Complete | 2026-03-19   |
+| 03. Memory Match   | 5     | ⏳ Pending  | -            |
+| 04. Tic-Tac-Toe    | 5     | ⏳ Pending  | -            |
+| 05. Hangman        | 4     | ⏳ Pending  | -            |
+| 06. 2048           | 5     | ⏳ Pending  | -            |
+| 07. Simon Says     | 4     | ⏳ Pending  | -            |
+| 08. Whack-a-Mole   | 4     | ⏳ Pending  | -            |
+| 09. Balloon Pop    | 4     | ⏳ Pending  | -            |
+| 10. Snake          | 5     | ⏳ Pending  | -            |
 
 ### Tier 2: Physics & Motion (10 games)
-| Game | Steps | Status | Last Updated |
-|------|-------|--------|--------------|
-| 11. Pong | 5 | ⏳ Pending | - |
-| 12. Breakout | 6 | ⏳ Pending | - |
-| 13. Flappy Bird | 5 | ⏳ Pending | - |
-| 14. Helicopter | 4 | ⏳ Pending | - |
-| 15. Doodle Jump | 5 | ⏳ Pending | - |
-| 16. Basketball | 5 | ⏳ Pending | - |
-| 17. Golf | 6 | ⏳ Pending | - |
-| 18. Lava Floor | 5 | ⏳ Pending | - |
-| 19. Color Switch | 5 | ⏳ Pending | - |
-| 20. Frogger | 6 | ⏳ Pending | - |
+
+| Game             | Steps | Status     | Last Updated |
+| ---------------- | ----- | ---------- | ------------ |
+| 11. Pong         | 5     | ⏳ Pending | -            |
+| 12. Breakout     | 6     | ⏳ Pending | -            |
+| 13. Flappy Bird  | 5     | ⏳ Pending | -            |
+| 14. Helicopter   | 4     | ⏳ Pending | -            |
+| 15. Doodle Jump  | 5     | ⏳ Pending | -            |
+| 16. Basketball   | 5     | ⏳ Pending | -            |
+| 17. Golf         | 6     | ⏳ Pending | -            |
+| 18. Lava Floor   | 5     | ⏳ Pending | -            |
+| 19. Color Switch | 5     | ⏳ Pending | -            |
+| 20. Frogger      | 6     | ⏳ Pending | -            |
 
 ### Tier 3: Classic Arcade (10 games)
-| Game | Steps | Status | Last Updated |
-|------|-------|--------|--------------|
-| 21. Space Invaders | 6 | ⏳ Pending | - |
-| 22. Asteroids | 6 | ⏳ Pending | - |
-| 23. Pac-Man | 7 | ⏳ Pending | - |
-| 24. Tetris | 7 | ⏳ Pending | - |
-| 25. Fruit Ninja | 5 | ⏳ Pending | - |
-| 26. Typing Speed | 5 | ⏳ Pending | - |
-| 27. Rhythm Tap | 5 | ⏳ Pending | - |
-| 28. Connect Four | 5 | ⏳ Pending | - |
-| 29. Sokoban | 5 | ⏳ Pending | - |
-| 30. Minesweeper | 5 | ⏳ Pending | - |
+
+| Game               | Steps | Status     | Last Updated |
+| ------------------ | ----- | ---------- | ------------ |
+| 21. Space Invaders | 6     | ⏳ Pending | -            |
+| 22. Asteroids      | 6     | ⏳ Pending | -            |
+| 23. Pac-Man        | 7     | ⏳ Pending | -            |
+| 24. Tetris         | 7     | ⏳ Pending | -            |
+| 25. Fruit Ninja    | 5     | ⏳ Pending | -            |
+| 26. Typing Speed   | 5     | ⏳ Pending | -            |
+| 27. Rhythm Tap     | 5     | ⏳ Pending | -            |
+| 28. Connect Four   | 5     | ⏳ Pending | -            |
+| 29. Sokoban        | 5     | ⏳ Pending | -            |
+| 30. Minesweeper    | 5     | ⏳ Pending | -            |
 
 ### Tier 4: Puzzles & Strategy (10 games)
-| Game | Steps | Status | Last Updated |
-|------|-------|--------|--------------|
-| 31. Sudoku | 6 | ⏳ Pending | - |
-| 32. Word Search | 5 | ⏳ Pending | - |
-| 33. Pipe Connect | 5 | ⏳ Pending | - |
-| 34. Maze Runner | 5 | ⏳ Pending | - |
-| 35. Match-3 | 6 | ⏳ Pending | - |
-| 36. Gravity Ball | 5 | ⏳ Pending | - |
-| 37. Physics Puzzle | 6 | ⏳ Pending | - |
-| 38. Card Battle | 6 | ⏳ Pending | - |
-| 39. Pixel Art | 4 | ⏳ Pending | - |
-| 40. Particle Sand | 5 | ⏳ Pending | - |
+
+| Game               | Steps | Status     | Last Updated |
+| ------------------ | ----- | ---------- | ------------ |
+| 31. Sudoku         | 6     | ⏳ Pending | -            |
+| 32. Word Search    | 5     | ⏳ Pending | -            |
+| 33. Pipe Connect   | 5     | ⏳ Pending | -            |
+| 34. Maze Runner    | 5     | ⏳ Pending | -            |
+| 35. Match-3        | 6     | ⏳ Pending | -            |
+| 36. Gravity Ball   | 5     | ⏳ Pending | -            |
+| 37. Physics Puzzle | 6     | ⏳ Pending | -            |
+| 38. Card Battle    | 6     | ⏳ Pending | -            |
+| 39. Pixel Art      | 4     | ⏳ Pending | -            |
+| 40. Particle Sand  | 5     | ⏳ Pending | -            |
 
 ### Tier 5: Complex Games (10 games)
-| Game | Steps | Status | Last Updated |
-|------|-------|--------|--------------|
-| 41. Platformer | 7 | ⏳ Pending | - |
-| 42. Top-Down Shooter | 6 | ⏳ Pending | - |
-| 43. Racing | 7 | ⏳ Pending | - |
-| 44. Zombie Survival | 7 | ⏳ Pending | - |
-| 45. City Builder | 6 | ⏳ Pending | - |
-| 46. Ant Colony | 6 | ⏳ Pending | - |
-| 47. Tower Defense | 8 | ⏳ Pending | - |
-| 48. Fishing | 5 | ⏳ Pending | - |
-| 49. Idle Clicker | 5 | ⏳ Pending | - |
-| 50. Brick Builder | 4 | ⏳ Pending | - |
+
+| Game                 | Steps | Status     | Last Updated |
+| -------------------- | ----- | ---------- | ------------ |
+| 41. Platformer       | 7     | ⏳ Pending | -            |
+| 42. Top-Down Shooter | 6     | ⏳ Pending | -            |
+| 43. Racing           | 7     | ⏳ Pending | -            |
+| 44. Zombie Survival  | 7     | ⏳ Pending | -            |
+| 45. City Builder     | 6     | ⏳ Pending | -            |
+| 46. Ant Colony       | 6     | ⏳ Pending | -            |
+| 47. Tower Defense    | 8     | ⏳ Pending | -            |
+| 48. Fishing          | 5     | ⏳ Pending | -            |
+| 49. Idle Clicker     | 5     | ⏳ Pending | -            |
+| 50. Brick Builder    | 4     | ⏳ Pending | -            |
 
 ---
 
@@ -110,16 +117,18 @@ src/
 
 ### SOLID Principles Applied
 
-| Principle | How Applied |
-|-----------|-------------|
-| **S** — Single Responsibility | Each system/renderer does exactly one thing |
-| **O** — Open/Closed | New mechanics = new system files, never modify existing ones |
-| **L** — Liskov Substitution | Every game implements `GameInstance` — platform is game-agnostic |
-| **I** — Interface Segregation | `Updatable`, `Renderable`, `InputHandler` — systems only implement what they need |
-| **D** — Dependency Inversion | Systems depend on state interfaces, not concrete engine; adapters bridge to platform |
+| Principle                     | How Applied                                                                          |
+| ----------------------------- | ------------------------------------------------------------------------------------ |
+| **S** — Single Responsibility | Each system/renderer does exactly one thing                                          |
+| **O** — Open/Closed           | New mechanics = new system files, never modify existing ones                         |
+| **L** — Liskov Substitution   | Every game implements `GameInstance` — platform is game-agnostic                     |
+| **I** — Interface Segregation | `Updatable`, `Renderable`, `InputHandler` — systems only implement what they need    |
+| **D** — Dependency Inversion  | Systems depend on state interfaces, not concrete engine; adapters bridge to platform |
 
 ### Adapter Pattern
+
 Each game has a `PlatformAdapter.ts` that:
+
 - Implements `GameInstance` (the platform contract)
 - Owns the game engine, wires systems, manages lifecycle
 - Translates `onExit()` callback into the game's internal menu flow
@@ -130,22 +139,25 @@ Each game has a `PlatformAdapter.ts` that:
 ## Data Models
 
 ### Tower Types
-| Tower   | Cost | Damage | Range | Fire Rate | Special          |
-|---------|------|--------|-------|-----------|------------------|
-| Archer  | 50   | 10     | 150   | Fast      | Basic            |
-| Cannon  | 100  | 30     | 120   | Slow      | Splash (radius)  |
-| Frost   | 75   | 5      | 130   | Medium    | Slows enemies    |
-| Sniper  | 150  | 50     | 250   | Very Slow | Long range       |
+
+| Tower  | Cost | Damage | Range | Fire Rate | Special         |
+| ------ | ---- | ------ | ----- | --------- | --------------- |
+| Archer | 50   | 10     | 150   | Fast      | Basic           |
+| Cannon | 100  | 30     | 120   | Slow      | Splash (radius) |
+| Frost  | 75   | 5      | 130   | Medium    | Slows enemies   |
+| Sniper | 150  | 50     | 250   | Very Slow | Long range      |
 
 ### Enemy Types
-| Enemy  | HP  | Speed       | Reward | Special                    |
-|--------|-----|-------------|--------|----------------------------|
-| Goblin | 30  | Fast (2.0)  | 10     | Basic                      |
-| Orc    | 80  | Medium(1.0) | 25     | Tanky                      |
-| Ghost  | 50  | VFast (2.5) | 20     | Phases (ignores slow)      |
-| Boss   | 500 | Slow (0.5)  | 100    | End-of-wave boss           |
+
+| Enemy  | HP  | Speed       | Reward | Special               |
+| ------ | --- | ----------- | ------ | --------------------- |
+| Goblin | 30  | Fast (2.0)  | 10     | Basic                 |
+| Orc    | 80  | Medium(1.0) | 25     | Tanky                 |
+| Ghost  | 50  | VFast (2.5) | 20     | Phases (ignores slow) |
+| Boss   | 500 | Slow (0.5)  | 100    | End-of-wave boss      |
 
 ### Game State
+
 ```typescript
 {
   screen: 'menu' | 'modeSelect' | 'playing' | 'paused' | 'gameover' | 'win',
@@ -167,6 +179,7 @@ Each game has a `PlatformAdapter.ts` that:
 ---
 
 ## Grid System
+
 - **Size:** 16 columns × 10 rows
 - **Cell size:** dynamic (canvas width / 16)
 - **Cell types:** `empty` | `path` | `tower` | `start` | `end`
@@ -174,6 +187,7 @@ Each game has a `PlatformAdapter.ts` that:
 - Towers can only be placed on `empty` cells
 
 ### Path Layout (16×10)
+
 ```
 . . . . . . . . . . . . . . . .
 S > > > > > D . . . D < < < < .
@@ -182,6 +196,7 @@ S > > > > > D . . . D < < < < .
 . . . . . . D > > > U . . . . .
 . . . . . . . . . . . . . . . E
 ```
+
 (S=Start, E=End, D=Down, U=Up, >=Right, <=Left)
 
 ---
@@ -189,6 +204,7 @@ S > > > > > D . . . D < < < < .
 ## Core Systems
 
 ### 1. GridSystem
+
 - Initialize 16×10 grid with `empty` cells
 - Mark path cells from waypoint list
 - `getCellAt(x, y)` → convert pixel to grid coords
@@ -196,18 +212,21 @@ S > > > > > D . . . D < < < < .
 - `placeTower(col, row, type)` → mark cell as `tower`
 
 ### 2. PathSystem
+
 - Waypoints array: list of `{col, row}` grid positions
 - Enemies store `waypointIndex` and `progress` (0-1 between waypoints)
 - `getPositionOnPath(enemy)` → pixel {x, y}
 - `advanceEnemy(enemy, dt)` → move along path
 
 ### 3. EnemySystem
+
 - Spawn from path start, follow waypoints
 - Each enemy: `{id, type, hp, maxHp, speed, slowFactor, waypointIndex, progress, reward}`
 - On reaching end: deduct life, remove enemy
 - On HP ≤ 0: award gold, add score, remove enemy
 
 ### 4. TowerSystem
+
 - `PlacedTower`: `{id, type, col, row, level, lastFiredAt, target}`
 - Max level: 3 (upgrade costs multiply by 1.5x)
 - Sell: refund 60% of total invested gold
@@ -215,12 +234,14 @@ S > > > > > D . . . D < < < < .
 - Target priority: furthest along path (highest waypointIndex + progress)
 
 ### 5. CombatSystem
+
 - Timer-based: each tower fires when `now - lastFiredAt >= fireInterval`
 - On fire: create `Projectile {from, to, speed, damage, type}`
 - Projectile reaches target: apply damage (+ splash for Cannon, + slow for Frost)
 - Splash: damage all enemies within splash radius
 
 ### 6. WaveSystem
+
 - Wave config: `{waveNumber, groups: [{enemyType, count, interval}]}`
 - Classic: 10 waves with boss on wave 5 & 10
 - Endless: waves scale infinitely (HP and count multiply by 1.1 per wave)
@@ -228,11 +249,13 @@ S > > > > > D . . . D < < < < .
 - Between waves: 5-second countdown before next wave
 
 ### 7. EconomySystem
+
 - Starting gold: Classic=200, Endless=150, Challenge=100
 - Gold earned: enemy.reward (+ 20% bonus in Classic on wave complete)
 - Score: enemy killed = enemy.maxHp (boss = 500 bonus)
 
 ### 8. InputSystem
+
 - Canvas click → determine action:
   - If menu/gameover screen: button hit test
   - If `selectedTowerType` set + empty cell clicked: place tower
@@ -245,17 +268,20 @@ S > > > > > D . . . D < < < < .
 ## Screens / UI
 
 ### Menu Screen
+
 - Title: "TOWER DEFENSE"
 - Buttons: [Play Classic] [Endless Mode] [Challenge Mode]
 - Animated background (scrolling gradient or idle enemies walking)
 
 ### HUD (during gameplay)
+
 - Top bar: Lives ❤️ | Gold 💰 | Score ⭐ | Wave 🌊
 - Bottom panel: Tower selection cards (Archer | Cannon | Frost | Sniper)
 - Each card shows: icon, name, cost
 - Greyed out if insufficient gold
 
 ### Upgrade Panel (slide-in on tower click)
+
 - Tower name + current level
 - Stats: Damage / Range / Fire Rate
 - [Upgrade - cost] button (disabled at max level)
@@ -263,6 +289,7 @@ S > > > > > D . . . D < < < < .
 - [Close] button
 
 ### Game Over Screen
+
 - "GAME OVER" or "YOU WIN!" (Classic)
 - Final score, wave reached
 - [Play Again] [Main Menu]
@@ -271,15 +298,16 @@ S > > > > > D . . . D < < < < .
 
 ## Game Modes
 
-| Mode      | Waves | Lives | Start Gold | Special                         |
-|-----------|-------|-------|------------|----------------------------------|
-| Classic   | 10    | 20    | 200        | Win screen after wave 10         |
-| Endless   | ∞     | 15    | 150        | No win, high score tracking      |
-| Challenge | 10    | 10    | 100        | Speed bonus gold, no pause       |
+| Mode      | Waves | Lives | Start Gold | Special                     |
+| --------- | ----- | ----- | ---------- | --------------------------- |
+| Classic   | 10    | 20    | 200        | Win screen after wave 10    |
+| Endless   | ∞     | 15    | 150        | No win, high score tracking |
+| Challenge | 10    | 10    | 100        | Speed bonus gold, no pause  |
 
 ---
 
 ## Rendering Pipeline (per frame)
+
 1. Clear canvas
 2. Render grid (path tiles highlighted)
 3. Render towers (with range ring if selected)
@@ -294,6 +322,7 @@ S > > > > > D . . . D < < < < .
 ## Implementation Checklist
 
 ### Phase 1 – Foundation
+
 - [x] Project structure exists (Vite + TypeScript)
 - [x] Refactor canvas-setup.ts (resize support)
 - [x] Create types/index.ts
@@ -301,6 +330,7 @@ S > > > > > D . . . D < < < < .
 - [x] Create data/towers.ts, enemies.ts, waves.ts
 
 ### Phase 2 – Core Systems
+
 - [x] GridSystem.ts
 - [x] PathSystem.ts
 - [x] EnemySystem.ts
@@ -311,6 +341,7 @@ S > > > > > D . . . D < < < < .
 - [x] InputSystem.ts
 
 ### Phase 3 – Renderers
+
 - [x] GridRenderer.ts
 - [x] EnemyRenderer.ts
 - [x] TowerRenderer.ts
@@ -321,17 +352,20 @@ S > > > > > D . . . D < < < < .
 - [x] ParticleRenderer.ts
 
 ### Phase 4 – Game Loop
+
 - [x] Refactor game-engine.ts (full game loop)
 - [x] Wire all systems into game loop
 - [x] Screen transitions
 
 ### Phase 5 – Polish
+
 - [x] Responsive canvas resize
 - [x] Particle effects on enemy death
 - [x] Win/loss animations
 - [ ] Sound effects (optional future enhancement)
 
 ### Phase 6 – Balance & Polish Pass
+
 - [x] Sniper tower rebalanced (cost 150→120, damage 50→55, fire rate 2500→2200ms)
 - [x] Frost tower buffed (cost 75→70, damage 5→12, range 130→140, fire rate 1000→900ms)
 - [x] Challenge mode gold 100→150
@@ -351,6 +385,7 @@ S > > > > > D . . . D < < < < .
 ---
 
 ### Phase 7 – Multi-Game Platform
+
 - [x] Shared `GameInterface` (GameDefinition + GameInstance)
 - [x] Platform menu (GameLauncher + PlatformMenu with animated card selector)
 - [x] GameRegistry (central game registration)
@@ -371,6 +406,7 @@ S > > > > > D . . . D < < < < .
 ## Per-Game SOLID Folder Structures
 
 ### Tower Defense (already SOLID)
+
 ```
 games/tower-defense/
 ├── index.ts                   # GameDefinition export
@@ -402,6 +438,7 @@ games/tower-defense/
 ```
 
 ### Snake
+
 ```
 games/snake/
 ├── index.ts                   # GameDefinition export
@@ -421,6 +458,7 @@ games/snake/
 ```
 
 ### Platformer
+
 ```
 games/platformer/
 ├── index.ts                   # GameDefinition export
@@ -445,6 +483,7 @@ games/platformer/
 ```
 
 ### Physics Puzzle
+
 ```
 games/physics-puzzle/
 ├── index.ts                   # GameDefinition export
@@ -467,6 +506,7 @@ games/physics-puzzle/
 ```
 
 ### City Builder
+
 ```
 games/city-builder/
 ├── index.ts                   # GameDefinition export
@@ -488,42 +528,44 @@ games/city-builder/
 ```
 
 ### Game Interface Contract
+
 ```typescript
 // shared/GameInterface.ts
 interface GameInstance {
-  start(): void;
-  destroy(): void;  // Must remove ALL event listeners
+	start(): void;
+	destroy(): void; // Must remove ALL event listeners
 }
 
 interface GameDefinition {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-  color: string;
-  create(canvas: HTMLCanvasElement, onExit: () => void): GameInstance;
+	id: string;
+	name: string;
+	description: string;
+	icon: string;
+	color: string;
+	create(canvas: HTMLCanvasElement, onExit: () => void): GameInstance;
 }
 
 // shared/Updatable.ts
 interface Updatable {
-  update(state: unknown, dt: number): void;
+	update(state: unknown, dt: number): void;
 }
 
 // shared/Renderable.ts
 interface Renderable {
-  render(ctx: CanvasRenderingContext2D, state: unknown): void;
+	render(ctx: CanvasRenderingContext2D, state: unknown): void;
 }
 
 // shared/InputHandler.ts
 interface InputHandler {
-  attach(): void;
-  detach(): void;
+	attach(): void;
+	detach(): void;
 }
 ```
 
 ---
 
 ### Phase 8 – Games 6-20 (Batch 1-3)
+
 - [x] Breakout, Asteroids, Space Invaders, Flappy Bird, Tetris
 - [x] Minesweeper, Match-3, Card Battle, Top-Down Shooter, Racing
 - [x] Zombie Survival, Sokoban, 2048, Maze Runner, Fishing
@@ -532,11 +574,13 @@ interface InputHandler {
 - [x] Record<GameCategory, GameDefinition[]> registry
 
 ### Phase 9 – Games 21-30 (Batch 4-5)
+
 - [x] Pong, Pac-Man, Whack-a-Mole, Fruit Ninja, Helicopter
 - [x] Sudoku, Word Search, Pipe Connect, Ant Colony, Idle Clicker
 - [x] Individual commits per game for clean history
 
 ### Phase 10 – Games 31-40 (Batch 6-7)
+
 - [ ] Memory Match — flip cards to find matching pairs (puzzle)
 - [ ] Tic-Tac-Toe — 3x3 grid vs minimax AI (strategy)
 - [ ] Doodle Jump — endless vertical platform jumping (arcade)
@@ -552,60 +596,60 @@ interface InputHandler {
 
 ## Full Game Roster (40 games)
 
-| # | Game | Category | Key Mechanic |
-|---|------|----------|-------------|
-| 1 | Tower Defense | action | Place towers, wave survival |
-| 2 | Snake | arcade | Grow longer, avoid self |
-| 3 | Platformer | action | Jump, coins, stomp enemies |
-| 4 | Physics Puzzle | puzzle | Place pieces, simulate physics |
-| 5 | City Builder | strategy | Manage resources, grow city |
-| 6 | Breakout | arcade | Paddle + ball, break bricks |
-| 7 | Asteroids | arcade | Rotate, thrust, shoot rocks |
-| 8 | Space Invaders | arcade | Shoot descending aliens |
-| 9 | Flappy Bird | arcade | Tap to fly through pipes |
-| 10 | Tetris | arcade | Stack blocks, clear lines |
-| 11 | Minesweeper | puzzle | Reveal cells, flag mines |
-| 12 | Match-3 | puzzle | Swap gems, cascade combos |
-| 13 | Card Battle | strategy | Draw cards, defeat enemies |
-| 14 | Top-Down Shooter | action | WASD + mouse aim, wave survival |
-| 15 | Racing | action | Top-down track, AI opponents |
-| 16 | Zombie Survival | action | Day/night, barricades, ammo |
-| 17 | Sokoban | puzzle | Push boxes onto targets |
-| 18 | 2048 | puzzle | Slide + merge tiles |
-| 19 | Maze Runner | puzzle | Fog of war, timed maze |
-| 20 | Fishing | chill | Cast, hook timing, reel tension |
-| 21 | Pong | arcade | Paddle tennis vs AI/2P |
-| 22 | Pac-Man | arcade | Eat dots, avoid/eat ghosts |
-| 23 | Whack-a-Mole | arcade | Timed reflex clicking |
-| 24 | Sudoku | puzzle | 9x9 number placement |
-| 25 | Word Search | puzzle | Find words in letter grid |
-| 26 | Pipe Connect | puzzle | Rotate pipes, connect flow |
-| 27 | Ant Colony | strategy | Emergent ant simulation |
-| 28 | Idle Clicker | chill | Click + buy upgrades |
-| 29 | Fruit Ninja | action | Slice fruit, avoid bombs |
-| 30 | Helicopter | arcade | One-button cave scroller |
-| 31 | Memory Match | puzzle | Flip cards, find pairs |
-| 32 | Tic-Tac-Toe | strategy | vs minimax AI |
-| 33 | Doodle Jump | arcade | Endless vertical jumping |
-| 34 | Gravity Ball | puzzle | Toggle gravity direction |
-| 35 | Rhythm Tap | arcade | Tap circles in time |
-| 36 | Lights Out | puzzle | Toggle adjacent lights |
-| 37 | Lava Floor | action | Sinking platforms survival |
-| 38 | Hangman | puzzle | Guess word by letters |
-| 39 | Particle Sand | chill | Sand/water/fire sandbox |
-| 40 | Basketball | action | Physics arc shooting |
+| #   | Game             | Category | Key Mechanic                    |
+| --- | ---------------- | -------- | ------------------------------- |
+| 1   | Tower Defense    | action   | Place towers, wave survival     |
+| 2   | Snake            | arcade   | Grow longer, avoid self         |
+| 3   | Platformer       | action   | Jump, coins, stomp enemies      |
+| 4   | Physics Puzzle   | puzzle   | Place pieces, simulate physics  |
+| 5   | City Builder     | strategy | Manage resources, grow city     |
+| 6   | Breakout         | arcade   | Paddle + ball, break bricks     |
+| 7   | Asteroids        | arcade   | Rotate, thrust, shoot rocks     |
+| 8   | Space Invaders   | arcade   | Shoot descending aliens         |
+| 9   | Flappy Bird      | arcade   | Tap to fly through pipes        |
+| 10  | Tetris           | arcade   | Stack blocks, clear lines       |
+| 11  | Minesweeper      | puzzle   | Reveal cells, flag mines        |
+| 12  | Match-3          | puzzle   | Swap gems, cascade combos       |
+| 13  | Card Battle      | strategy | Draw cards, defeat enemies      |
+| 14  | Top-Down Shooter | action   | WASD + mouse aim, wave survival |
+| 15  | Racing           | action   | Top-down track, AI opponents    |
+| 16  | Zombie Survival  | action   | Day/night, barricades, ammo     |
+| 17  | Sokoban          | puzzle   | Push boxes onto targets         |
+| 18  | 2048             | puzzle   | Slide + merge tiles             |
+| 19  | Maze Runner      | puzzle   | Fog of war, timed maze          |
+| 20  | Fishing          | chill    | Cast, hook timing, reel tension |
+| 21  | Pong             | arcade   | Paddle tennis vs AI/2P          |
+| 22  | Pac-Man          | arcade   | Eat dots, avoid/eat ghosts      |
+| 23  | Whack-a-Mole     | arcade   | Timed reflex clicking           |
+| 24  | Sudoku           | puzzle   | 9x9 number placement            |
+| 25  | Word Search      | puzzle   | Find words in letter grid       |
+| 26  | Pipe Connect     | puzzle   | Rotate pipes, connect flow      |
+| 27  | Ant Colony       | strategy | Emergent ant simulation         |
+| 28  | Idle Clicker     | chill    | Click + buy upgrades            |
+| 29  | Fruit Ninja      | action   | Slice fruit, avoid bombs        |
+| 30  | Helicopter       | arcade   | One-button cave scroller        |
+| 31  | Memory Match     | puzzle   | Flip cards, find pairs          |
+| 32  | Tic-Tac-Toe      | strategy | vs minimax AI                   |
+| 33  | Doodle Jump      | arcade   | Endless vertical jumping        |
+| 34  | Gravity Ball     | puzzle   | Toggle gravity direction        |
+| 35  | Rhythm Tap       | arcade   | Tap circles in time             |
+| 36  | Lights Out       | puzzle   | Toggle adjacent lights          |
+| 37  | Lava Floor       | action   | Sinking platforms survival      |
+| 38  | Hangman          | puzzle   | Guess word by letters           |
+| 39  | Particle Sand    | chill    | Sand/water/fire sandbox         |
+| 40  | Basketball       | action   | Physics arc shooting            |
 
 ---
 
 ## Progress Log
 
-| Date       | Status   | Notes |
-|------------|----------|-------|
-| 2026-03-18 | Start    | Base canvas project scaffolded |
-| 2026-03-18 | Done     | Full TD implementation complete — 0 TS errors, build 33KB |
-| 2026-03-18 | Polish   | Balance & polish pass — 0 TS errors, build 35KB |
-| 2026-03-18 | Platform | Multi-game platform with 5 games — 0 TS errors, build 68KB |
+| Date       | Status   | Notes                                                         |
+| ---------- | -------- | ------------------------------------------------------------- |
+| 2026-03-18 | Start    | Base canvas project scaffolded                                |
+| 2026-03-18 | Done     | Full TD implementation complete — 0 TS errors, build 33KB     |
+| 2026-03-18 | Polish   | Balance & polish pass — 0 TS errors, build 35KB               |
+| 2026-03-18 | Platform | Multi-game platform with 5 games — 0 TS errors, build 68KB    |
 | 2026-03-18 | SOLID    | All 4 games refactored to multi-file SOLID — 81 modules, 73KB |
 | 2026-03-19 | 20 games | 15 more games + help system + categories — 241 modules, 274KB |
-| 2026-03-19 | 30 games | 10 more games with individual commits — 345 modules, 401KB |
-| 2026-03-19 | 40 games | 10 more games (in progress) |
+| 2026-03-19 | 30 games | 10 more games with individual commits — 345 modules, 401KB    |
+| 2026-03-19 | 40 games | 10 more games (in progress)                                   |
