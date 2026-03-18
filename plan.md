@@ -444,6 +444,80 @@ interface InputHandler {
 
 ---
 
+### Phase 8 – Games 6-20 (Batch 1-3)
+- [x] Breakout, Asteroids, Space Invaders, Flappy Bird, Tetris
+- [x] Minesweeper, Match-3, Card Battle, Top-Down Shooter, Racing
+- [x] Zombie Survival, Sokoban, 2048, Maze Runner, Fishing
+- [x] Help system (GameHelp, HelpOverlay, [H] key)
+- [x] Category tabs (arcade/action/puzzle/strategy/chill)
+- [x] Record<GameCategory, GameDefinition[]> registry
+
+### Phase 9 – Games 21-30 (Batch 4-5)
+- [x] Pong, Pac-Man, Whack-a-Mole, Fruit Ninja, Helicopter
+- [x] Sudoku, Word Search, Pipe Connect, Ant Colony, Idle Clicker
+- [x] Individual commits per game for clean history
+
+### Phase 10 – Games 31-40 (Batch 6-7)
+- [ ] Memory Match — flip cards to find matching pairs (puzzle)
+- [ ] Tic-Tac-Toe — 3x3 grid vs minimax AI (strategy)
+- [ ] Doodle Jump — endless vertical platform jumping (arcade)
+- [ ] Gravity Ball — toggle gravity to guide ball to exit (puzzle)
+- [ ] Rhythm Tap — tap shrinking circles in time (arcade)
+- [ ] Lights Out — toggle grid lights, flipping adjacent (puzzle)
+- [ ] Lava Floor — platforms sink into lava, keep jumping (action)
+- [ ] Hangman — guess the word letter by letter (puzzle)
+- [ ] Particle Sand — draw with falling sand/water/fire (chill)
+- [ ] Basketball — drag to aim, physics arc shooting (action)
+
+---
+
+## Full Game Roster (40 games)
+
+| # | Game | Category | Key Mechanic |
+|---|------|----------|-------------|
+| 1 | Tower Defense | action | Place towers, wave survival |
+| 2 | Snake | arcade | Grow longer, avoid self |
+| 3 | Platformer | action | Jump, coins, stomp enemies |
+| 4 | Physics Puzzle | puzzle | Place pieces, simulate physics |
+| 5 | City Builder | strategy | Manage resources, grow city |
+| 6 | Breakout | arcade | Paddle + ball, break bricks |
+| 7 | Asteroids | arcade | Rotate, thrust, shoot rocks |
+| 8 | Space Invaders | arcade | Shoot descending aliens |
+| 9 | Flappy Bird | arcade | Tap to fly through pipes |
+| 10 | Tetris | arcade | Stack blocks, clear lines |
+| 11 | Minesweeper | puzzle | Reveal cells, flag mines |
+| 12 | Match-3 | puzzle | Swap gems, cascade combos |
+| 13 | Card Battle | strategy | Draw cards, defeat enemies |
+| 14 | Top-Down Shooter | action | WASD + mouse aim, wave survival |
+| 15 | Racing | action | Top-down track, AI opponents |
+| 16 | Zombie Survival | action | Day/night, barricades, ammo |
+| 17 | Sokoban | puzzle | Push boxes onto targets |
+| 18 | 2048 | puzzle | Slide + merge tiles |
+| 19 | Maze Runner | puzzle | Fog of war, timed maze |
+| 20 | Fishing | chill | Cast, hook timing, reel tension |
+| 21 | Pong | arcade | Paddle tennis vs AI/2P |
+| 22 | Pac-Man | arcade | Eat dots, avoid/eat ghosts |
+| 23 | Whack-a-Mole | arcade | Timed reflex clicking |
+| 24 | Sudoku | puzzle | 9x9 number placement |
+| 25 | Word Search | puzzle | Find words in letter grid |
+| 26 | Pipe Connect | puzzle | Rotate pipes, connect flow |
+| 27 | Ant Colony | strategy | Emergent ant simulation |
+| 28 | Idle Clicker | chill | Click + buy upgrades |
+| 29 | Fruit Ninja | action | Slice fruit, avoid bombs |
+| 30 | Helicopter | arcade | One-button cave scroller |
+| 31 | Memory Match | puzzle | Flip cards, find pairs |
+| 32 | Tic-Tac-Toe | strategy | vs minimax AI |
+| 33 | Doodle Jump | arcade | Endless vertical jumping |
+| 34 | Gravity Ball | puzzle | Toggle gravity direction |
+| 35 | Rhythm Tap | arcade | Tap circles in time |
+| 36 | Lights Out | puzzle | Toggle adjacent lights |
+| 37 | Lava Floor | action | Sinking platforms survival |
+| 38 | Hangman | puzzle | Guess word by letters |
+| 39 | Particle Sand | chill | Sand/water/fire sandbox |
+| 40 | Basketball | action | Physics arc shooting |
+
+---
+
 ## Progress Log
 
 | Date       | Status   | Notes |
@@ -453,3 +527,6 @@ interface InputHandler {
 | 2026-03-18 | Polish   | Balance & polish pass — 0 TS errors, build 35KB |
 | 2026-03-18 | Platform | Multi-game platform with 5 games — 0 TS errors, build 68KB |
 | 2026-03-18 | SOLID    | All 4 games refactored to multi-file SOLID — 81 modules, 73KB |
+| 2026-03-19 | 20 games | 15 more games + help system + categories — 241 modules, 274KB |
+| 2026-03-19 | 30 games | 10 more games with individual commits — 345 modules, 401KB |
+| 2026-03-19 | 40 games | 10 more games (in progress) |
