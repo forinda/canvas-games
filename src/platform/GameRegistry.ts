@@ -39,6 +39,10 @@ import { GravityBallGame } from '@games/gravity-ball';
 import { RhythmTapGame } from '@games/rhythm-tap';
 import { HangmanGame } from '@games/hangman';
 import { ParticleSandGame } from '@games/particle-sand';
+import { SimonSaysGame } from '@games/simon-says';
+import { ReactionTimerGame } from '@games/reaction-timer';
+import { BrickBuilderGame } from '@games/brick-builder';
+import { BalloonPopGame } from '@games/balloon-pop';
 
 export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
   arcade: [
@@ -54,6 +58,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
     PacManGame,
     DoodleJumpGame,
     RhythmTapGame,
+    ReactionTimerGame,
   ],
   action: [
     TowerDefenseGame,
@@ -77,6 +82,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
     PipeConnectGame,
     LightsOutGame,
     MemoryMatchGame,
+    SimonSaysGame,
     GravityBallGame,
     HangmanGame,
   ],
@@ -90,6 +96,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
     FishingGame,
     IdleClickerGame,
     ParticleSandGame,
+    BrickBuilderGame,
   ],
 };
 
