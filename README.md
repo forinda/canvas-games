@@ -2,6 +2,10 @@
 
 A multi-game arcade platform with **50 playable games** built with TypeScript and HTML5 Canvas (Vite).
 
+## Tutorial Series
+
+Follow the **[step-by-step tutorial series](./tutorials/README.md)** to build all 50 games from scratch — ordered from beginner to advanced. Perfect for YouTube content creators and learners.
+
 ## Quick Start
 
 ```bash
