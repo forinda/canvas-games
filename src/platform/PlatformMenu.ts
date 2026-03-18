@@ -1,4 +1,4 @@
-import type { GameDefinition } from '../shared/GameInterface';
+import type { GameDefinition } from '@shared/GameInterface';
 
 export class PlatformMenu {
   private canvas: HTMLCanvasElement;

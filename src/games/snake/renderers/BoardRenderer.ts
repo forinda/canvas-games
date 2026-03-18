@@ -1,4 +1,4 @@
-import type { Renderable } from '../../../shared/Renderable';
+import type { Renderable } from '@shared/Renderable';
 import type { SnakeState } from '../types';
 import { CELL } from '../types';
 

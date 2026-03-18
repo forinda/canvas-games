@@ -1,4 +1,4 @@
-import type { GameInstance } from '../../../shared/GameInterface';
+import type { GameInstance } from '@shared/GameInterface';
 import { PuzzleEngine } from '../PuzzleEngine';
 import { InventorySystem } from '../systems/InventorySystem';
 import { InputSystem } from '../systems/InputSystem';

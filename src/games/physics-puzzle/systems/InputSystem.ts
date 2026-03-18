@@ -1,4 +1,4 @@
-import type { InputHandler } from '../../../shared/InputHandler';
+import type { InputHandler } from '@shared/InputHandler';
 import type { PuzzleState } from '../types';
 import { InventorySystem } from './InventorySystem';
 import { buildLevel } from '../data/levels';

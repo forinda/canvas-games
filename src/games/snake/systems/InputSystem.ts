@@ -1,4 +1,4 @@
-import type { InputHandler } from '../../../shared/InputHandler';
+import type { InputHandler } from '@shared/InputHandler';
 import type { SnakeState, Direction } from '../types';
 
 export class InputSystem implements InputHandler {

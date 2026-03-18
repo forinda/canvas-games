@@ -1,4 +1,4 @@
-import type { Renderable } from '../../../shared/Renderable';
+import type { Renderable } from '@shared/Renderable';
 import type { PuzzleState } from '../types';
 
 export class InventoryRenderer implements Renderable<PuzzleState> {

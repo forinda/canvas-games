@@ -1,4 +1,4 @@
-import type { Updatable } from '../../../shared/Updatable';
+import type { Updatable } from '@shared/Updatable';
 import type { Body, PuzzleState } from '../types';
 
 export function boxOverlap(a: Body, b: Body): boolean {

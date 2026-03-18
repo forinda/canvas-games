@@ -1,4 +1,4 @@
-import type { GameInstance } from '../../../shared/GameInterface';
+import type { GameInstance } from '@shared/GameInterface';
 import { PlatformerEngine } from '../PlatformerEngine';
 
 export class PlatformAdapter implements GameInstance {

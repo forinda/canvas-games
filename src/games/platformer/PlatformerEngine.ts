@@ -1,5 +1,5 @@
-import type { Updatable } from '../../shared/Updatable';
-import type { Renderable } from '../../shared/Renderable';
+import type { Updatable } from '@shared/Updatable';
+import type { Renderable } from '@shared/Renderable';
 import type { PlatState } from './types';
 import { buildLevel } from './data/levels';
 import { InputSystem } from './systems/InputSystem';

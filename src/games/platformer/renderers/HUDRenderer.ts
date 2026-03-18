@@ -1,4 +1,4 @@
-import type { Renderable } from '../../../shared/Renderable';
+import type { Renderable } from '@shared/Renderable';
 import type { PlatState } from '../types';
 
 export class HUDRenderer implements Renderable<PlatState> {

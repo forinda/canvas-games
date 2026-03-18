@@ -1,4 +1,4 @@
-import type { Updatable } from '../../../shared/Updatable';
+import type { Updatable } from '@shared/Updatable';
 import type { PuzzleState } from '../types';
 import { GRAVITY, DAMPING } from '../types';
 

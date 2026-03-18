@@ -1,5 +1,5 @@
-import type { Updatable } from '../../shared/Updatable';
-import type { Renderable } from '../../shared/Renderable';
+import type { Updatable } from '@shared/Updatable';
+import type { Renderable } from '@shared/Renderable';
 import type { PuzzleState } from './types';
 import { PhysicsSystem } from './systems/PhysicsSystem';
 import { CollisionSystem } from './systems/CollisionSystem';

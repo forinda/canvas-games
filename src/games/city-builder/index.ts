@@ -1,4 +1,4 @@
-import type { GameDefinition } from '../../shared/GameInterface';
+import type { GameDefinition } from '@shared/GameInterface';
 import { PlatformAdapter } from './adapters/PlatformAdapter';
 
 export const CityBuilderGame: GameDefinition = {

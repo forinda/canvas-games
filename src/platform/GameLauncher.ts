@@ -1,4 +1,4 @@
-import type { GameDefinition, GameInstance } from '../shared/GameInterface';
+import type { GameDefinition, GameInstance } from '@shared/GameInterface';
 import { GAME_REGISTRY } from './GameRegistry';
 import { PlatformMenu } from './PlatformMenu';
 

@@ -1,4 +1,4 @@
-import type { InputHandler } from '../../../shared/InputHandler';
+import type { InputHandler } from '@shared/InputHandler';
 import type { CityState } from '../types';
 import { BUILDING_DEFS } from '../data/buildings';
 import { BUILDING_TYPES } from '../data/buildings';

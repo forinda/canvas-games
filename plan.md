@@ -281,11 +281,11 @@ S > > > > > D . . . D < < < < .
 - [x] Physics Puzzle — place pieces, simulate gravity, guide ball to goal
 - [x] City Builder — grid placement, economy (population/money/food/power/happiness)
 - [x] Each game: full event cleanup on destroy(), exit-to-platform support
-- [ ] Shared abstractions: `Updatable`, `Renderable`, `InputHandler`
-- [ ] Refactor Snake → multi-file SOLID with PlatformAdapter
-- [ ] Refactor Platformer → multi-file SOLID with PlatformAdapter
-- [ ] Refactor Physics Puzzle → multi-file SOLID with PlatformAdapter
-- [ ] Refactor City Builder → multi-file SOLID with PlatformAdapter
+- [x] Shared abstractions: `Updatable`, `Renderable`, `InputHandler`
+- [x] Refactor Snake → multi-file SOLID with PlatformAdapter
+- [x] Refactor Platformer → multi-file SOLID with PlatformAdapter
+- [x] Refactor Physics Puzzle → multi-file SOLID with PlatformAdapter
+- [x] Refactor City Builder → multi-file SOLID with PlatformAdapter
 
 ---
 
@@ -452,3 +452,4 @@ interface InputHandler {
 | 2026-03-18 | Done     | Full TD implementation complete — 0 TS errors, build 33KB |
 | 2026-03-18 | Polish   | Balance & polish pass — 0 TS errors, build 35KB |
 | 2026-03-18 | Platform | Multi-game platform with 5 games — 0 TS errors, build 68KB |
+| 2026-03-18 | SOLID    | All 4 games refactored to multi-file SOLID — 81 modules, 73KB |

@@ -1,4 +1,4 @@
-import type { GameDefinition, GameInstance } from '../../shared/GameInterface';
+import type { GameDefinition, GameInstance } from '@shared/GameInterface';
 import { GameEngine } from './game-engine';
 
 class TowerDefenseInstance implements GameInstance {

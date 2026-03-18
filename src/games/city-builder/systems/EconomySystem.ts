@@ -1,4 +1,4 @@
-import type { Updatable } from '../../../shared/Updatable';
+import type { Updatable } from '@shared/Updatable';
 import type { CityState } from '../types';
 
 export class EconomySystem implements Updatable<CityState> {

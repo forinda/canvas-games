@@ -1,4 +1,4 @@
-import type { Updatable } from '../../../shared/Updatable';
+import type { Updatable } from '@shared/Updatable';
 import type { SnakeState, Coord } from '../types';
 import { HS_KEY } from '../types';
 

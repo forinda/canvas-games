@@ -1,4 +1,4 @@
-import type { Updatable } from '../../../shared/Updatable';
+import type { Updatable } from '@shared/Updatable';
 import type { PlatState } from '../types';
 
 export class CameraSystem implements Updatable<PlatState> {

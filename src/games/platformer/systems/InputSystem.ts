@@ -1,5 +1,5 @@
-import type { InputHandler } from '../../../shared/InputHandler';
-import type { Updatable } from '../../../shared/Updatable';
+import type { InputHandler } from '@shared/InputHandler';
+import type { Updatable } from '@shared/Updatable';
 import type { PlatState } from '../types';
 import { MOVE_SPEED, JUMP_SPEED } from '../types';
 

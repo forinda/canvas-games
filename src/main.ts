@@ -1,4 +1,4 @@
-import { GameLauncher } from './platform/GameLauncher';
+import { GameLauncher } from '@platform/GameLauncher';
 import './style.css';
 
 const app = document.querySelector<HTMLDivElement>('#app')!;

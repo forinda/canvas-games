@@ -1,4 +1,4 @@
-import type { Updatable } from '../../../shared/Updatable';
+import type { Updatable } from '@shared/Updatable';
 import type { SnakeState } from '../types';
 
 export class CollisionSystem implements Updatable<SnakeState> {

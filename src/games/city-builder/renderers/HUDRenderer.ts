@@ -1,4 +1,4 @@
-import type { Renderable } from '../../../shared/Renderable';
+import type { Renderable } from '@shared/Renderable';
 import type { CityState } from '../types';
 import { HUD_HEIGHT } from '../types';
 
