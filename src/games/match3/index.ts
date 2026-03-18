@@ -3,6 +3,7 @@ import { PlatformAdapter } from './adapters/PlatformAdapter';
 
 export const Match3Game: GameDefinition = {
   id: 'match3',
+  category: 'puzzle' as const,
   name: 'Match-3',
   description: 'Swap gems to match 3+ in a row!',
   icon: '💎',

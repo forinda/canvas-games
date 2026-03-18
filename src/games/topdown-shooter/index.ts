@@ -23,6 +23,7 @@ const help = {
 
 export const TopDownShooterGame: GameDefinition = {
   id: 'topdown-shooter',
+  category: 'action' as const,
   name: 'Top-Down Shooter',
   description: 'Arena survival shooter — defeat waves of enemies!',
   icon: '\uD83D\uDD2B',

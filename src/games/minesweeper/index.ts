@@ -3,6 +3,7 @@ import { PlatformAdapter } from './adapters/PlatformAdapter';
 
 export const MinesweeperGame: GameDefinition = {
   id: 'minesweeper',
+  category: 'puzzle' as const,
   name: 'Minesweeper',
   description: 'Clear the minefield without detonating any mines!',
   icon: '\u{1F4A3}',

@@ -4,6 +4,7 @@ import { racingHelp } from './RacingEngine';
 
 export const RacingGame: GameDefinition = {
   id: 'racing',
+  category: 'action' as const,
   name: 'Racing',
   description: 'Top-down racing with AI opponents!',
   icon: '\uD83C\uDFCE\uFE0F',

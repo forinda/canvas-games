@@ -21,6 +21,7 @@ const help = {
 
 export const Game2048: GameDefinition = {
   id: 'game-2048',
+  category: 'puzzle' as const,
   name: '2048',
   description: 'Slide and merge tiles to reach 2048!',
   icon: '\uD83D\uDD22',

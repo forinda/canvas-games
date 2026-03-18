@@ -3,6 +3,7 @@ import { PlatformAdapter } from './adapters/PlatformAdapter.ts';
 
 export const MazeRunnerGame: GameDefinition = {
   id: 'maze-runner',
+  category: 'puzzle' as const,
   name: 'Maze Runner',
   description: 'Navigate fog-shrouded mazes before time runs out!',
   icon: '🏃‍♂️',

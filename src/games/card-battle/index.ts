@@ -3,6 +3,7 @@ import { PlatformAdapter } from './adapters/PlatformAdapter';
 
 export const CardBattleGame: GameDefinition = {
   id: 'card-battle',
+  category: 'strategy' as const,
   name: 'Card Battle',
   description: 'Defeat enemies with your card deck!',
   icon: '🃏',

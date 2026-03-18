@@ -3,6 +3,7 @@ import { PlatformAdapter } from './adapters/PlatformAdapter.ts';
 
 export const ZombieSurvivalGame: GameDefinition = {
   id: 'zombie-survival',
+  category: 'action' as const,
   name: 'Zombie Survival',
   description: 'Survive waves of zombies in a dark arena with limited ammo!',
   icon: '\uD83E\uDDDF',

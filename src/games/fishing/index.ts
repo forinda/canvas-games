@@ -4,6 +4,7 @@ import { FISHING_HELP } from './FishingEngine';
 
 export const FishingGame: GameDefinition = {
   id: 'fishing',
+  category: 'chill' as const,
   name: 'Fishing',
   description: 'Cast your line, hook fish, and complete your catalog!',
   icon: '🎣',

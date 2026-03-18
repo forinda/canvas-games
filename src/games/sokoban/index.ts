@@ -3,6 +3,7 @@ import { PlatformAdapter } from './adapters/PlatformAdapter';
 
 export const SokobanGame: GameDefinition = {
   id: 'sokoban',
+  category: 'puzzle' as const,
   name: 'Sokoban',
   description: 'Push boxes onto targets in this classic puzzle game!',
   icon: '📦',
