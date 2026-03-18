@@ -1,4 +1,4 @@
-import type { GameDefinition } from '@shared/GameInterface';
+import type { GameCategory, GameDefinition } from '@shared/GameInterface';
 import { TowerDefenseGame } from '@games/tower-defense';
 import { SnakeGame } from '@games/snake';
 import { PlatformerGame } from '@games/platformer';
@@ -20,30 +20,45 @@ import { Game2048 } from '@games/game-2048';
 import { MazeRunnerGame } from '@games/maze-runner';
 import { FishingGame } from '@games/fishing';
 
-export const GAME_REGISTRY: GameDefinition[] = [
-  // Arcade
-  SnakeGame,
-  BreakoutGame,
-  AsteroidsGame,
-  SpaceInvadersGame,
-  FlappyBirdGame,
-  TetrisGame,
-  // Action
-  TowerDefenseGame,
-  PlatformerGame,
-  TopDownShooterGame,
-  ZombieSurvivalGame,
-  RacingGame,
-  // Puzzle
-  PhysicsPuzzleGame,
-  MinesweeperGame,
-  Match3Game,
-  Game2048,
-  SokobanGame,
-  MazeRunnerGame,
-  // Strategy
-  CityBuilderGame,
-  CardBattleGame,
-  // Chill
-  FishingGame,
-];
+export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
+  arcade: [
+    SnakeGame,
+    BreakoutGame,
+    AsteroidsGame,
+    SpaceInvadersGame,
+    FlappyBirdGame,
+    TetrisGame,
+  ],
+  action: [
+    TowerDefenseGame,
+    PlatformerGame,
+    TopDownShooterGame,
+    ZombieSurvivalGame,
+    RacingGame,
+  ],
+  puzzle: [
+    PhysicsPuzzleGame,
+    MinesweeperGame,
+    Match3Game,
+    Game2048,
+    SokobanGame,
+    MazeRunnerGame,
+  ],
+  strategy: [
+    CityBuilderGame,
+    CardBattleGame,
+  ],
+  chill: [
+    FishingGame,
+  ],
+};
+
+/** Flat list of all games across categories */
+export function getAllGames(): GameDefinition[] {
+  return Object.values(GAME_REGISTRY).flat();
+}
+
+/** Get games for a specific category */
+export function getGamesByCategory(category: GameCategory): GameDefinition[] {
+  return GAME_REGISTRY[category];
+}

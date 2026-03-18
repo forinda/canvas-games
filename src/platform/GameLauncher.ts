@@ -1,5 +1,5 @@
 import type { GameDefinition, GameInstance } from '@shared/GameInterface';
-import { GAME_REGISTRY } from './GameRegistry';
+import { GAME_REGISTRY, getAllGames } from './GameRegistry';
 import { PlatformMenu } from './PlatformMenu';
 
 export class GameLauncher {
@@ -32,7 +32,7 @@ export class GameLauncher {
     }
     this.handleResize();
     this.canvas.style.cursor = 'default';
-    this.menu.show(GAME_REGISTRY);
+    this.menu.show(GAME_REGISTRY, getAllGames());
   }
 
   private launchGame(game: GameDefinition): void {

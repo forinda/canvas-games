@@ -24,7 +24,8 @@ const CONTENT_TOP = HEADER_H + TAB_H + 8;
 export class PlatformMenu {
   private canvas: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
-  private games: GameDefinition[] = [];
+  private registry: Record<GameCategory, GameDefinition[]> = {} as Record<GameCategory, GameDefinition[]>;
+  private allGames: GameDefinition[] = [];
   private onSelect: (game: GameDefinition) => void;
   private rafId = 0;
   private running = false;
@@ -62,8 +63,9 @@ export class PlatformMenu {
     };
   }
 
-  show(games: GameDefinition[]): void {
-    this.games = games;
+  show(registry: Record<GameCategory, GameDefinition[]>, allGames: GameDefinition[]): void {
+    this.registry = registry;
+    this.allGames = allGames;
     this.running = true;
     this.hoveredIndex = -1;
     this.hoveredTab = -1;
@@ -87,8 +89,8 @@ export class PlatformMenu {
   }
 
   private getFilteredGames(): GameDefinition[] {
-    if (this.activeCategory === 'all') return this.games;
-    return this.games.filter(g => g.category === this.activeCategory);
+    if (this.activeCategory === 'all') return this.allGames;
+    return this.registry[this.activeCategory] ?? [];
   }
 
   private loop(): void {
@@ -190,7 +192,7 @@ export class PlatformMenu {
     // Game count
     ctx.font = `${Math.min(11, W * 0.015)}px monospace`;
     ctx.fillStyle = '#5a4a7a';
-    ctx.fillText(`${filtered.length} of ${this.games.length} games`, W / 2, 52);
+    ctx.fillText(`${filtered.length} of ${this.allGames.length} games`, W / 2, 52);
 
     // ── Category tabs ─────────────────────────────────────────────────
     const tabs = this.getTabLayout();
@@ -198,7 +200,7 @@ export class PlatformMenu {
       const cat = CATEGORIES[i];
       const isActive = this.activeCategory === cat.key;
       const isHovered = this.hoveredTab === i;
-      const count = cat.key === 'all' ? this.games.length : this.games.filter(g => g.category === cat.key).length;
+      const count = cat.key === 'all' ? this.allGames.length : (this.registry[cat.key]?.length ?? 0);
 
       // Tab background
       ctx.fillStyle = isActive ? `${cat.color}33` : isHovered ? '#1a1a2e' : '#0e0e1a';
