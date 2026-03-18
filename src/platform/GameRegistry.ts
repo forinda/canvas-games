@@ -19,6 +19,12 @@ import { SokobanGame } from '@games/sokoban';
 import { Game2048 } from '@games/game-2048';
 import { MazeRunnerGame } from '@games/maze-runner';
 import { FishingGame } from '@games/fishing';
+import { WhackAMoleGame } from '@games/whack-a-mole';
+import { WordSearchGame } from '@games/word-search';
+import { SudokuGame } from '@games/sudoku';
+import { PipeConnectGame } from '@games/pipe-connect';
+import { HelicopterGame } from '@games/helicopter';
+import { PongGame } from '@games/pong';
 
 export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
   arcade: [
@@ -28,6 +34,9 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
     SpaceInvadersGame,
     FlappyBirdGame,
     TetrisGame,
+    WhackAMoleGame,
+    HelicopterGame,
+    PongGame,
   ],
   action: [
     TowerDefenseGame,
@@ -43,6 +52,9 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
     Game2048,
     SokobanGame,
     MazeRunnerGame,
+    WordSearchGame,
+    SudokuGame,
+    PipeConnectGame,
   ],
   strategy: [
     CityBuilderGame,
