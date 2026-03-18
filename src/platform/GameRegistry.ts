@@ -25,6 +25,10 @@ import { SudokuGame } from '@games/sudoku';
 import { PipeConnectGame } from '@games/pipe-connect';
 import { HelicopterGame } from '@games/helicopter';
 import { PongGame } from '@games/pong';
+import { PacManGame } from '@games/pacman';
+import { FruitNinjaGame } from '@games/fruit-ninja';
+import { AntColonyGame } from '@games/ant-colony';
+import { IdleClickerGame } from '@games/idle-clicker';
 
 export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
   arcade: [
@@ -37,6 +41,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
     WhackAMoleGame,
     HelicopterGame,
     PongGame,
+    PacManGame,
   ],
   action: [
     TowerDefenseGame,
@@ -44,6 +49,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
     TopDownShooterGame,
     ZombieSurvivalGame,
     RacingGame,
+    FruitNinjaGame,
   ],
   puzzle: [
     PhysicsPuzzleGame,
@@ -59,9 +65,11 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
   strategy: [
     CityBuilderGame,
     CardBattleGame,
+    AntColonyGame,
   ],
   chill: [
     FishingGame,
+    IdleClickerGame,
   ],
 };
 
