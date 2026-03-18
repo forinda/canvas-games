@@ -34,83 +34,84 @@ Replace the content of `index.html`:
 ```html
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Reaction Timer</title>
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      body {
-        overflow: hidden;
-        font-family: monospace;
-      }
-      canvas {
-        display: block;
-      }
-    </style>
-  </head>
-  <body>
-    <canvas id="gameCanvas"></canvas>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Reaction Timer</title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+			body {
+				overflow: hidden;
+				font-family: monospace;
+			}
+			canvas {
+				display: block;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="gameCanvas"></canvas>
+		<script type="module" src="/src/main.ts"></script>
+	</body>
 </html>
 ```
 
 **What's happening:**
+
 - Line 7-14: Reset default styles and hide scrollbars
 - Line 18: Create a canvas that fills the screen
 - Line 19: Load our TypeScript game code
 
-### 1.3 — Create the Game Engine 
+### 1.3 — Create the Game Engine
 
 Create `src/main.ts`:
 
 ```typescript
 // Canvas setup
-const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
-const ctx = canvas.getContext('2d')!;
+const canvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
+const ctx = canvas.getContext("2d")!;
 
 // Make canvas fill the screen
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 // Handle window resize
-window.addEventListener('resize', () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+window.addEventListener("resize", () => {
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
 });
 
 // Game state
-let phase: 'waiting' | 'ready' = 'waiting';
+let phase: "waiting" | "ready" = "waiting";
 
 // Game loop
 function loop() {
-  const width = canvas.width;
-  const height = canvas.height;
-  const centerX = width / 2;
-  const centerY = height / 2;
+	const width = canvas.width;
+	const height = canvas.height;
+	const centerX = width / 2;
+	const centerY = height / 2;
 
-  // Clear screen with red background (waiting phase)
-  ctx.fillStyle = '#cc0000';
-  ctx.fillRect(0, 0, width, height);
+	// Clear screen with red background (waiting phase)
+	ctx.fillStyle = "#cc0000";
+	ctx.fillRect(0, 0, width, height);
 
-  // Draw centered text
-  ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 48px monospace';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('Wait for green...', centerX, centerY);
+	// Draw centered text
+	ctx.fillStyle = "#ffffff";
+	ctx.font = "bold 48px monospace";
+	ctx.textAlign = "center";
+	ctx.textBaseline = "middle";
+	ctx.fillText("Wait for green...", centerX, centerY);
 
-  // Draw instructions at bottom
-  ctx.font = '24px monospace';
-  ctx.fillText('Click when the screen turns green!', centerX, height - 50);
+	// Draw instructions at bottom
+	ctx.font = "24px monospace";
+	ctx.fillText("Click when the screen turns green!", centerX, height - 50);
 
-  // Continue the game loop
-  requestAnimationFrame(loop);
+	// Continue the game loop
+	requestAnimationFrame(loop);
 }
 
 // Start the game
@@ -118,6 +119,7 @@ loop();
 ```
 
 **What's happening:**
+
 - Line 2-3: Get canvas element and 2D drawing context
 - Line 6-7: Set canvas to full window size
 - Line 10-13: Update canvas size when window is resized
@@ -146,6 +148,7 @@ npm run dev
 ```
 
 Open http://localhost:5173 in your browser. You should see:
+
 - A full-screen red canvas
 - White centered text: "Wait for green..."
 - Instructions at the bottom
@@ -164,6 +167,7 @@ We've laid the foundation for our game. The red screen is already visible, setti
 ## Challenge
 
 Try these on your own:
+
 1. Change the red color to something else (try `#0066cc`)
 2. Add a round counter at the top: "Round 1/5"
 3. Make the font size responsive: `Math.min(48, width * 0.06) + 'px'`
