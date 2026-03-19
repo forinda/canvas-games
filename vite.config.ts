@@ -5,6 +5,10 @@ export default defineConfig({
 	build: {
 		sourcemap: false,
 		minify: "oxc",
+		chunkSizeWarningLimit: 800,
+		license: {
+			fileName: "LICENSE",
+		},
 	},
 	server: {
 		port: 3000,
