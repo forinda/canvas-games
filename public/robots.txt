@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+# Disallow admin or private areas (if any)
+# Disallow: /admin/
+# Disallow: /private/
+
+# Sitemap location
+Sitemap: https://forinda-games.netlify.app/sitemap.xml
+
+# Crawl-delay (optional, in seconds)
+Crawl-delay: 1
+
+# Block specific bots (optional)
+# User-agent: BadBot
+# Disallow: /
