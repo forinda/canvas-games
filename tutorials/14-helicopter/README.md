@@ -23,10 +23,10 @@ A helicopter that flies through an endless, narrowing cave. Hold the mouse to th
 
 | # | Title | Time | What You'll Build |
 |---|-------|------|-------------------|
-| 1 | [Project Setup & Helicopter Drawing](./step-1.md) | ~15min | Draw the helicopter and a static cave background |
-| 2 | [Thrust Physics & Cave Scrolling](./step-2.md) | ~15min | Hold to rise, release to fall; scroll the cave leftward |
-| 3 | [Procedural Cave Generation](./step-3.md) | ~15min | Generate cave walls that narrow over time |
-| 4 | [Obstacles, Collision & Polish](./step-4.md) | ~15min | Add obstacles inside the cave, collision detection, scoring |
+| 1 | [Helicopter & Controls](./step-1.md) | ~15min | Draw helicopter with animated rotor, hold-to-rise / release-to-fall physics |
+| 2 | [Cave Generation](./step-2.md) | ~15min | Procedural cave with random-walk walls, left-scrolling, gap narrows over time |
+| 3 | [Obstacles & Collision](./step-3.md) | ~15min | Stalactite/stalagmite obstacles, cave wall and obstacle collision, death state |
+| 4 | [Score, Speed & Polish](./step-4.md) | ~15min | Distance scoring, speed ramp, localStorage best, star background, death effects |
 
 ## Final Code
 
