@@ -23,11 +23,11 @@ Fruits are tossed into the air and you slice them by swiping across the screen w
 
 | # | Title | Time | What You'll Build |
 |---|-------|------|-------------------|
-| 1 | [Project Setup & Fruit Drawing](./step-1.md) | ~15min | Draw colorful fruit shapes on the canvas |
-| 2 | [Fruit Tossing Physics](./step-2.md) | ~15min | Launch fruits upward from below with gravity arcs |
-| 3 | [Swipe Detection & Slicing](./step-3.md) | ~15min | Track mouse movement, detect swipe intersections with fruit |
-| 4 | [Slice Halves & Scoring](./step-4.md) | ~15min | Split sliced fruit into falling halves, track score |
-| 5 | [Bombs, Combos & Polish](./step-5.md) | ~15min | Bombs that end the game, combo bonuses, blade trail effect |
+| 1 | [Fruit & Gravity](./step-1.md) | ~15min | Define 6 fruit types, launch upward with parabolic arcs |
+| 2 | [Mouse Trail & Slicing](./step-2.md) | ~15min | Track mouse as blade trail, line-circle intersection, split into halves |
+| 3 | [Juice Particles & Combos](./step-3.md) | ~15min | Juice splash particles on slice, combo bonus for multi-slice swipes |
+| 4 | [Bombs & Lives](./step-4.md) | ~15min | Bomb fruits that end the game, 3-life system for missed fruits |
+| 5 | [Score, Waves & Polish](./step-5.md) | ~15min | High score, wave difficulty, start/pause/game-over overlays |
 
 ## Final Code
 
