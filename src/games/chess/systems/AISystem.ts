@@ -4,25 +4,56 @@ import { BOARD_SIZE } from '../types.ts';
 import { PIECE_VALUES, PIECE_SQUARE_TABLES } from '../data/pieces.ts';
 import { MoveSystem } from './MoveSystem.ts';
 
-function cloneBoard(board: Cell[][]): Cell[][] {
-  return board.map((row) => row.map((cell) => (cell ? { ...cell } : null)));
-}
+/** Lightweight clone that only copies data needed for move generation + evaluation.
+ *  Skips moveHistory, selectedPosition, legalMoves, captured lists, and UI fields. */
+function cloneForAI(state: ChessState): ChessState {
+  const board: Cell[][] = new Array(BOARD_SIZE);
+  for (let r = 0; r < BOARD_SIZE; r++) {
+    const srcRow = state.board[r];
+    const newRow: Cell[] = new Array(BOARD_SIZE);
+    for (let c = 0; c < BOARD_SIZE; c++) {
+      const cell = srcRow[c];
+      newRow[c] = cell ? { type: cell.type, color: cell.color } : null;
+    }
+    board[r] = newRow;
+  }
 
-function cloneState(state: ChessState): ChessState {
   return {
-    ...state,
-    board: cloneBoard(state.board),
-    castlingRights: { ...state.castlingRights },
-    enPassantTarget: state.enPassantTarget ? { ...state.enPassantTarget } : null,
-    kingPositions: {
-      white: { ...state.kingPositions.white },
-      black: { ...state.kingPositions.black },
+    board,
+    currentPlayer: state.currentPlayer,
+    mode: state.mode,
+    castlingRights: {
+      whiteKingside: state.castlingRights.whiteKingside,
+      whiteQueenside: state.castlingRights.whiteQueenside,
+      blackKingside: state.castlingRights.blackKingside,
+      blackQueenside: state.castlingRights.blackQueenside,
     },
-    capturedByWhite: [...state.capturedByWhite],
-    capturedByBlack: [...state.capturedByBlack],
-    moveHistory: [...state.moveHistory],
-    legalMoves: [],
+    enPassantTarget: state.enPassantTarget
+      ? { row: state.enPassantTarget.row, col: state.enPassantTarget.col }
+      : null,
+    kingPositions: {
+      white: { row: state.kingPositions.white.row, col: state.kingPositions.white.col },
+      black: { row: state.kingPositions.black.row, col: state.kingPositions.black.col },
+    },
+    // Fields below are not used by move generation / evaluation but required by ChessState
     selectedPosition: null,
+    legalMoves: [],
+    lastMove: null,
+    moveHistory: [],
+    capturedByWhite: [],
+    capturedByBlack: [],
+    isCheck: false,
+    isCheckmate: false,
+    isStalemate: false,
+    gameOver: false,
+    showModeSelect: false,
+    canvasWidth: 0,
+    canvasHeight: 0,
+    aiThinking: false,
+    halfMoveClock: 0,
+    fullMoveNumber: 0,
+    animationTime: 0,
+    pendingPromotion: null,
   };
 }
 
@@ -79,8 +110,8 @@ export class AISystem implements Updatable<ChessState> {
     let bestMove = allMoves[0];
 
     for (const move of allMoves) {
-      const testState = cloneState(state);
-      this.moveSystem.executeMove(testState, move.from, move.to);
+      const testState = cloneForAI(state);
+      this.moveSystem.executeMove(testState, move.from, move.to, 'queen');
       const score = this.minimax(testState, 2, -Infinity, Infinity, false);
       if (score > bestScore) {
         bestScore = score;
@@ -115,8 +146,8 @@ export class AISystem implements Updatable<ChessState> {
     if (isMaximizing) {
       let maxEval = -Infinity;
       for (const move of allMoves) {
-        const testState = cloneState(state);
-        this.moveSystem.executeMove(testState, move.from, move.to);
+        const testState = cloneForAI(state);
+        this.moveSystem.executeMove(testState, move.from, move.to, 'queen');
         const score = this.minimax(testState, depth - 1, alpha, beta, false);
         maxEval = Math.max(maxEval, score);
         alpha = Math.max(alpha, score);
@@ -126,8 +157,8 @@ export class AISystem implements Updatable<ChessState> {
     } else {
       let minEval = Infinity;
       for (const move of allMoves) {
-        const testState = cloneState(state);
-        this.moveSystem.executeMove(testState, move.from, move.to);
+        const testState = cloneForAI(state);
+        this.moveSystem.executeMove(testState, move.from, move.to, 'queen');
         const score = this.minimax(testState, depth - 1, alpha, beta, true);
         minEval = Math.min(minEval, score);
         beta = Math.min(beta, score);

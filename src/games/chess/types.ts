@@ -59,4 +59,5 @@ export interface ChessState {
   fullMoveNumber: number;
   animationTime: number;
   kingPositions: { white: Position; black: Position };
+  pendingPromotion: { row: number; col: number } | null;
 }

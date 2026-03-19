@@ -1,5 +1,6 @@
 import type { InputHandler } from '@shared/InputHandler.ts';
-import type { ChessState, Position, GameMode } from '../types.ts';
+import type { ChessState, Position, GameMode, PieceType } from '../types.ts';
+import { BOARD_SIZE } from '../types.ts';
 
 export class InputSystem implements InputHandler {
   private canvas: HTMLCanvasElement;
@@ -10,6 +11,7 @@ export class InputSystem implements InputHandler {
   private onRestart: () => void;
   private onToggleHelp: () => void;
   private onUndo: () => void;
+  private onPromotionChoice: (choice: PieceType) => void;
 
   private clickHandler: (e: MouseEvent) => void;
   private keyHandler: (e: KeyboardEvent) => void;
@@ -23,6 +25,7 @@ export class InputSystem implements InputHandler {
     onRestart: () => void,
     onToggleHelp: () => void,
     onUndo: () => void,
+    onPromotionChoice: (choice: PieceType) => void,
   ) {
     this.canvas = canvas;
     this.state = state;
@@ -32,6 +35,7 @@ export class InputSystem implements InputHandler {
     this.onRestart = onRestart;
     this.onToggleHelp = onToggleHelp;
     this.onUndo = onUndo;
+    this.onPromotionChoice = onPromotionChoice;
 
     this.clickHandler = (e: MouseEvent) => this.handleClick(e);
     this.keyHandler = (e: KeyboardEvent) => this.handleKey(e);
@@ -74,6 +78,35 @@ export class InputSystem implements InputHandler {
         this.onModeSelect('2player');
         return;
       }
+      return;
+    }
+
+    // Handle promotion picker clicks
+    if (s.pendingPromotion) {
+      const boardInfo = this.getBoardLayout();
+      const promoCol = s.pendingPromotion.col;
+      const promoRow = s.pendingPromotion.row;
+      const cellSize = boardInfo.cellSize;
+      const pickerX = boardInfo.x + promoCol * cellSize;
+      // Picker extends downward for white (row 0) or upward for black (row 7)
+      const goingDown = promoRow === 0;
+      const choices: PieceType[] = ['queen', 'rook', 'bishop', 'knight'];
+
+      for (let i = 0; i < choices.length; i++) {
+        const py = goingDown
+          ? boardInfo.y + i * cellSize
+          : boardInfo.y + (BOARD_SIZE - 1 - i) * cellSize;
+        if (
+          mx >= pickerX &&
+          mx <= pickerX + cellSize &&
+          my >= py &&
+          my <= py + cellSize
+        ) {
+          this.onPromotionChoice(choices[i]);
+          return;
+        }
+      }
+      // Click outside the picker does nothing while promotion is pending
       return;
     }
 

@@ -4,6 +4,7 @@ import type {
   Position,
   Move,
   Piece,
+  PieceType,
   PieceColor,
   Cell,
 } from '../types.ts';
@@ -259,8 +260,14 @@ export class MoveSystem implements Updatable<ChessState> {
     return false;
   }
 
-  /** Execute a move on the state, returns the Move object */
-  executeMove(state: ChessState, from: Position, to: Position): Move {
+  /** Execute a move on the state, returns the Move object.
+   *  If promotionChoice is provided, it overrides the promotion UI flow. */
+  executeMove(
+    state: ChessState,
+    from: Position,
+    to: Position,
+    promotionChoice?: PieceType,
+  ): Move {
     const piece = state.board[from.row][from.col]!;
     const captured = state.board[to.row][to.col];
     let isEnPassant = false;
@@ -304,7 +311,40 @@ export class MoveSystem implements Updatable<ChessState> {
     const promotionRow = piece.color === 'white' ? 0 : 7;
     if (piece.type === 'pawn' && to.row === promotionRow) {
       isPromotion = true;
-      promotedTo = 'queen'; // Auto-queen
+      // If no explicit choice provided, request one via pendingPromotion
+      if (promotionChoice) {
+        promotedTo = promotionChoice;
+      } else {
+        // Set pending promotion and place the pawn on the destination
+        // so the board shows it; completePromotion will finalize it.
+        state.board[to.row][to.col] = piece;
+        state.board[from.row][from.col] = null;
+        state.pendingPromotion = { row: to.row, col: to.col };
+
+        // Still update en passant / captures before returning
+        if (captured && !isEnPassant) {
+          if (piece.color === 'white') {
+            state.capturedByWhite.push(captured);
+          } else {
+            state.capturedByBlack.push(captured);
+          }
+        }
+        state.enPassantTarget = null;
+        this.updateCastlingRights(state, from, to);
+
+        // Return a partial move; promotion will be completed later
+        return {
+          from,
+          to,
+          piece,
+          captured: captured || (isEnPassant ? { type: 'pawn', color: piece.color === 'white' ? 'black' : 'white' } : null),
+          isEnPassant,
+          isCastling,
+          isPromotion: true,
+          promotedTo: null,
+          notation: '',
+        };
+      }
     }
 
     // Handle normal capture
@@ -335,7 +375,7 @@ export class MoveSystem implements Updatable<ChessState> {
     }
 
     // Update castling rights
-    this.updateCastlingRights(state, from, piece);
+    this.updateCastlingRights(state, from, to);
 
     // Update king position
     if (piece.type === 'king') {
@@ -369,27 +409,68 @@ export class MoveSystem implements Updatable<ChessState> {
     return move;
   }
 
-  private updateCastlingRights(state: ChessState, from: Position, piece: Piece): void {
-    if (piece.type === 'king') {
-      if (piece.color === 'white') {
-        state.castlingRights.whiteKingside = false;
-        state.castlingRights.whiteQueenside = false;
-      } else {
-        state.castlingRights.blackKingside = false;
-        state.castlingRights.blackQueenside = false;
+  /** Complete a pending pawn promotion */
+  completePromotion(state: ChessState, choice: PieceType): Move | null {
+    const promo = state.pendingPromotion;
+    if (!promo) return null;
+
+    const piece = state.board[promo.row][promo.col];
+    if (!piece) return null;
+
+    // Replace the pawn with the chosen piece
+    state.board[promo.row][promo.col] = { type: choice, color: piece.color };
+    state.pendingPromotion = null;
+
+    // Update the last move in history with the promotion choice
+    const lastMove = state.moveHistory[state.moveHistory.length - 1];
+    if (lastMove) {
+      lastMove.promotedTo = choice;
+      lastMove.notation = this.buildNotation(
+        lastMove.piece,
+        lastMove.from,
+        lastMove.to,
+        lastMove.captured !== null,
+        lastMove.isCastling,
+        true,
+        choice,
+        state,
+      );
+      return lastMove;
+    }
+
+    return null;
+  }
+
+  private updateCastlingRights(state: ChessState, from: Position, to: Position): void {
+    // Map each corner square to the castling right it invalidates.
+    // A piece leaving from OR arriving at (capturing) a corner square
+    // revokes the associated castling right. King moves revoke both sides.
+    const rights = state.castlingRights;
+    const squares: Array<{ row: number; col: number; key: keyof typeof rights }> = [
+      { row: 7, col: 0, key: 'whiteQueenside' },
+      { row: 7, col: 7, key: 'whiteKingside' },
+      { row: 0, col: 0, key: 'blackQueenside' },
+      { row: 0, col: 7, key: 'blackKingside' },
+    ];
+
+    for (const sq of squares) {
+      if (
+        (from.row === sq.row && from.col === sq.col) ||
+        (to.row === sq.row && to.col === sq.col)
+      ) {
+        rights[sq.key] = false;
       }
     }
-    if (piece.type === 'rook') {
-      if (from.row === 7 && from.col === 0) state.castlingRights.whiteQueenside = false;
-      if (from.row === 7 && from.col === 7) state.castlingRights.whiteKingside = false;
-      if (from.row === 0 && from.col === 0) state.castlingRights.blackQueenside = false;
-      if (from.row === 0 && from.col === 7) state.castlingRights.blackKingside = false;
+
+    // King move revokes both sides
+    if (from.row === 7 && from.col === 4) {
+      rights.whiteKingside = false;
+      rights.whiteQueenside = false;
     }
-    // If a rook is captured on its starting square
-    if (from.row === 0 && from.col === 0) state.castlingRights.blackQueenside = false;
-    if (from.row === 0 && from.col === 7) state.castlingRights.blackKingside = false;
-    if (from.row === 7 && from.col === 0) state.castlingRights.whiteQueenside = false;
-    if (from.row === 7 && from.col === 7) state.castlingRights.whiteKingside = false;
+    if (from.row === 0 && from.col === 4) {
+      rights.blackKingside = false;
+      rights.blackQueenside = false;
+    }
   }
 
   private buildNotation(
@@ -575,40 +656,39 @@ export class MoveSystem implements Updatable<ChessState> {
     const row = piece.color === 'white' ? 7 : 0;
 
     if (pos.row === row && pos.col === 4) {
-      // Don't castle out of check
-      if (!this.isSquareAttacked(board, pos, opponent)) {
-        // Kingside
-        const canKingside = piece.color === 'white'
-          ? castlingRights.whiteKingside
-          : castlingRights.blackKingside;
-        if (
-          canKingside &&
-          !board[row][5] &&
-          !board[row][6] &&
-          board[row][7]?.type === 'rook' &&
-          board[row][7]?.color === piece.color &&
-          !this.isSquareAttacked(board, { row, col: 5 }, opponent) &&
-          !this.isSquareAttacked(board, { row, col: 6 }, opponent)
-        ) {
-          moves.push({ row, col: 6 });
-        }
+      // Kingside: king traverses cols 4, 5, 6 — all must be safe
+      const canKingside = piece.color === 'white'
+        ? castlingRights.whiteKingside
+        : castlingRights.blackKingside;
+      if (
+        canKingside &&
+        !board[row][5] &&
+        !board[row][6] &&
+        board[row][7]?.type === 'rook' &&
+        board[row][7]?.color === piece.color &&
+        !this.isSquareAttacked(board, { row, col: 4 }, opponent) &&
+        !this.isSquareAttacked(board, { row, col: 5 }, opponent) &&
+        !this.isSquareAttacked(board, { row, col: 6 }, opponent)
+      ) {
+        moves.push({ row, col: 6 });
+      }
 
-        // Queenside
-        const canQueenside = piece.color === 'white'
-          ? castlingRights.whiteQueenside
-          : castlingRights.blackQueenside;
-        if (
-          canQueenside &&
-          !board[row][3] &&
-          !board[row][2] &&
-          !board[row][1] &&
-          board[row][0]?.type === 'rook' &&
-          board[row][0]?.color === piece.color &&
-          !this.isSquareAttacked(board, { row, col: 3 }, opponent) &&
-          !this.isSquareAttacked(board, { row, col: 2 }, opponent)
-        ) {
-          moves.push({ row, col: 2 });
-        }
+      // Queenside: king traverses cols 4, 3, 2 — all must be safe
+      const canQueenside = piece.color === 'white'
+        ? castlingRights.whiteQueenside
+        : castlingRights.blackQueenside;
+      if (
+        canQueenside &&
+        !board[row][3] &&
+        !board[row][2] &&
+        !board[row][1] &&
+        board[row][0]?.type === 'rook' &&
+        board[row][0]?.color === piece.color &&
+        !this.isSquareAttacked(board, { row, col: 4 }, opponent) &&
+        !this.isSquareAttacked(board, { row, col: 3 }, opponent) &&
+        !this.isSquareAttacked(board, { row, col: 2 }, opponent)
+      ) {
+        moves.push({ row, col: 2 });
       }
     }
 

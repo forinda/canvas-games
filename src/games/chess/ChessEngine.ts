@@ -1,4 +1,4 @@
-import type { ChessState, GameMode, Position } from './types.ts';
+import type { ChessState, GameMode, Position, PieceType } from './types.ts';
 import type { GameHelp } from '@shared/GameInterface.ts';
 import { HelpOverlay } from '@shared/HelpOverlay.ts';
 import { createInitialBoard } from './data/pieces.ts';
@@ -71,6 +71,7 @@ export class ChessEngine {
       () => this.resetGame(),
       () => this.helpOverlay.toggle(),
       () => this.undoMove(),
+      (choice: PieceType) => this.onPromotionChoice(choice),
     );
 
     this.resizeHandler = () => {
@@ -113,6 +114,7 @@ export class ChessEngine {
   private update(dt: number): void {
     if (this.state.showModeSelect) return;
     if (this.state.gameOver) return;
+    if (this.state.pendingPromotion) return;
 
     this.aiSystem.update(this.state, dt);
 
@@ -126,7 +128,11 @@ export class ChessEngine {
     ) {
       const from = this.state.selectedPosition;
       const to = this.state.legalMoves[0];
-      this.makeMove(from, to);
+      // AI always promotes to queen
+      const pawn = this.state.board[from.row][from.col];
+      const promotionRow = pawn?.color === 'white' ? 0 : 7;
+      const isPromotion = pawn?.type === 'pawn' && to.row === promotionRow;
+      this.makeMove(from, to, isPromotion ? 'queen' : undefined);
       this.state.aiThinking = false;
     }
   }
@@ -149,6 +155,7 @@ export class ChessEngine {
     if (this.state.showModeSelect) return;
     if (this.state.gameOver) return;
     if (this.state.aiThinking) return;
+    if (this.state.pendingPromotion) return;
     if (this.state.mode === 'ai' && this.state.currentPlayer === 'black') return;
 
     const clickedPiece = this.state.board[pos.row][pos.col];
@@ -187,13 +194,23 @@ export class ChessEngine {
     this.state.legalMoves = this.moveSystem.getLegalMoves(this.state, pos);
   }
 
-  private makeMove(from: Position, to: Position): void {
-    const move = this.moveSystem.executeMove(this.state, from, to);
+  private makeMove(from: Position, to: Position, promotionChoice?: PieceType): void {
+    const move = this.moveSystem.executeMove(this.state, from, to, promotionChoice);
     this.state.moveHistory.push(move);
     this.state.lastMove = move;
     this.state.selectedPosition = null;
     this.state.legalMoves = [];
 
+    // If a promotion is pending, don't switch turns yet
+    if (this.state.pendingPromotion) return;
+
+    this.gameSystem.updateGameStatus(this.state);
+  }
+
+  private onPromotionChoice(choice: PieceType): void {
+    if (!this.state.pendingPromotion) return;
+
+    this.moveSystem.completePromotion(this.state, choice);
     this.gameSystem.updateGameStatus(this.state);
   }
 
@@ -230,7 +247,9 @@ export class ChessEngine {
 
     // Replay all moves
     for (const move of moves) {
-      this.moveSystem.executeMove(this.state, move.from, move.to);
+      const promoChoice = move.isPromotion ? (move.promotedTo ?? 'queen') : undefined;
+      this.moveSystem.executeMove(this.state, move.from, move.to, promoChoice);
+      this.state.pendingPromotion = null;
       this.state.moveHistory.push(move);
       // Switch turns
       this.state.currentPlayer =
@@ -313,6 +332,7 @@ export class ChessEngine {
         white: { row: 7, col: 4 },
         black: { row: 0, col: 4 },
       },
+      pendingPromotion: null,
     };
   }
 }
