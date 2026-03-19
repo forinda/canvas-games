@@ -6,6 +6,26 @@ A standalone reference for every concept used across the 50-game tutorial series
 
 ---
 
+## Canvas API
+
+| # | Concept | File | First Used In |
+|---|---------|------|---------------|
+| C1 | [Canvas Setup & Sizing](./canvas/c01-canvas-setup.md) | Element, context, DPR, resize | Game 1: Reaction Timer |
+| C2 | [Shapes & Paths](./canvas/c02-shapes-and-paths.md) | Rectangles, lines, custom polygons | Game 1: Reaction Timer |
+| C3 | [Circles & Arcs](./canvas/c03-circles-and-arcs.md) | Full circles, partial arcs, pie slices | Game 11: Pong |
+| C4 | [Colors & Gradients](./canvas/c04-colors-and-gradients.md) | Solid, hex, rgba, linear/radial gradients | Game 1: Reaction Timer |
+| C5 | [Text Rendering](./canvas/c05-text-rendering.md) | Fonts, alignment, measurement | Game 1: Reaction Timer |
+| C6 | [Transforms](./canvas/c06-transforms.md) | translate, rotate, scale, save/restore | Game 22: Asteroids |
+| C7 | [Transparency & Compositing](./canvas/c07-transparency-and-compositing.md) | globalAlpha, composite operations | Game 23: Pac-Man |
+| C8 | [Shadows & Glow](./canvas/c08-shadows-and-glow.md) | shadowColor, shadowBlur | Game 2: Lights Out |
+| C9 | [Clipping](./canvas/c09-clipping.md) | clip() with paths | Game 8: Whack-a-Mole |
+| C10 | [Image Data (Pixels)](./canvas/c10-image-data.md) | createImageData, putImageData | Game 39: Particle Sand |
+| C11 | [Rounded Rectangles](./canvas/c11-rounded-rectangles.md) | roundRect() method | Game 3: Memory Match |
+| C12 | [Animation Loop](./canvas/c12-animation-loop.md) | requestAnimationFrame, delta time | Every game |
+| C13 | [Coordinate Systems](./canvas/c13-coordinate-systems.md) | Mouse-to-canvas mapping, grid cells | Game 2: Lights Out |
+| C14 | [Layered Rendering](./canvas/c14-layered-rendering.md) | Painter's algorithm, draw order | Game 47: Tower Defense |
+| C15 | [Responsive Canvas](./canvas/c15-responsive-canvas.md) | Resize, aspect ratio, scaling | Every game |
+
 ## Mathematics
 
 | # | Concept | File | First Used In |
