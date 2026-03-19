@@ -191,11 +191,18 @@ The Memory Match board shows a grid of 4x3 cards. The first two cards are face-u
 
 ## Used In These Games
 
-- **Memory Match**: Every card is a rounded rectangle with shadow, showing either the face (symbol) or the back (pattern).
-- **2048**: Each numbered tile is a rounded rectangle with a background color based on its value.
-- **Sudoku**: The cell grid uses rounded rectangles for the outer container and subgrid boundaries.
-- **All games (UI)**: Menu panels, dialog boxes, buttons, score displays, and instruction overlays all use rounded rectangles.
-- **Solitaire / Card games**: Card rendering relies entirely on rounded rectangles for the authentic card shape.
+- **Memory Match**: Every card is a rounded rectangle with shadow, showing either the face (symbol) or the back (pattern). The flip animation narrows the rounded rect width.
+- **Card Battle**: Each card in the player's hand and on the field is a rounded rectangle with attack/defense stats rendered inside.
+- **2048**: Each numbered tile is a rounded rectangle with a background color that shifts based on its value (2, 4, 8, 16, etc.).
+- **Sudoku**: The outer container and 3x3 subgrid boundaries use rounded rectangles for a polished appearance.
+- **Idle Clicker**: Upgrade buttons, resource panels, and the main clicker target all use pill-shaped or rounded-corner rectangles.
+- **Simon Says**: Each colored panel is a large rounded rectangle that lights up when active in the sequence.
+- **Match-3**: Each gem or candy tile sits inside a rounded rectangle cell background on the game board.
+- **Hangman**: The letter selection buttons along the bottom are rounded rectangles that grey out when used.
+- **Connect Four**: The game board frame is a large rounded rectangle with circular cutouts for the token slots.
+- **Tic-Tac-Toe**: The game board container and the "New Game" button use rounded rectangles for a clean UI look.
+- **Typing Speed**: The text input area and result display panels are rounded rectangles with subtle borders.
+- **All games (UI)**: Menu panels, dialog boxes, buttons, score displays, and instruction overlays all use rounded rectangles throughout.
 
 ## Common Pitfalls
 

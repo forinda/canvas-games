@@ -176,12 +176,18 @@ The neon button appears as a rectangular outline with a soft colored glow radiat
 
 ## Used In These Games
 
-- **Breakout**: The ball has a colored glow trail. Power-up items glow to attract attention.
-- **Tower Defense**: Selected towers show their range as a glowing ring. Upgrade buttons use neon glow styling.
-- **Pac-Man**: Power pellets pulse with a glow effect. The energized Pac-Man has an enhanced glow.
-- **Pong**: The ball glows, and the paddles have a subtle colored glow matching their team color.
-- **Space Invaders**: Laser shots glow brightly. The player ship has a subtle engine glow.
-- **All games**: Menu buttons use neon glow on hover for interactive feedback.
+- **Lights Out**: Lit cells glow brightly with `shadowColor` matching the cell color and a high `shadowBlur`, making them visually distinct from unlit cells.
+- **Balloon Pop**: Each balloon has a soft colored glow radiating from its surface, and the pop explosion emits a bright flash using double-drawn shadow fills.
+- **Rhythm Tap**: The target circles pulse with a neon glow effect. Successfully tapped circles flash with an intensified glow burst.
+- **Tower Defense**: Selected towers show their range as a glowing ring. Upgrade buttons and UI panels use neon glow styling on hover.
+- **Breakout**: The ball has a colored glow trail. Power-up items glow to attract the player's attention as they fall.
+- **Pong**: The ball glows with a cyan halo, and the paddles have a subtle colored glow matching their team color.
+- **Space Invaders**: Laser shots glow brightly with `shadowBlur`. The player ship has a subtle engine glow at the base.
+- **Pac-Man**: Power pellets pulse with a glow effect that oscillates in intensity each frame.
+- **Doodle Jump**: The player character has a subtle glow when powered up. Spring and jetpack power-ups glow to stand out.
+- **Color Switch**: The active color gate segments glow to indicate which color the player currently matches.
+- **Snake**: The snake's head has a glow effect to distinguish it from body segments, especially at high speed.
+- **Particle Sand**: Fire particles emit a warm orange glow using `shadowColor` and `shadowBlur` when rendered at larger scales.
 
 ## Common Pitfalls
 

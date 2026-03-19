@@ -159,11 +159,18 @@ The score HUD shows a white "SCORE: 000042" flush left, a red "LIVES: 3" flush r
 
 ## Used In These Games
 
-- **Pong**: Score numbers displayed above each player's side using large centered text.
-- **Sudoku**: Every cell value is rendered with `fillText`, centered in the cell using `textAlign: "center"` and `textBaseline: "middle"`.
+- **Sudoku**: Every cell value is rendered with `fillText`, centered in the cell using `textAlign: "center"` and `textBaseline: "middle"`. Fixed and player-entered numbers use different colors.
+- **Typing Speed**: The target word is drawn as large centered text, with correctly typed characters highlighted in a different color.
+- **Hangman**: Letter blanks, guessed letters, and the target word are all rendered with `fillText`. Wrong guesses display in red.
 - **Minesweeper**: Adjacent mine count numbers are drawn in cells with different colors per digit (1=blue, 2=green, 3=red).
 - **2048**: Tile numbers are centered in each tile, with font size adjusted based on digit count to prevent overflow.
-- **All games**: The score HUD, game-over screen, and menu titles use text rendering extensively.
+- **Word Search**: The entire letter grid is rendered with `fillText`, one character per cell, with found words highlighted.
+- **Pong**: Score numbers displayed above each player's side using large centered text.
+- **Simon Says**: Color names or sequence indicators are drawn as text overlays on the colored panels.
+- **Idle Clicker**: Resource counts, upgrade costs, and multiplier labels are all rendered with `fillText` at various sizes.
+- **Card Battle**: Card stats (attack, defense, cost) are rendered as text on each card face using `measureText` for layout.
+- **Reaction Timer**: The countdown display and reaction time result are shown as large centered text.
+- **Rhythm Tap**: Score multipliers and combo counters float above the play area as animated text that fades out.
 
 ## Common Pitfalls
 

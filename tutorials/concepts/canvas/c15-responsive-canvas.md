@@ -235,12 +235,19 @@ On a desktop monitor, the grid appears with large cells (up to 80px each) center
 
 ## Used In These Games
 
-- **Sudoku**: The 9x9 grid calculates cell size based on the smaller screen dimension, ensuring all cells fit on any device.
-- **Minesweeper**: The grid adapts to screen size, with larger cells on desktop and smaller cells on mobile.
-- **2048**: The 4x4 tile grid scales proportionally with the screen, maintaining square tiles.
-- **Chess / Checkers**: The 8x8 board must be square and fit the screen. Cell size is determined by `min(availWidth, availHeight) / 8`.
-- **Tower Defense**: The game map uses a fixed aspect ratio with scale-to-fit, ensuring towers and paths are always visible.
-- **All games**: Every game handles window resize to maintain usability across devices.
+- **Sudoku**: The 9x9 grid calculates cell size based on the smaller screen dimension, ensuring all 81 cells fit on any device from phone to desktop.
+- **Minesweeper**: The grid adapts to screen size, with larger cells on desktop and smaller cells on mobile. Font size for mine count numbers scales with cell size.
+- **2048**: The 4x4 tile grid scales proportionally with the screen, maintaining square tiles and scaling the number font size to match.
+- **Tetris**: The playfield and next-piece preview scale to fit the screen height, with the side panel repositioning on narrow screens.
+- **Tower Defense**: The game map uses a fixed aspect ratio with scale-to-fit, ensuring towers, paths, and the minimap are always visible and correctly positioned.
+- **Snake**: The grid cell size adapts so the full playfield fits the screen, recalculating on resize to avoid clipping on small devices.
+- **Breakout**: The brick grid, paddle width, and ball size all scale proportionally to the canvas width so the game plays consistently on any screen.
+- **Pong**: The court, paddle dimensions, and ball size scale to fill the available window while maintaining the correct aspect ratio.
+- **Flappy Bird**: Pipe gaps, bird size, and scroll speed scale relative to the screen height so difficulty remains consistent across devices.
+- **City Builder**: The city grid cell size and UI panel widths adapt to the screen, with panels collapsing on mobile to maximize the visible map area.
+- **Sokoban**: The puzzle grid scales to fit the screen, centering the level and adjusting wall and crate sizes proportionally.
+- **Card Battle**: Card dimensions and hand layout reflow based on screen width, showing fewer cards per row on narrow screens.
+- **All 50 games**: Every game handles window resize and DPR changes to maintain usability and sharp rendering across devices.
 
 ## Common Pitfalls
 

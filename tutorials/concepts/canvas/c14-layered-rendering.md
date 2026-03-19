@@ -246,11 +246,18 @@ The Tower Defense scene renders as a layered composition. At the bottom, a dark 
 
 ## Used In These Games
 
-- **Tower Defense**: The most complex layering example: background, grid, path, range rings, enemies (depth-sorted), towers, projectiles, particles, HUD, and pause overlay.
-- **Pac-Man**: Background maze, pellets, ghosts (sorted), Pac-Man, score text, "READY!" overlay.
-- **Platformer**: Parallax background layers, platforms, enemies, player, foreground decorations, HUD.
-- **Space Invaders**: Stars background, shields, alien grid, player ship, bullets, score HUD, wave intro text.
-- **Breakout**: Background, bricks, paddle, ball, power-ups, particles, score HUD, game-over overlay.
+- **Tower Defense**: The most complex layering example with 8+ layers: background, grid, path, range rings, enemies (depth-sorted), towers, projectiles, particles, HUD, and pause overlay.
+- **Platformer**: Parallax background layers (far sky, mid mountains, near trees), platforms, enemies, player, foreground decorations, HUD, and dialog overlays.
+- **Racing**: Track background, road surface, road markings, opponent cars (depth-sorted by distance), player car, particle dust, speed HUD, and lap counter overlay.
+- **Pac-Man**: Background maze walls, pellets and power pellets, ghosts (sorted by position), Pac-Man, score text, "READY!" overlay, and level transition screens.
+- **Space Invaders**: Starfield background, destructible shields, alien grid (row by row), player ship, bullets (both player and alien), explosion particles, score HUD, and wave intro text.
+- **Breakout**: Gradient background, brick grid, paddle, ball with glow, falling power-ups, hit particles, score HUD, and game-over overlay.
+- **Zombie Survival**: Terrain, obstacles, zombies (depth-sorted by Y), player, bullets, blood particles, darkness overlay, and ammo/health HUD.
+- **City Builder**: Terrain grid, roads, buildings (sorted by Y for depth), vehicles, citizen sprites, resource income particles, and the building-selection UI panel.
+- **Fishing**: Sky background, far water, fish at depth (sorted), fishing line, bobber, near water surface, splash particles, and catch notification HUD.
+- **Frogger**: Water background, logs and turtles, road surface, cars and trucks, the frog character, splash effects, lives display, and score HUD.
+- **Doodle Jump**: Scrolling background, platforms, springs and power-ups, monsters, the player character, projectiles, and the altitude score display.
+- **Top-Down Shooter**: Floor tiles, obstacles, enemies (depth-sorted), player, bullet trails, muzzle flash particles, and ammo/health HUD.
 
 ## Common Pitfalls
 

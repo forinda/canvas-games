@@ -173,12 +173,19 @@ The canvas shows a dark background with a cyan ball bouncing around, rebounding 
 
 ## Used In These Games
 
-- **Every single game**: All 50 games use `requestAnimationFrame` as their core loop. The clear-update-draw cycle is universal.
-- **Pong**: Ball physics and paddle movement use delta time for smooth, consistent speed.
-- **Breakout**: Ball trajectory, brick collision checks, and power-up animation all run inside the game loop.
-- **Asteroids**: Ship momentum, asteroid drift, and bullet travel all multiply velocity by delta time.
-- **Tetris**: The drop timer uses accumulated delta time to determine when to advance the piece down one row.
-- **Particle Sand**: The simulation step and full-canvas render happen each frame inside the loop.
+- **Pong**: Ball physics and paddle movement use delta time for smooth, consistent speed across all monitors.
+- **Breakout**: Ball trajectory, brick collision checks, and power-up animation all run inside the game loop each frame.
+- **Asteroids**: Ship momentum, asteroid drift, and bullet travel all multiply velocity by delta time for frame-rate independence.
+- **Tetris**: The drop timer uses accumulated delta time to determine when to advance the piece down one row, independent of frame rate.
+- **Particle Sand**: The simulation step (gravity, flow, collision) and full-canvas `putImageData` render happen each frame inside the loop.
+- **Flappy Bird**: The bird's gravity, pipe scrolling, and gap detection all update each frame with delta-time-scaled physics.
+- **Snake**: The move timer accumulates delta time, advancing the snake one cell at fixed intervals regardless of display refresh rate.
+- **Tower Defense**: Enemy movement along the path, projectile flight, tower cooldown timers, and particle effects all use delta time inside the loop.
+- **Zombie Survival**: Zombie pathfinding updates, player movement, bullet physics, and spawn timers all execute each frame.
+- **Racing**: Car acceleration, steering, track scrolling, and opponent AI all update with delta-time-scaled values each frame.
+- **Doodle Jump**: Platform scrolling, jump physics, and monster movement all run inside the animation loop with delta time.
+- **Fishing**: The bobber physics, fish AI movement, and water ripple animation all update per frame in the game loop.
+- **All 50 games**: Every single game uses `requestAnimationFrame` as its core loop. The clear-update-draw cycle is universal.
 
 ## Common Pitfalls
 

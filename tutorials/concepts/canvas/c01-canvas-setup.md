@@ -100,6 +100,15 @@ The code produces a full-window canvas element with a dark navy background. On a
 - **Pong**: Sets up a fullscreen dark canvas that serves as the court, then draws paddles and ball on top.
 - **Tetris**: Initializes a canvas sized to fit the Tetris grid, with the DPI correction ensuring the block edges are crisp.
 - **Asteroids**: Uses the full window canvas so the ship can fly anywhere; resize handling ensures the play area adjusts when the window changes.
+- **Snake**: Creates the canvas and context before drawing the grid and snake body segments each frame.
+- **Breakout**: Initializes the canvas with DPR scaling so brick edges and the ball remain sharp on Retina displays.
+- **Space Invaders**: Sets up a full-window canvas for the alien grid, player ship, and bullet rendering.
+- **Flappy Bird**: Configures the canvas to fill the screen, establishing the coordinate space for the bird and scrolling pipes.
+- **Tower Defense**: Initializes the canvas and stores the context reference used by all nine rendering layers.
+- **Minesweeper**: Creates the canvas and context before drawing the clickable cell grid with crisp borders.
+- **Particle Sand**: Sets up the canvas buffer that receives per-pixel `putImageData` writes every frame.
+- **Sudoku**: Initializes the canvas at the correct DPR so number text and grid lines render without blur.
+- **Fishing**: Creates the full-window canvas used for the water surface, fishing line, and fish sprites.
 - **All 50 games**: Every single game calls some variant of this setup routine before any rendering begins.
 
 ## Common Pitfalls

@@ -161,11 +161,18 @@ Each Whack-a-Mole hole appears as a dark ellipse. When a mole pops up, its brown
 
 ## Used In These Games
 
-- **Whack-a-Mole**: Each hole clips the mole character so it appears to pop up from inside the ground. This is the primary visual mechanic.
-- **Tower Defense**: The minimap viewport clips the overhead map view to a small rectangular region in the corner.
-- **Pac-Man**: The maze viewport could use clipping to prevent drawing ghosts that have exited the visible area (optimization).
-- **Platformer**: Side-scrolling games use viewport clipping to constrain the visible world to the screen bounds while the level extends beyond.
-- **Card games (Memory Match)**: A card face clipping effect can reveal the card image as it "flips" by narrowing the clip width.
+- **Whack-a-Mole**: Each hole clips the mole character so it appears to pop up from inside the ground. This is the primary visual mechanic of the game.
+- **Tower Defense**: The minimap viewport clips the overhead map view to a small rectangular region in the corner. The main game area can also clip to prevent drawing outside the play zone.
+- **Platformer**: The camera viewport clips the visible portion of the level, preventing off-screen platforms and enemies from rendering outside the game area.
+- **Memory Match**: A card face clipping effect reveals the card image as it "flips" by narrowing the clip width during the animation.
+- **Fishing**: The underwater view clips fish and scenery to the water area, so nothing renders above the waterline boundary.
+- **Racing**: The track viewport clips the visible portion of the course, hiding track segments that extend beyond the screen edge.
+- **City Builder**: The city map clips to the visible viewport as the player pans across the larger city grid.
+- **Maze Runner**: The visible portion of the maze clips to the player's viewport area, hiding unseen corridors beyond the fog of war boundary.
+- **Fruit Ninja**: Sliced fruit pieces clip to the play area so fragments do not render outside the game bounds as they fly apart.
+- **Pac-Man**: The maze viewport clips ghost and pellet drawing to the visible play area, preventing rendering outside the maze boundaries.
+- **Helicopter**: The cavern viewport clips the procedurally generated ceiling and floor to the visible screen region as the cave scrolls.
+- **Pipe Connect**: The game board clips pipe segment animations to cell boundaries during rotation transitions.
 
 ## Common Pitfalls
 

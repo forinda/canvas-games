@@ -169,11 +169,18 @@ The Pac-Man ghost appears as a colored dome shape with a wavy bottom edge, two w
 
 ## Used In These Games
 
-- **Pac-Man**: Frightened ghosts use `globalAlpha` for their semi-transparent appearance. The ghost body fades in opacity when retreating to the ghost house.
-- **Minesweeper**: Unexplored cells use a semi-transparent overlay to look "covered."
-- **Tower Defense**: Fog of war uses `destination-out` compositing to reveal the map around towers. Range indicators use alpha for semi-transparent circles.
-- **Space Invaders**: Shield blocks become more transparent as they take damage, using decreasing `globalAlpha` values.
-- **All games**: Fade-to-black transitions between game states use an `rgba(0,0,0,alpha)` fullscreen overlay with increasing alpha.
+- **Pac-Man**: Frightened ghosts use `globalAlpha` for their semi-transparent blue appearance. The ghost body fades in opacity when retreating to the ghost house.
+- **Maze Runner**: A dark fog-of-war overlay covers the maze, with `destination-out` compositing cutting a visibility hole around the player's position.
+- **Zombie Survival**: A semi-transparent darkness layer covers the screen, with a radial gradient `destination-out` hole simulating the player's flashlight or lantern.
+- **Particle Sand**: Newly placed particles fade in using increasing alpha. Water particles use rgba colors for their translucent appearance.
+- **Tower Defense**: Range indicators use `globalAlpha` for semi-transparent circles. Fog of war uses `destination-out` to reveal explored areas.
+- **Space Invaders**: Shield blocks become more transparent as they take damage, using decreasing `globalAlpha` values. Explosions use additive (`lighter`) compositing for bright flashes.
+- **Flappy Bird**: The ground and pipe edges use semi-transparent shadows. The game-over overlay fades in with increasing alpha.
+- **Balloon Pop**: Popped balloon fragments fade out by reducing `globalAlpha` each frame until they disappear.
+- **Lava Floor**: The lava surface uses rgba colors for a semi-transparent heat shimmer effect layered over the base lava gradient.
+- **Fishing**: The underwater view uses transparency to show fish at varying depths, with deeper fish drawn at lower alpha values.
+- **Idle Clicker**: Floating resource gain numbers fade out over time using decreasing `globalAlpha` as they drift upward.
+- **Platformer**: Semi-transparent clouds and atmospheric fog layers use `globalAlpha` to create depth in the parallax background.
 
 ## Common Pitfalls
 

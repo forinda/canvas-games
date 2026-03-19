@@ -151,10 +151,17 @@ The spaceship appears as a green arrow-like polygon pointing in the direction of
 ## Used In These Games
 
 - **Asteroids**: The player ship rotates freely using `translate` + `rotate`. Asteroid shapes also rotate slowly for visual flair.
-- **Tetris**: Pieces rotate in 90-degree increments. The transform system handles drawing each rotation state cleanly.
+- **Racing**: The player car and AI cars rotate to match their heading direction on the track using `translate` + `rotate`.
+- **Top-Down Shooter**: The player character rotates to face the mouse cursor. Bullets are drawn at the aim angle using rotation transforms.
+- **Color Switch**: The rotating gate obstacles spin continuously using `translate` to the gate center and `rotate` by an increasing angle each frame.
+- **Golf**: The aim line rotates around the ball position to show the shot direction, using `translate` + `rotate` before drawing the line.
 - **Tower Defense**: Tower turrets rotate to face incoming enemies using nested transforms (tower position + turret angle).
-- **Pac-Man**: Pac-Man's direction is handled by rotating the drawing context before drawing the arc.
-- **Space Invaders**: The player ship does not rotate, but bullet spray patterns in advanced modes use rotation transforms.
+- **Tetris**: Pieces rotate in 90-degree increments. The transform system handles drawing each rotation state cleanly.
+- **Fruit Ninja**: Sliced fruit halves rotate as they fly apart, each half using `translate` + `rotate` with increasing angular velocity.
+- **Pac-Man**: Pac-Man's facing direction is handled by rotating the drawing context before drawing the arc-based mouth.
+- **Zombie Survival**: The player character rotates to face the nearest zombie or the mouse aim direction.
+- **Ant Colony**: Individual ants rotate to face their movement direction as they navigate between the colony and food sources.
+- **Helicopter**: The helicopter rotor blades spin using rotation transforms centered on the rotor hub.
 
 ## Common Pitfalls
 

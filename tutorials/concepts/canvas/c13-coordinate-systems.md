@@ -191,12 +191,18 @@ A 10x10 grid of dark cells appears, offset from the top-left corner. When the mo
 
 ## Used In These Games
 
-- **Minesweeper**: Click-to-reveal and right-click-to-flag both require converting mouse position to grid cell coordinates.
+- **Minesweeper**: Click-to-reveal and right-click-to-flag both require converting mouse position to grid cell coordinates on the minefield.
 - **Sudoku**: Clicking a cell to select it for number input requires precise coordinate mapping to the 9x9 grid.
-- **Chess / Checkers**: Selecting and moving pieces requires mapping clicks to board squares.
-- **Connect Four**: Clicking a column to drop a token maps the X coordinate to a column index.
-- **Tower Defense**: Placing towers on grid cells and clicking enemies both need coordinate conversion.
-- **Whack-a-Mole**: Detecting which hole was clicked requires testing the click position against each hole's coordinates.
+- **Lights Out**: Clicking a cell to toggle it and its neighbors requires mapping the click position to the grid cell index.
+- **Sokoban**: Clicking to move the player or select a direction requires mapping the click to the grid cell relative to the player's position.
+- **City Builder**: Placing buildings and roads on the city grid requires converting click coordinates to tile positions.
+- **Tic-Tac-Toe**: Clicking a cell to place an X or O maps the mouse position to one of the nine grid cells.
+- **Connect Four**: Clicking a column to drop a token maps the X coordinate to a column index, ignoring the Y position.
+- **Tower Defense**: Placing towers on grid cells and clicking enemies both require coordinate conversion from screen to game-world positions.
+- **Whack-a-Mole**: Detecting which hole was clicked requires testing the click position against each hole's circular bounds.
+- **Pixel Art**: Every click or drag on the canvas must map precisely to a pixel cell on the drawing grid.
+- **Match-3**: Clicking to select and swap gems requires mapping the click to the correct row and column in the gem grid.
+- **Pipe Connect**: Clicking a pipe cell to rotate it requires converting the mouse position to the pipe grid's row and column.
 
 ## Common Pitfalls
 

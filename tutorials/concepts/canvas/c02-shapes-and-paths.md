@@ -105,10 +105,17 @@ The code draws a complete Pong court: a near-black background with a dashed vert
 ## Used In These Games
 
 - **Pong**: Paddles are `fillRect` calls, the center line uses `beginPath/moveTo/lineTo/stroke` with a dash pattern, and the court border is a `strokeRect`.
-- **Breakout**: Each brick is a `fillRect` with varying colors. The court walls are stroked rectangles.
-- **Snake**: The grid background uses `fillRect` for alternating cell colors. The snake body segments are filled rectangles.
+- **Breakout**: Each brick is a `fillRect` with varying colors arranged in rows. The court walls are stroked rectangles.
+- **Snake**: The grid background uses `fillRect` for alternating cell colors. Each snake body segment is a filled rectangle.
+- **Tetris**: Every block in every piece is a `fillRect`. The playfield border is a `strokeRect`, and the grid lines use path-based vertical and horizontal lines.
 - **Minesweeper**: Each cell is a `fillRect` for the background, with `strokeRect` for the border. Flagged cells use path-based triangles for the flag shape.
-- **Checkers**: The 8x8 board is drawn with alternating `fillRect` calls for light and dark squares.
+- **Sokoban**: Walls, floor tiles, crates, and goal markers are all drawn with `fillRect` calls at grid-aligned positions.
+- **City Builder**: Building footprints and road segments are filled rectangles placed on the grid. Zone outlines use `strokeRect`.
+- **Frogger**: Lanes, cars, logs, and the frog itself are all drawn as filled rectangles with `fillRect`.
+- **Tic-Tac-Toe**: The board grid lines use `beginPath/moveTo/lineTo/stroke`. X marks are drawn with two crossed path lines.
+- **Platformer**: Platforms and wall tiles are `fillRect` calls. The player character uses path-based polygons for a custom shape.
+- **Pixel Art**: Each pixel on the drawing grid is a `fillRect`, with `strokeRect` for the cell outline in grid-view mode.
+- **Brick Builder**: Each placed brick is a `fillRect` with a `strokeRect` border, stacked on a grid to form structures.
 
 ## Common Pitfalls
 

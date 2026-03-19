@@ -147,10 +147,16 @@ The sand simulation renders as a grid where each cell appears as a small colored
 
 ## Used In These Games
 
-- **Particle Sand**: The entire rendering system uses `ImageData`. Each simulation cell maps to a block of pixels in the buffer. This is the only practical way to render tens of thousands of particles at 60fps.
-- **Asteroids / Space Invaders**: The starfield background is generated procedurally using per-pixel writes into an `ImageData` buffer.
-- **Game of Life**: Each cell (alive or dead) maps to a pixel or small block, rendered via `putImageData` for bulk efficiency.
-- **Any pixel-art style game**: When rendering at a low resolution and scaling up, `ImageData` gives direct control over every pixel.
+- **Particle Sand**: The entire rendering system uses `ImageData`. Each simulation cell maps to a block of pixels in the buffer. This is the only practical way to render tens of thousands of sand, water, and stone particles at 60fps.
+- **Space Invaders**: Shield barriers use `getImageData` to read pixel data for erosion when hit by bullets, removing pixels in the impact area to simulate destructible cover.
+- **Pixel Art**: The drawing canvas maps each logical pixel to a block in an `ImageData` buffer, giving direct per-pixel color control for the art grid.
+- **Asteroids**: The starfield background is generated procedurally using per-pixel writes into an `ImageData` buffer, scattered at random positions with varying brightness.
+- **Minesweeper**: The procedural background texture uses `ImageData` to generate a subtle noise pattern behind the grid.
+- **Ant Colony**: Pheromone trails are rendered by writing per-pixel intensity values into an `ImageData` buffer, with trails fading over time by reducing pixel alpha.
+- **Gravity Ball**: Trajectory prediction uses `getImageData` to sample the color of the surface beneath the ball for physics interaction.
+- **Maze Runner**: The procedural maze floor texture is generated with per-pixel noise written into an `ImageData` buffer for a stone-like appearance.
+- **Breakout**: The brick debris effect uses `getImageData` to capture the brick area before destruction, then scatters the pixel data as particles.
+- **Fishing**: The underwater caustic light effect uses `ImageData` to write a procedural ripple pattern that animates each frame.
 
 ## Common Pitfalls
 

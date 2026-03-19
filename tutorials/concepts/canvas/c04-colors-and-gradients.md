@@ -125,11 +125,18 @@ The scene shows a dramatic sky gradient that transitions from dark navy at the t
 
 ## Used In These Games
 
-- **Tower Defense**: Uses linear gradients for sky/ground backgrounds and radial gradients for tower range indicator rings.
-- **Breakout**: The ball has a radial gradient glow effect. Bricks use different solid colors per row.
-- **Pac-Man**: Ghost bodies use solid colors (`#ff0000` for Blinky, `#ffb8ff` for Pinky). The frightened state uses a blue color with alpha.
-- **Space Invaders**: The background uses a dark gradient. Laser shots use bright gradient fills for a beam effect.
+- **Flappy Bird**: The sky background is a vertical linear gradient from light blue at the top to warm orange near the horizon.
+- **Lava Floor**: The lava surface uses a linear gradient shifting from bright orange to deep red, with radial gradients for heat distortion spots.
+- **Fishing**: The water is drawn with a vertical linear gradient from light blue at the surface to dark blue at depth.
+- **Platformer**: The parallax sky uses a multi-stop linear gradient for sunrise/sunset effects behind the level.
+- **Tower Defense**: Uses linear gradients for the terrain background and radial gradients for tower range indicator rings.
+- **Breakout**: The ball has a radial gradient glow effect. Bricks use different solid colors per row, and power-ups have gradient fills.
+- **Space Invaders**: The background uses a dark gradient from deep navy to black. Laser shots use bright gradient fills for a beam effect.
 - **Asteroids**: Explosions use radial gradients that fade from bright orange to transparent.
+- **Doodle Jump**: The background gradient shifts from sky blue at the top to lighter tones at the bottom as the player ascends.
+- **Color Switch**: Each rotating gate segment uses a distinct solid color. The background uses a dark gradient for contrast.
+- **Helicopter**: The cavern background uses a vertical gradient to suggest depth, with the ceiling and floor shaded differently.
+- **Idle Clicker**: Resource bars and upgrade buttons use linear gradients to give UI elements a polished, glossy appearance.
 
 ## Common Pitfalls
 

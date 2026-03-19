@@ -119,12 +119,18 @@ The Breakout ball appears as a bright cyan circle with a subtle glow ring around
 
 ## Used In These Games
 
-- **Breakout**: The ball is a filled circle with a glow ring (two concentric arcs with different radii).
 - **Pac-Man**: The player character uses a partial arc with `moveTo` to the center to create the mouth wedge. The mouth angle oscillates for the chomp animation. Pellets and power pellets are small filled circles.
-- **Pong**: The ball is a simple filled circle.
-- **Bubble Shooter**: Each bubble is a filled circle with color. The aiming line connects to a circle at the tip.
-- **Connect Four**: Tokens are filled circles drawn on top of the board grid.
+- **Pong**: The ball is a simple filled circle drawn with `arc` and `fill`.
+- **Breakout**: The ball is a filled circle with a glow ring (two concentric arcs with different radii).
+- **Asteroids**: The ship nose and asteroid shapes use arcs for rounded segments. Bullet projectiles are small filled circles.
+- **Balloon Pop**: Each balloon is drawn as a filled circle (or ellipse) with a highlight arc for a shiny 3D look.
+- **Basketball**: The ball is a filled circle with arc-based seam lines. The hoop ring is a stroked arc.
+- **Golf**: The golf ball is a small filled circle. The hole target is a dark filled circle on the green.
+- **Connect Four**: Tokens are filled circles drawn on top of the board grid, with different colors per player.
+- **Tower Defense**: Enemy units are circles, tower range indicators are stroked arcs, and projectile impacts use arc-based explosion rings.
 - **Minesweeper**: Mines are drawn as circles with radiating lines for the spikes.
+- **Fishing**: Fish eyes are small filled circles. The bobber float is drawn with arcs for its rounded shape.
+- **Reaction Timer**: The target area is a filled circle that appears at random positions for the player to click.
 
 ## Common Pitfalls
 
