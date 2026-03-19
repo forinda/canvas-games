@@ -40,6 +40,32 @@ export class GameLauncher {
 		this.menu.hide();
 		this.handleResize();
 		this.canvas.style.cursor = "crosshair";
-		this.currentGame = game.create(this.canvas, () => this.showMenu());
+
+		// Show loading indicator
+		const ctx = this.canvas.getContext("2d");
+
+		if (ctx) {
+			ctx.fillStyle = "#0a0a1a";
+			ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+			ctx.font = "bold 24px monospace";
+			ctx.fillStyle = game.color;
+			ctx.textAlign = "center";
+			ctx.textBaseline = "middle";
+			ctx.fillText(
+				`${game.icon} Loading ${game.name}...`,
+				this.canvas.width / 2,
+				this.canvas.height / 2,
+			);
+		}
+
+		const result = game.create(this.canvas, () => this.showMenu());
+
+		if (result instanceof Promise) {
+			result.then((instance) => {
+				this.currentGame = instance;
+			});
+		} else {
+			this.currentGame = result;
+		}
 	}
 }
