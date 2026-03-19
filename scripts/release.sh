@@ -158,12 +158,36 @@ TEMP_ENTRY=$(mktemp)
     echo ""
   fi
 
-  # Refactors + Chores
-  OTHER=$(git log --oneline $RANGE --grep="^refactor\|^chore" 2>/dev/null)
-  if [ -n "$OTHER" ]; then
-    echo "### Other Changes"
+  # Refactors
+  REFACTORS=$(git log --oneline $RANGE --grep="^refactor" 2>/dev/null)
+  if [ -n "$REFACTORS" ]; then
+    echo "### Refactoring"
     echo ""
-    echo "$OTHER" | while read -r line; do
+    echo "$REFACTORS" | while read -r line; do
+      format_entry "$line"
+    done
+    echo ""
+  fi
+
+  # Chores
+  CHORES=$(git log --oneline $RANGE --grep="^chore" 2>/dev/null)
+  if [ -n "$CHORES" ]; then
+    echo "### Chores"
+    echo ""
+    echo "$CHORES" | while read -r line; do
+      format_entry "$line"
+    done
+    echo ""
+  fi
+
+  # Uncategorized (anything not matching known prefixes, excluding release commits)
+  KNOWN_PREFIXES="^feat\|^fix\|^perf\|^docs\|^refactor\|^chore\|^release"
+  ALL_COMMITS=$(git log --oneline $RANGE 2>/dev/null)
+  UNCATEGORIZED=$(echo "$ALL_COMMITS" | grep -v "$KNOWN_PREFIXES" 2>/dev/null || true)
+  if [ -n "$UNCATEGORIZED" ]; then
+    echo "### Other"
+    echo ""
+    echo "$UNCATEGORIZED" | while read -r line; do
       format_entry "$line"
     done
     echo ""

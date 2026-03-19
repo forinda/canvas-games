@@ -116,6 +116,19 @@ if [ -n "$CHORES" ]; then
   echo ""
 fi
 
+# Uncategorized (anything not matching known prefixes, excluding release commits)
+KNOWN_PREFIXES="^feat\|^fix\|^perf\|^docs\|^refactor\|^chore\|^release"
+ALL_COMMITS=$(git log --oneline $RANGE 2>/dev/null)
+UNCATEGORIZED=$(echo "$ALL_COMMITS" | grep -v "$KNOWN_PREFIXES" 2>/dev/null || true)
+if [ -n "$UNCATEGORIZED" ]; then
+  echo "## Other"
+  echo ""
+  echo "$UNCATEGORIZED" | while read -r line; do
+    format_entry "$line"
+  done
+  echo ""
+fi
+
 # Contributors
 echo "## Contributors"
 echo ""
