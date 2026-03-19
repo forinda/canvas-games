@@ -1,5 +1,6 @@
 import type { InputHandler } from "@shared/InputHandler";
 import type { SnakeState, Direction } from "../types";
+import type { TouchControls } from "@shared/TouchControls";
 
 export class InputSystem implements InputHandler {
 	private state: SnakeState;
@@ -8,17 +9,21 @@ export class InputSystem implements InputHandler {
 	private onReset: () => void;
 	private keyHandler: (e: KeyboardEvent) => void;
 	private clickHandler: (e: MouseEvent) => void;
+	private touchControls: TouchControls | null;
+	private lastTouchDir: Direction | null = null;
 
 	constructor(
 		state: SnakeState,
 		canvas: HTMLCanvasElement,
 		onExit: () => void,
 		onReset: () => void,
+		touchControls: TouchControls | null = null,
 	) {
 		this.state = state;
 		this.canvas = canvas;
 		this.onExit = onExit;
 		this.onReset = onReset;
+		this.touchControls = touchControls;
 		this.keyHandler = (e: KeyboardEvent) => this.handleKey(e);
 		this.clickHandler = (e: MouseEvent) => this.handleClick(e);
 	}
@@ -26,11 +31,47 @@ export class InputSystem implements InputHandler {
 	attach(): void {
 		window.addEventListener("keydown", this.keyHandler);
 		this.canvas.addEventListener("click", this.clickHandler);
+		this.touchControls?.attach();
 	}
 
 	detach(): void {
 		window.removeEventListener("keydown", this.keyHandler);
 		this.canvas.removeEventListener("click", this.clickHandler);
+		this.touchControls?.detach();
+	}
+
+	/** Poll touch controls each frame — call from engine update */
+	pollTouch(): void {
+		if (!this.touchControls?.visible) return;
+
+		const s = this.state;
+		const touch = this.touchControls.getState();
+
+		// Determine direction from touch d-pad
+		let touchDir: Direction | null = null;
+
+		if (touch.up) touchDir = "up";
+		else if (touch.down) touchDir = "down";
+		else if (touch.left) touchDir = "left";
+		else if (touch.right) touchDir = "right";
+
+		// Only change direction on new press (not while held)
+		if (touchDir && touchDir !== this.lastTouchDir) {
+			const opposites: Record<string, string> = {
+				up: "down",
+				down: "up",
+				left: "right",
+				right: "left",
+			};
+
+			if (opposites[touchDir] !== s.dir) {
+				s.nextDir = touchDir;
+			}
+
+			if (!s.started) s.started = true;
+		}
+
+		this.lastTouchDir = touchDir;
 	}
 
 	private handleKey(e: KeyboardEvent): void {

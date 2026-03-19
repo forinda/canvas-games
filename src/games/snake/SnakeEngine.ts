@@ -7,6 +7,7 @@ import { ScoreSystem } from "./systems/ScoreSystem";
 import { InputSystem } from "./systems/InputSystem";
 import { BoardRenderer } from "./renderers/BoardRenderer";
 import { HUDRenderer } from "./renderers/HUDRenderer";
+import { TouchControls } from "@shared/TouchControls";
 
 export class SnakeEngine {
 	private ctx: CanvasRenderingContext2D;
@@ -22,6 +23,7 @@ export class SnakeEngine {
 	private inputSystem: InputSystem;
 	private boardRenderer: BoardRenderer;
 	private hudRenderer: HUDRenderer;
+	private touchControls: TouchControls;
 	private resizeHandler: () => void;
 
 	constructor(canvas: HTMLCanvasElement, onExit: () => void) {
@@ -56,13 +58,20 @@ export class SnakeEngine {
 			gridH,
 		};
 
+		// Touch controls
+		this.touchControls = new TouchControls(canvas, "dpad");
+
 		// Systems
 		this.movementSystem = new MovementSystem();
 		this.collisionSystem = new CollisionSystem();
 		this.foodSystem = new FoodSystem();
 		this.scoreSystem = new ScoreSystem();
-		this.inputSystem = new InputSystem(this.state, canvas, onExit, () =>
-			this.reset(),
+		this.inputSystem = new InputSystem(
+			this.state,
+			canvas,
+			onExit,
+			() => this.reset(),
+			this.touchControls,
 		);
 		this.boardRenderer = new BoardRenderer();
 		this.hudRenderer = new HUDRenderer();
@@ -99,6 +108,9 @@ export class SnakeEngine {
 	private loop(): void {
 		if (!this.running) return;
 
+		// Poll touch controls each frame
+		this.inputSystem.pollTouch();
+
 		const now = performance.now();
 
 		if (this.state.started && !this.state.paused && !this.state.gameOver) {
@@ -127,6 +139,7 @@ export class SnakeEngine {
 	private render(): void {
 		this.boardRenderer.render(this.ctx, this.state);
 		this.hudRenderer.render(this.ctx, this.state);
+		this.touchControls.render(this.ctx);
 	}
 
 	private reset(): void {
