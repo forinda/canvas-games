@@ -2,7 +2,10 @@ import { defineConfig } from "vite";
 import { fileURLToPath, URL } from "url";
 
 export default defineConfig({
-	build: {},
+	build: {
+		sourcemap: false,
+		minify: "oxc",
+	},
 	server: {
 		port: 3000,
 	},
