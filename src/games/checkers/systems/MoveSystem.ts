@@ -10,7 +10,9 @@ import { BOARD_SIZE, cellsEqual, cloneBoard } from '../types';
 
 export class MoveSystem implements Updatable<CheckersState> {
   update(state: CheckersState, _dt: number): void {
+    if (!state.legalMovesDirty) return;
     state.legalMoves = this.getAllLegalMoves(state.board, state.currentTurn, state.mustContinueJump);
+    state.legalMovesDirty = false;
   }
 
   getAllLegalMoves(

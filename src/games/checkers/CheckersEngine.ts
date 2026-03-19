@@ -1,5 +1,5 @@
 import type { CheckersState } from './types';
-import { createInitialState } from './types';
+import { createInitialState, cloneBoard } from './types';
 import { MoveSystem } from './systems/MoveSystem';
 import { GameSystem } from './systems/GameSystem';
 import { AISystem } from './systems/AISystem';
@@ -57,6 +57,7 @@ export class CheckersEngine {
     };
 
     // Initialize legal moves
+    this.state.legalMovesDirty = true;
     this.moveSystem.update(this.state, 0);
 
     // Attach listeners
@@ -108,6 +109,7 @@ export class CheckersEngine {
 
   private onMoveComplete(): void {
     // Recalculate legal moves after a move
+    this.state.legalMovesDirty = true;
     this.moveSystem.update(this.state, 0);
     this.gameSystem.update(this.state, 0);
   }
@@ -122,12 +124,43 @@ export class CheckersEngine {
         return;
       }
 
-      const move = this.aiSystem.getBestMove(this.state);
+      const s = this.state;
+      const move = this.aiSystem.getBestMove(s);
       if (move) {
-        this.moveSystem.applyMove(this.state, move);
-        this.gameSystem.switchTurn(this.state);
-        this.moveSystem.update(this.state, 0);
-        this.gameSystem.update(this.state, 0);
+        // Push snapshot to history before applying the move
+        s.moveHistory.push({
+          board: cloneBoard(s.board),
+          currentTurn: s.currentTurn,
+          capturedRed: s.capturedRed,
+          capturedBlack: s.capturedBlack,
+          mustContinueJump: s.mustContinueJump,
+          lastMove: s.lastMove,
+        });
+
+        this.moveSystem.applyMove(s, move);
+        s.mustContinueJump = null;
+
+        // Check for multi-jump continuation
+        if (move.captures.length > 0) {
+          const continuationJumps = this.moveSystem.getJumpMoves(
+            s.board,
+            move.to,
+            s.board[move.to.row][move.to.col]!
+          );
+          if (continuationJumps.length > 0) {
+            s.mustContinueJump = move.to;
+            s.legalMovesDirty = true;
+            this.moveSystem.update(s, 0);
+            // Keep AI thinking — schedule another AI move
+            this.state.aiThinking = false;
+            return;
+          }
+        }
+
+        this.gameSystem.switchTurn(s);
+        s.legalMovesDirty = true;
+        this.moveSystem.update(s, 0);
+        this.gameSystem.update(s, 0);
       }
       this.state.aiThinking = false;
     }, 300);

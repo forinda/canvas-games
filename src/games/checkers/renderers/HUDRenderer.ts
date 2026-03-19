@@ -96,7 +96,7 @@ export class HUDRenderer implements Renderable<CheckersState> {
     ctx.fillText(label, W - 16, 12);
 
     ctx.fillStyle = '#444';
-    ctx.fillText('[H] Help  [R] Restart  [ESC] Menu', W - 16, 28);
+    ctx.fillText('[H] Help  [U] Undo  [R] Restart  [ESC] Menu', W - 16, 28);
   }
 
   private drawModeSelector(ctx: CanvasRenderingContext2D, W: number, H: number): void {

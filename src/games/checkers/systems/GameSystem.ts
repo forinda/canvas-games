@@ -68,5 +68,6 @@ export class GameSystem implements Updatable<CheckersState> {
     state.selectedCell = null;
     state.legalMovesForSelected = [];
     state.mustContinueJump = null;
+    state.legalMovesDirty = true;
   }
 }

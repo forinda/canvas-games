@@ -1,6 +1,6 @@
 import type { InputHandler } from '@shared/InputHandler';
 import type { CheckersState, Cell, Move } from '../types';
-import { BOARD_SIZE, cellsEqual } from '../types';
+import { BOARD_SIZE, cellsEqual, cloneBoard } from '../types';
 import { MoveSystem } from './MoveSystem';
 import { GameSystem } from './GameSystem';
 
@@ -59,12 +59,39 @@ export class InputSystem implements InputHandler {
       this.state.paused = !this.state.paused;
       return;
     }
-    if (e.key === 'r' || e.key === 'R') {
+    if (e.key === 'R') {
+      this.onReset();
+      return;
+    }
+    if (e.key === 'r') {
       if (this.state.gameOver) {
         this.onReset();
       }
       return;
     }
+    if (e.key === 'u' || e.key === 'U') {
+      this.undoMove();
+      return;
+    }
+  }
+
+  private undoMove(): void {
+    const s = this.state;
+    if (s.moveHistory.length === 0 || s.gameOver || s.aiThinking) return;
+
+    const entry = s.moveHistory.pop()!;
+    s.board = entry.board;
+    s.currentTurn = entry.currentTurn;
+    s.capturedRed = entry.capturedRed;
+    s.capturedBlack = entry.capturedBlack;
+    s.mustContinueJump = entry.mustContinueJump;
+    s.lastMove = entry.lastMove;
+    s.selectedCell = null;
+    s.legalMovesForSelected = [];
+    s.gameOver = false;
+    s.winner = null;
+    s.legalMovesDirty = true;
+    this.onMoveComplete();
   }
 
   private handleClick(e: MouseEvent): void {
@@ -166,13 +193,40 @@ export class InputSystem implements InputHandler {
 
   private executeMove(move: Move): void {
     const s = this.state;
+
+    // Push snapshot to history before applying the move
+    s.moveHistory.push({
+      board: cloneBoard(s.board),
+      currentTurn: s.currentTurn,
+      capturedRed: s.capturedRed,
+      capturedBlack: s.capturedBlack,
+      mustContinueJump: s.mustContinueJump,
+      lastMove: s.lastMove,
+    });
+
     this.moveSystem.applyMove(s, move);
     s.selectedCell = null;
     s.legalMovesForSelected = [];
     s.mustContinueJump = null;
 
-    // After the move, switch turn
+    // Check for multi-jump continuation
+    if (move.captures.length > 0) {
+      const continuationJumps = this.moveSystem.getJumpMoves(
+        s.board,
+        move.to,
+        s.board[move.to.row][move.to.col]!
+      );
+      if (continuationJumps.length > 0) {
+        s.mustContinueJump = move.to;
+        s.legalMovesDirty = true;
+        this.onMoveComplete();
+        return;
+      }
+    }
+
+    // No more jumps available, switch turn
     this.gameSystem.switchTurn(s);
+    s.legalMovesDirty = true;
     this.onMoveComplete();
   }
 

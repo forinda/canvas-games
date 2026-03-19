@@ -1,4 +1,4 @@
-import type { CheckersState, Piece, Move, PieceColor } from '../types';
+import type { CheckersState, Piece, Move, PieceColor, Cell } from '../types';
 import { BOARD_SIZE, cloneBoard } from '../types';
 import { MoveSystem } from './MoveSystem';
 
@@ -144,7 +144,7 @@ export class AISystem {
       piece.isKing = true;
     }
 
-    return {
+    let simState: CheckersState = {
       ...state,
       board: simBoard,
       capturedRed: state.capturedRed + move.captures.filter(cap => state.board[cap.row][cap.col]?.color === 'red').length,
@@ -152,5 +152,55 @@ export class AISystem {
       gameOver: false,
       winner: null,
     };
+
+    // If this was a jump, check for continuation jumps and simulate the best one
+    if (move.captures.length > 0) {
+      simState = this.simulateContinuationJumps(simState, move.to, piece);
+    }
+
+    return simState;
+  }
+
+  private simulateContinuationJumps(
+    state: CheckersState,
+    landingCell: Cell,
+    piece: Piece
+  ): CheckersState {
+    const jumps = this.moveSystem.getJumpMoves(state.board, landingCell, piece);
+    if (jumps.length === 0) return state;
+
+    // Pick the jump that captures the most pieces
+    let bestJump = jumps[0];
+    for (const jump of jumps) {
+      if (jump.captures.length > bestJump.captures.length) {
+        bestJump = jump;
+      }
+    }
+
+    const nextBoard = cloneBoard(state.board);
+    const movingPiece = nextBoard[bestJump.from.row][bestJump.from.col];
+    if (!movingPiece) return state;
+
+    nextBoard[bestJump.from.row][bestJump.from.col] = null;
+    for (const cap of bestJump.captures) {
+      nextBoard[cap.row][cap.col] = null;
+    }
+    nextBoard[bestJump.to.row][bestJump.to.col] = movingPiece;
+
+    if (movingPiece.color === 'red' && bestJump.to.row === 0) {
+      movingPiece.isKing = true;
+    } else if (movingPiece.color === 'black' && bestJump.to.row === BOARD_SIZE - 1) {
+      movingPiece.isKing = true;
+    }
+
+    const nextState: CheckersState = {
+      ...state,
+      board: nextBoard,
+      capturedRed: state.capturedRed + bestJump.captures.filter(cap => state.board[cap.row][cap.col]?.color === 'red').length,
+      capturedBlack: state.capturedBlack + bestJump.captures.filter(cap => state.board[cap.row][cap.col]?.color === 'black').length,
+    };
+
+    // Recurse for further continuations
+    return this.simulateContinuationJumps(nextState, bestJump.to, movingPiece);
   }
 }

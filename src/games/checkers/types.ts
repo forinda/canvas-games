@@ -20,6 +20,15 @@ export interface Move {
   captures: Cell[];
 }
 
+export interface HistoryEntry {
+  board: (Piece | null)[][];
+  currentTurn: PieceColor;
+  capturedRed: number;
+  capturedBlack: number;
+  mustContinueJump: Cell | null;
+  lastMove: Move | null;
+}
+
 export interface CheckersState {
   board: (Piece | null)[][];
   currentTurn: PieceColor;
@@ -38,6 +47,8 @@ export interface CheckersState {
   mustContinueJump: Cell | null;
   showModeSelector: boolean;
   animatingMove: { move: Move; progress: number } | null;
+  moveHistory: HistoryEntry[];
+  legalMovesDirty: boolean;
 }
 
 export function createInitialBoard(): (Piece | null)[][] {
@@ -77,6 +88,8 @@ export function createInitialState(): CheckersState {
     mustContinueJump: null,
     showModeSelector: true,
     animatingMove: null,
+    moveHistory: [],
+    legalMovesDirty: true,
   };
 }
 
