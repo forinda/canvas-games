@@ -1,121 +1,127 @@
-import type { Updatable } from '@shared/Updatable';
-import type { GravityState, GravityDir, Pos } from '../types';
-import { SLIDE_SPEED, MAX_TRAIL } from '../types';
+import type { Updatable } from "@shared/Updatable";
+import type { GravityState, GravityDir, Pos } from "../types";
+import { SLIDE_SPEED, MAX_TRAIL } from "../types";
 
 export class PhysicsSystem implements Updatable<GravityState> {
-  update(state: GravityState, dt: number): void {
-    // If level is complete or game won, skip physics
-    if (state.levelComplete || state.gameWon) return;
+	update(state: GravityState, dt: number): void {
+		// If level is complete or game won, skip physics
+		if (state.levelComplete || state.gameWon) return;
 
-    // Process queued gravity change
-    if (state.queuedGravity !== null && !state.sliding) {
-      state.gravity = state.queuedGravity;
-      state.queuedGravity = null;
-      state.moves += 1;
+		// Process queued gravity change
+		if (state.queuedGravity !== null && !state.sliding) {
+			state.gravity = state.queuedGravity;
+			state.queuedGravity = null;
+			state.moves += 1;
 
-      // Calculate slide target
-      const target = this.findSlideTarget(state, state.ball.pos, state.gravity);
+			// Calculate slide target
+			const target = this.findSlideTarget(state, state.ball.pos, state.gravity);
 
-      if (target.x !== state.ball.pos.x || target.y !== state.ball.pos.y) {
-        state.sliding = true;
-        state.slideProgress = 0;
-        state.slideFrom = { x: state.ball.pos.x, y: state.ball.pos.y };
-        state.slideTo = { x: target.x, y: target.y };
-      }
-    }
+			if (target.x !== state.ball.pos.x || target.y !== state.ball.pos.y) {
+				state.sliding = true;
+				state.slideProgress = 0;
+				state.slideFrom = { x: state.ball.pos.x, y: state.ball.pos.y };
+				state.slideTo = { x: target.x, y: target.y };
+			}
+		}
 
-    // Animate slide
-    if (state.sliding) {
-      const dx = state.slideTo.x - state.slideFrom.x;
-      const dy = state.slideTo.y - state.slideFrom.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
+		// Animate slide
+		if (state.sliding) {
+			const dx = state.slideTo.x - state.slideFrom.x;
+			const dy = state.slideTo.y - state.slideFrom.y;
+			const distance = Math.sqrt(dx * dx + dy * dy);
 
-      if (distance === 0) {
-        state.sliding = false;
-        return;
-      }
+			if (distance === 0) {
+				state.sliding = false;
 
-      const duration = distance / SLIDE_SPEED;
-      state.slideProgress += dt / duration;
+				return;
+			}
 
-      if (state.slideProgress >= 1) {
-        state.slideProgress = 1;
-        state.sliding = false;
+			const duration = distance / SLIDE_SPEED;
 
-        // Add trail positions along the path
-        this.addTrailAlongPath(state);
+			state.slideProgress += dt / duration;
 
-        // Snap ball to final position
-        state.ball.pos.x = state.slideTo.x;
-        state.ball.pos.y = state.slideTo.y;
-      }
-    }
-  }
+			if (state.slideProgress >= 1) {
+				state.slideProgress = 1;
+				state.sliding = false;
 
-  private findSlideTarget(state: GravityState, from: Pos, dir: GravityDir): Pos {
-    let dx = 0;
-    let dy = 0;
+				// Add trail positions along the path
+				this.addTrailAlongPath(state);
 
-    switch (dir) {
-      case 'up':
-        dy = -1;
-        break;
-      case 'down':
-        dy = 1;
-        break;
-      case 'left':
-        dx = -1;
-        break;
-      case 'right':
-        dx = 1;
-        break;
-    }
+				// Snap ball to final position
+				state.ball.pos.x = state.slideTo.x;
+				state.ball.pos.y = state.slideTo.y;
+			}
+		}
+	}
 
-    let cx = from.x;
-    let cy = from.y;
+	private findSlideTarget(
+		state: GravityState,
+		from: Pos,
+		dir: GravityDir,
+	): Pos {
+		let dx = 0;
+		let dy = 0;
 
-    while (true) {
-      const nx = cx + dx;
-      const ny = cy + dy;
+		switch (dir) {
+			case "up":
+				dy = -1;
+				break;
+			case "down":
+				dy = 1;
+				break;
+			case "left":
+				dx = -1;
+				break;
+			case "right":
+				dx = 1;
+				break;
+		}
 
-      // Check bounds
-      if (nx < 0 || nx >= state.gridWidth || ny < 0 || ny >= state.gridHeight) {
-        break;
-      }
+		let cx = from.x;
+		let cy = from.y;
 
-      // Check wall collision
-      if (state.wallSet.has(`${nx},${ny}`)) {
-        break;
-      }
+		while (true) {
+			const nx = cx + dx;
+			const ny = cy + dy;
 
-      cx = nx;
-      cy = ny;
-    }
+			// Check bounds
+			if (nx < 0 || nx >= state.gridWidth || ny < 0 || ny >= state.gridHeight) {
+				break;
+			}
 
-    return { x: cx, y: cy };
-  }
+			// Check wall collision
+			if (state.wallSet.has(`${nx},${ny}`)) {
+				break;
+			}
 
-  private addTrailAlongPath(state: GravityState): void {
-    const sx = state.slideFrom.x;
-    const sy = state.slideFrom.y;
-    const ex = state.slideTo.x;
-    const ey = state.slideTo.y;
+			cx = nx;
+			cy = ny;
+		}
 
-    const dx = Math.sign(ex - sx);
-    const dy = Math.sign(ey - sy);
+		return { x: cx, y: cy };
+	}
 
-    let cx = sx;
-    let cy = sy;
+	private addTrailAlongPath(state: GravityState): void {
+		const sx = state.slideFrom.x;
+		const sy = state.slideFrom.y;
+		const ex = state.slideTo.x;
+		const ey = state.slideTo.y;
 
-    while (cx !== ex || cy !== ey) {
-      state.ball.trail.push({ x: cx, y: cy });
-      cx += dx;
-      cy += dy;
-    }
+		const dx = Math.sign(ex - sx);
+		const dy = Math.sign(ey - sy);
 
-    // Trim trail
-    while (state.ball.trail.length > MAX_TRAIL) {
-      state.ball.trail.shift();
-    }
-  }
+		let cx = sx;
+		let cy = sy;
+
+		while (cx !== ex || cy !== ey) {
+			state.ball.trail.push({ x: cx, y: cy });
+			cx += dx;
+			cy += dy;
+		}
+
+		// Trim trail
+		while (state.ball.trail.length > MAX_TRAIL) {
+			state.ball.trail.shift();
+		}
+	}
 }

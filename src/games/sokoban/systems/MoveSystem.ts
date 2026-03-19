@@ -1,65 +1,70 @@
-import type { Updatable } from '@shared/Updatable';
-import { Cell, type SokobanState, type Snapshot } from '../types';
+import type { Updatable } from "@shared/Updatable";
+import { Cell, type SokobanState, type Snapshot } from "../types";
 
 export class MoveSystem implements Updatable<SokobanState> {
-  update(state: SokobanState, _dt: number): void {
-    if (state.levelComplete || state.gameWon) return;
+	update(state: SokobanState, _dt: number): void {
+		if (state.levelComplete || state.gameWon) return;
 
-    const dir = state.queuedDir;
-    if (!dir) return;
-    state.queuedDir = null;
+		const dir = state.queuedDir;
 
-    const newX = state.player.x + dir.dx;
-    const newY = state.player.y + dir.dy;
+		if (!dir) return;
 
-    // Out of bounds check
-    if (!this.inBounds(state, newX, newY)) return;
+		state.queuedDir = null;
 
-    // Wall check
-    if (state.grid[newY][newX] === Cell.Wall) return;
+		const newX = state.player.x + dir.dx;
+		const newY = state.player.y + dir.dy;
 
-    // Check if a box is at the target position
-    const boxIdx = this.boxAt(state, newX, newY);
+		// Out of bounds check
+		if (!this.inBounds(state, newX, newY)) return;
 
-    if (boxIdx >= 0) {
-      // There is a box — can we push it?
-      const pushX = newX + dir.dx;
-      const pushY = newY + dir.dy;
+		// Wall check
+		if (state.grid[newY][newX] === Cell.Wall) return;
 
-      if (!this.inBounds(state, pushX, pushY)) return;
-      if (state.grid[pushY][pushX] === Cell.Wall) return;
-      if (this.boxAt(state, pushX, pushY) >= 0) return; // Can't push into another box
+		// Check if a box is at the target position
+		const boxIdx = this.boxAt(state, newX, newY);
 
-      // Save snapshot before move
-      this.saveSnapshot(state);
+		if (boxIdx >= 0) {
+			// There is a box — can we push it?
+			const pushX = newX + dir.dx;
+			const pushY = newY + dir.dy;
 
-      // Push box
-      state.boxes[boxIdx] = { x: pushX, y: pushY };
+			if (!this.inBounds(state, pushX, pushY)) return;
 
-      // Move player
-      state.player = { x: newX, y: newY };
-      state.moves++;
-    } else {
-      // No box — just move
-      this.saveSnapshot(state);
-      state.player = { x: newX, y: newY };
-      state.moves++;
-    }
-  }
+			if (state.grid[pushY][pushX] === Cell.Wall) return;
 
-  private inBounds(state: SokobanState, x: number, y: number): boolean {
-    return x >= 0 && x < state.width && y >= 0 && y < state.height;
-  }
+			if (this.boxAt(state, pushX, pushY) >= 0) return; // Can't push into another box
 
-  private boxAt(state: SokobanState, x: number, y: number): number {
-    return state.boxes.findIndex((b) => b.x === x && b.y === y);
-  }
+			// Save snapshot before move
+			this.saveSnapshot(state);
 
-  private saveSnapshot(state: SokobanState): void {
-    const snap: Snapshot = {
-      player: { ...state.player },
-      boxes: state.boxes.map((b) => ({ ...b })),
-    };
-    state.undoStack.push(snap);
-  }
+			// Push box
+			state.boxes[boxIdx] = { x: pushX, y: pushY };
+
+			// Move player
+			state.player = { x: newX, y: newY };
+			state.moves++;
+		} else {
+			// No box — just move
+			this.saveSnapshot(state);
+			state.player = { x: newX, y: newY };
+			state.moves++;
+		}
+	}
+
+	private inBounds(state: SokobanState, x: number, y: number): boolean {
+		return x >= 0 && x < state.width && y >= 0 && y < state.height;
+	}
+
+	private boxAt(state: SokobanState, x: number, y: number): number {
+		return state.boxes.findIndex((b) => b.x === x && b.y === y);
+	}
+
+	private saveSnapshot(state: SokobanState): void {
+		const snap: Snapshot = {
+			player: { ...state.player },
+			boxes: state.boxes.map((b) => ({ ...b })),
+		};
+
+		state.undoStack.push(snap);
+	}
 }

@@ -1,20 +1,29 @@
-import type { Updatable } from '@shared/Updatable';
-import type { SnakeState } from '../types';
+import type { Updatable } from "@shared/Updatable";
+import type { SnakeState } from "../types";
 
 export class MovementSystem implements Updatable<SnakeState> {
-  update(state: SnakeState, _dt: number): void {
-    if (!state.started || state.paused || state.gameOver) return;
+	update(state: SnakeState, _dt: number): void {
+		if (!state.started || state.paused || state.gameOver) return;
 
-    state.dir = state.nextDir;
+		state.dir = state.nextDir;
 
-    const head = { ...state.snake[0] };
-    switch (state.dir) {
-      case 'up': head.y--; break;
-      case 'down': head.y++; break;
-      case 'left': head.x--; break;
-      case 'right': head.x++; break;
-    }
+		const head = { ...state.snake[0] };
 
-    state.snake.unshift(head);
-  }
+		switch (state.dir) {
+			case "up":
+				head.y--;
+				break;
+			case "down":
+				head.y++;
+				break;
+			case "left":
+				head.x--;
+				break;
+			case "right":
+				head.x++;
+				break;
+		}
+
+		state.snake.unshift(head);
+	}
 }

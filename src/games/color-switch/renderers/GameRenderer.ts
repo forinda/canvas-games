@@ -1,267 +1,292 @@
-import type { Renderable } from '@shared/Renderable';
-import type { ColorSwitchState } from '../types';
+import type { Renderable } from "@shared/Renderable";
+import type { ColorSwitchState } from "../types";
 import {
-  GAME_COLORS,
-  GATE_RING_OUTER,
-  GATE_RING_INNER,
-  GATE_BAR_WIDTH,
-  GATE_BAR_HEIGHT,
-  GATE_SQUARE_SIZE,
-  SWITCHER_RADIUS,
-} from '../types';
+	GAME_COLORS,
+	GATE_RING_OUTER,
+	GATE_RING_INNER,
+	GATE_BAR_WIDTH,
+	GATE_BAR_HEIGHT,
+	GATE_SQUARE_SIZE,
+	SWITCHER_RADIUS,
+} from "../types";
 
 export class GameRenderer implements Renderable<ColorSwitchState> {
-  render(ctx: CanvasRenderingContext2D, state: ColorSwitchState): void {
-    const { canvasW, canvasH } = state;
+	render(ctx: CanvasRenderingContext2D, state: ColorSwitchState): void {
+		const { canvasW, canvasH } = state;
 
-    // Dark background
-    ctx.fillStyle = '#1a1a2e';
-    ctx.fillRect(0, 0, canvasW, canvasH);
+		// Dark background
+		ctx.fillStyle = "#1a1a2e";
+		ctx.fillRect(0, 0, canvasW, canvasH);
 
-    // Subtle grid pattern
-    this.drawBackground(ctx, state);
+		// Subtle grid pattern
+		this.drawBackground(ctx, state);
 
-    ctx.save();
-    // Apply camera offset
-    ctx.translate(0, state.cameraY);
+		ctx.save();
+		// Apply camera offset
+		ctx.translate(0, state.cameraY);
 
-    // Draw gates
-    for (const gate of state.gates) {
-      this.drawGate(ctx, gate, canvasW);
-    }
+		// Draw gates
+		for (const gate of state.gates) {
+			this.drawGate(ctx, gate, canvasW);
+		}
 
-    // Draw color switchers
-    for (const sw of state.switchers) {
-      if (!sw.consumed) {
-        this.drawSwitcher(ctx, sw);
-      }
-    }
+		// Draw color switchers
+		for (const sw of state.switchers) {
+			if (!sw.consumed) {
+				this.drawSwitcher(ctx, sw);
+			}
+		}
 
-    // Draw ball
-    this.drawBall(ctx, state);
+		// Draw ball
+		this.drawBall(ctx, state);
 
-    ctx.restore();
+		ctx.restore();
 
-    // Death flash
-    if (state.flashTimer > 0) {
-      const alpha = state.flashTimer / 200;
-      ctx.fillStyle = `rgba(255, 50, 50, ${alpha * 0.5})`;
-      ctx.fillRect(0, 0, canvasW, canvasH);
-    }
-  }
+		// Death flash
+		if (state.flashTimer > 0) {
+			const alpha = state.flashTimer / 200;
 
-  private drawBackground(ctx: CanvasRenderingContext2D, state: ColorSwitchState): void {
-    const { canvasW, canvasH } = state;
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
-    ctx.lineWidth = 1;
-    const gridSize = 40;
-    const offsetY = (state.cameraY % gridSize + gridSize) % gridSize;
+			ctx.fillStyle = `rgba(255, 50, 50, ${alpha * 0.5})`;
+			ctx.fillRect(0, 0, canvasW, canvasH);
+		}
+	}
 
-    for (let x = 0; x < canvasW; x += gridSize) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, canvasH);
-      ctx.stroke();
-    }
-    for (let y = offsetY; y < canvasH + gridSize; y += gridSize) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(canvasW, y);
-      ctx.stroke();
-    }
-  }
+	private drawBackground(
+		ctx: CanvasRenderingContext2D,
+		state: ColorSwitchState,
+	): void {
+		const { canvasW, canvasH } = state;
 
-  private drawGate(
-    ctx: CanvasRenderingContext2D,
-    gate: { type: string; y: number; rotation: number; colors: string[]; scored: boolean },
-    canvasW: number,
-  ): void {
-    const cx = canvasW / 2;
+		ctx.strokeStyle = "rgba(255, 255, 255, 0.03)";
+		ctx.lineWidth = 1;
+		const gridSize = 40;
+		const offsetY = ((state.cameraY % gridSize) + gridSize) % gridSize;
 
-    if (gate.type === 'ring') {
-      this.drawRingGate(ctx, cx, gate.y, gate.rotation, gate.colors);
-    } else if (gate.type === 'bar') {
-      this.drawBarGate(ctx, cx, gate.y, gate.rotation, gate.colors);
-    } else if (gate.type === 'square') {
-      this.drawSquareGate(ctx, cx, gate.y, gate.rotation, gate.colors);
-    }
-  }
+		for (let x = 0; x < canvasW; x += gridSize) {
+			ctx.beginPath();
+			ctx.moveTo(x, 0);
+			ctx.lineTo(x, canvasH);
+			ctx.stroke();
+		}
 
-  private drawRingGate(
-    ctx: CanvasRenderingContext2D,
-    cx: number,
-    cy: number,
-    rotation: number,
-    colors: string[],
-  ): void {
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(rotation);
+		for (let y = offsetY; y < canvasH + gridSize; y += gridSize) {
+			ctx.beginPath();
+			ctx.moveTo(0, y);
+			ctx.lineTo(canvasW, y);
+			ctx.stroke();
+		}
+	}
 
-    // Draw 4 colored quadrants
-    for (let i = 0; i < 4; i++) {
-      const startAngle = (i * Math.PI) / 2;
-      const endAngle = ((i + 1) * Math.PI) / 2;
+	private drawGate(
+		ctx: CanvasRenderingContext2D,
+		gate: {
+			type: string;
+			y: number;
+			rotation: number;
+			colors: string[];
+			scored: boolean;
+		},
+		canvasW: number,
+	): void {
+		const cx = canvasW / 2;
 
-      ctx.beginPath();
-      ctx.arc(0, 0, GATE_RING_OUTER, startAngle, endAngle);
-      ctx.arc(0, 0, GATE_RING_INNER, endAngle, startAngle, true);
-      ctx.closePath();
-      ctx.fillStyle = colors[i];
-      ctx.fill();
+		if (gate.type === "ring") {
+			this.drawRingGate(ctx, cx, gate.y, gate.rotation, gate.colors);
+		} else if (gate.type === "bar") {
+			this.drawBarGate(ctx, cx, gate.y, gate.rotation, gate.colors);
+		} else if (gate.type === "square") {
+			this.drawSquareGate(ctx, cx, gate.y, gate.rotation, gate.colors);
+		}
+	}
 
-      // Subtle border between sections
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-    }
+	private drawRingGate(
+		ctx: CanvasRenderingContext2D,
+		cx: number,
+		cy: number,
+		rotation: number,
+		colors: string[],
+	): void {
+		ctx.save();
+		ctx.translate(cx, cy);
+		ctx.rotate(rotation);
 
-    ctx.restore();
-  }
+		// Draw 4 colored quadrants
+		for (let i = 0; i < 4; i++) {
+			const startAngle = (i * Math.PI) / 2;
+			const endAngle = ((i + 1) * Math.PI) / 2;
 
-  private drawBarGate(
-    ctx: CanvasRenderingContext2D,
-    cx: number,
-    cy: number,
-    rotation: number,
-    colors: string[],
-  ): void {
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(rotation);
+			ctx.beginPath();
+			ctx.arc(0, 0, GATE_RING_OUTER, startAngle, endAngle);
+			ctx.arc(0, 0, GATE_RING_INNER, endAngle, startAngle, true);
+			ctx.closePath();
+			ctx.fillStyle = colors[i];
+			ctx.fill();
 
-    const halfW = GATE_BAR_WIDTH / 2;
-    const halfH = GATE_BAR_HEIGHT / 2;
-    const sectionW = GATE_BAR_WIDTH / 4;
+			// Subtle border between sections
+			ctx.strokeStyle = "rgba(0, 0, 0, 0.3)";
+			ctx.lineWidth = 2;
+			ctx.stroke();
+		}
 
-    for (let i = 0; i < 4; i++) {
-      ctx.fillStyle = colors[i];
-      ctx.fillRect(-halfW + i * sectionW, -halfH, sectionW, GATE_BAR_HEIGHT);
+		ctx.restore();
+	}
 
-      ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
-      ctx.lineWidth = 1;
-      ctx.strokeRect(-halfW + i * sectionW, -halfH, sectionW, GATE_BAR_HEIGHT);
-    }
+	private drawBarGate(
+		ctx: CanvasRenderingContext2D,
+		cx: number,
+		cy: number,
+		rotation: number,
+		colors: string[],
+	): void {
+		ctx.save();
+		ctx.translate(cx, cy);
+		ctx.rotate(rotation);
 
-    // Rounded ends
-    ctx.beginPath();
-    ctx.fillStyle = colors[0];
-    ctx.arc(-halfW, 0, halfH, Math.PI / 2, Math.PI * 1.5);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.fillStyle = colors[3];
-    ctx.arc(halfW, 0, halfH, -Math.PI / 2, Math.PI / 2);
-    ctx.fill();
+		const halfW = GATE_BAR_WIDTH / 2;
+		const halfH = GATE_BAR_HEIGHT / 2;
+		const sectionW = GATE_BAR_WIDTH / 4;
 
-    ctx.restore();
-  }
+		for (let i = 0; i < 4; i++) {
+			ctx.fillStyle = colors[i];
+			ctx.fillRect(-halfW + i * sectionW, -halfH, sectionW, GATE_BAR_HEIGHT);
 
-  private drawSquareGate(
-    ctx: CanvasRenderingContext2D,
-    cx: number,
-    cy: number,
-    rotation: number,
-    colors: string[],
-  ): void {
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(rotation);
+			ctx.strokeStyle = "rgba(0, 0, 0, 0.3)";
+			ctx.lineWidth = 1;
+			ctx.strokeRect(-halfW + i * sectionW, -halfH, sectionW, GATE_BAR_HEIGHT);
+		}
 
-    const halfSize = GATE_SQUARE_SIZE / 2;
-    const thickness = 18;
+		// Rounded ends
+		ctx.beginPath();
+		ctx.fillStyle = colors[0];
+		ctx.arc(-halfW, 0, halfH, Math.PI / 2, Math.PI * 1.5);
+		ctx.fill();
+		ctx.beginPath();
+		ctx.fillStyle = colors[3];
+		ctx.arc(halfW, 0, halfH, -Math.PI / 2, Math.PI / 2);
+		ctx.fill();
 
-    // Top side
-    ctx.fillStyle = colors[0];
-    ctx.fillRect(-halfSize, -halfSize, GATE_SQUARE_SIZE, thickness);
+		ctx.restore();
+	}
 
-    // Right side
-    ctx.fillStyle = colors[1];
-    ctx.fillRect(halfSize - thickness, -halfSize, thickness, GATE_SQUARE_SIZE);
+	private drawSquareGate(
+		ctx: CanvasRenderingContext2D,
+		cx: number,
+		cy: number,
+		rotation: number,
+		colors: string[],
+	): void {
+		ctx.save();
+		ctx.translate(cx, cy);
+		ctx.rotate(rotation);
 
-    // Bottom side
-    ctx.fillStyle = colors[2];
-    ctx.fillRect(-halfSize, halfSize - thickness, GATE_SQUARE_SIZE, thickness);
+		const halfSize = GATE_SQUARE_SIZE / 2;
+		const thickness = 18;
 
-    // Left side
-    ctx.fillStyle = colors[3];
-    ctx.fillRect(-halfSize, -halfSize, thickness, GATE_SQUARE_SIZE);
+		// Top side
+		ctx.fillStyle = colors[0];
+		ctx.fillRect(-halfSize, -halfSize, GATE_SQUARE_SIZE, thickness);
 
-    // Border
-    ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(-halfSize, -halfSize, GATE_SQUARE_SIZE, GATE_SQUARE_SIZE);
+		// Right side
+		ctx.fillStyle = colors[1];
+		ctx.fillRect(halfSize - thickness, -halfSize, thickness, GATE_SQUARE_SIZE);
 
-    ctx.restore();
-  }
+		// Bottom side
+		ctx.fillStyle = colors[2];
+		ctx.fillRect(-halfSize, halfSize - thickness, GATE_SQUARE_SIZE, thickness);
 
-  private drawSwitcher(ctx: CanvasRenderingContext2D, sw: { x: number; y: number; radius: number; rotation: number }): void {
-    ctx.save();
-    ctx.translate(sw.x, sw.y);
-    ctx.rotate(sw.rotation);
+		// Left side
+		ctx.fillStyle = colors[3];
+		ctx.fillRect(-halfSize, -halfSize, thickness, GATE_SQUARE_SIZE);
 
-    const r = SWITCHER_RADIUS;
+		// Border
+		ctx.strokeStyle = "rgba(0, 0, 0, 0.3)";
+		ctx.lineWidth = 2;
+		ctx.strokeRect(-halfSize, -halfSize, GATE_SQUARE_SIZE, GATE_SQUARE_SIZE);
 
-    // Draw rainbow circle with 4 color segments
-    for (let i = 0; i < 4; i++) {
-      const startAngle = (i * Math.PI) / 2;
-      const endAngle = ((i + 1) * Math.PI) / 2;
-      ctx.beginPath();
-      ctx.moveTo(0, 0);
-      ctx.arc(0, 0, r, startAngle, endAngle);
-      ctx.closePath();
-      ctx.fillStyle = GAME_COLORS[i];
-      ctx.fill();
-    }
+		ctx.restore();
+	}
 
-    // White center dot
-    ctx.beginPath();
-    ctx.arc(0, 0, r * 0.35, 0, Math.PI * 2);
-    ctx.fillStyle = '#fff';
-    ctx.fill();
+	private drawSwitcher(
+		ctx: CanvasRenderingContext2D,
+		sw: { x: number; y: number; radius: number; rotation: number },
+	): void {
+		ctx.save();
+		ctx.translate(sw.x, sw.y);
+		ctx.rotate(sw.rotation);
 
-    // Glow
-    ctx.shadowColor = '#ffffff';
-    ctx.shadowBlur = 12;
-    ctx.beginPath();
-    ctx.arc(0, 0, r + 2, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    ctx.shadowBlur = 0;
+		const r = SWITCHER_RADIUS;
 
-    ctx.restore();
-  }
+		// Draw rainbow circle with 4 color segments
+		for (let i = 0; i < 4; i++) {
+			const startAngle = (i * Math.PI) / 2;
+			const endAngle = ((i + 1) * Math.PI) / 2;
 
-  private drawBall(ctx: CanvasRenderingContext2D, state: ColorSwitchState): void {
-    const ball = state.ball;
+			ctx.beginPath();
+			ctx.moveTo(0, 0);
+			ctx.arc(0, 0, r, startAngle, endAngle);
+			ctx.closePath();
+			ctx.fillStyle = GAME_COLORS[i];
+			ctx.fill();
+		}
 
-    ctx.save();
-    ctx.translate(ball.x, ball.y);
+		// White center dot
+		ctx.beginPath();
+		ctx.arc(0, 0, r * 0.35, 0, Math.PI * 2);
+		ctx.fillStyle = "#fff";
+		ctx.fill();
 
-    // Glow effect
-    ctx.shadowColor = ball.color;
-    ctx.shadowBlur = 20;
+		// Glow
+		ctx.shadowColor = "#ffffff";
+		ctx.shadowBlur = 12;
+		ctx.beginPath();
+		ctx.arc(0, 0, r + 2, 0, Math.PI * 2);
+		ctx.strokeStyle = "rgba(255, 255, 255, 0.3)";
+		ctx.lineWidth = 2;
+		ctx.stroke();
+		ctx.shadowBlur = 0;
 
-    // Ball body
-    ctx.beginPath();
-    ctx.arc(0, 0, ball.radius, 0, Math.PI * 2);
-    ctx.fillStyle = ball.color;
-    ctx.fill();
+		ctx.restore();
+	}
 
-    // Inner highlight
-    ctx.shadowBlur = 0;
-    ctx.beginPath();
-    ctx.arc(-ball.radius * 0.25, -ball.radius * 0.25, ball.radius * 0.45, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.25)';
-    ctx.fill();
+	private drawBall(
+		ctx: CanvasRenderingContext2D,
+		state: ColorSwitchState,
+	): void {
+		const ball = state.ball;
 
-    // Border
-    ctx.beginPath();
-    ctx.arc(0, 0, ball.radius, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
+		ctx.save();
+		ctx.translate(ball.x, ball.y);
 
-    ctx.restore();
-  }
+		// Glow effect
+		ctx.shadowColor = ball.color;
+		ctx.shadowBlur = 20;
+
+		// Ball body
+		ctx.beginPath();
+		ctx.arc(0, 0, ball.radius, 0, Math.PI * 2);
+		ctx.fillStyle = ball.color;
+		ctx.fill();
+
+		// Inner highlight
+		ctx.shadowBlur = 0;
+		ctx.beginPath();
+		ctx.arc(
+			-ball.radius * 0.25,
+			-ball.radius * 0.25,
+			ball.radius * 0.45,
+			0,
+			Math.PI * 2,
+		);
+		ctx.fillStyle = "rgba(255, 255, 255, 0.25)";
+		ctx.fill();
+
+		// Border
+		ctx.beginPath();
+		ctx.arc(0, 0, ball.radius, 0, Math.PI * 2);
+		ctx.strokeStyle = "rgba(255, 255, 255, 0.4)";
+		ctx.lineWidth = 2;
+		ctx.stroke();
+
+		ctx.restore();
+	}
 }

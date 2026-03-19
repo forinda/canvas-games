@@ -1,4 +1,4 @@
-import type { GridCoord, ActiveEnemy } from '../types';
+import type { GridCoord, ActiveEnemy } from "../types";
 
 export const GRID_COLS = 16;
 export const GRID_ROWS = 10;
@@ -17,14 +17,14 @@ export const GRID_ROWS = 10;
  *   Then from row3,col15 → row8,col15 → row8,col12 → end (exit)
  */
 export const PATH_WAYPOINTS: GridCoord[] = [
-  { col: 0, row: 1 },   // start
-  { col: 5, row: 1 },
-  { col: 5, row: 7 },
-  { col: 10, row: 7 },
-  { col: 10, row: 3 },
-  { col: 14, row: 3 },
-  { col: 14, row: 8 },
-  { col: 15, row: 8 },  // end
+	{ col: 0, row: 1 }, // start
+	{ col: 5, row: 1 },
+	{ col: 5, row: 7 },
+	{ col: 10, row: 7 },
+	{ col: 10, row: 3 },
+	{ col: 14, row: 3 },
+	{ col: 14, row: 8 },
+	{ col: 15, row: 8 }, // end
 ];
 
 /**
@@ -34,27 +34,29 @@ export const PATH_WAYPOINTS: GridCoord[] = [
  * offsetY is the Y offset of the game grid (below HUD).
  */
 export function getEnemyPixelPos(
-  enemy: ActiveEnemy,
-  cellSize: number,
-  offsetY: number,
+	enemy: ActiveEnemy,
+	cellSize: number,
+	offsetY: number,
 ): { x: number; y: number } {
-  const wpIdx = enemy.waypointIndex;
-  if (wpIdx <= 0) {
-    const wp = PATH_WAYPOINTS[0];
-    return {
-      x: wp.col * cellSize + cellSize / 2,
-      y: offsetY + wp.row * cellSize + cellSize / 2,
-    };
-  }
+	const wpIdx = enemy.waypointIndex;
 
-  const from = PATH_WAYPOINTS[wpIdx - 1];
-  const to = PATH_WAYPOINTS[Math.min(wpIdx, PATH_WAYPOINTS.length - 1)];
-  const t = enemy.progress;
+	if (wpIdx <= 0) {
+		const wp = PATH_WAYPOINTS[0];
 
-  return {
-    x: (from.col + (to.col - from.col) * t) * cellSize + cellSize / 2,
-    y: offsetY + (from.row + (to.row - from.row) * t) * cellSize + cellSize / 2,
-  };
+		return {
+			x: wp.col * cellSize + cellSize / 2,
+			y: offsetY + wp.row * cellSize + cellSize / 2,
+		};
+	}
+
+	const from = PATH_WAYPOINTS[wpIdx - 1];
+	const to = PATH_WAYPOINTS[Math.min(wpIdx, PATH_WAYPOINTS.length - 1)];
+	const t = enemy.progress;
+
+	return {
+		x: (from.col + (to.col - from.col) * t) * cellSize + cellSize / 2,
+		y: offsetY + (from.row + (to.row - from.row) * t) * cellSize + cellSize / 2,
+	};
 }
 
 /**
@@ -62,37 +64,37 @@ export function getEnemyPixelPos(
  * Returns true if the enemy reached the end.
  */
 export function advanceEnemy(
-  enemy: ActiveEnemy,
-  distanceCells: number,
+	enemy: ActiveEnemy,
+	distanceCells: number,
 ): boolean {
-  let remaining = distanceCells;
+	let remaining = distanceCells;
 
-  while (remaining > 0 && enemy.waypointIndex < PATH_WAYPOINTS.length) {
-    const from = PATH_WAYPOINTS[enemy.waypointIndex - 1];
-    const to = PATH_WAYPOINTS[enemy.waypointIndex];
+	while (remaining > 0 && enemy.waypointIndex < PATH_WAYPOINTS.length) {
+		const from = PATH_WAYPOINTS[enemy.waypointIndex - 1];
+		const to = PATH_WAYPOINTS[enemy.waypointIndex];
 
-    const segLenCol = Math.abs(to.col - from.col);
-    const segLenRow = Math.abs(to.row - from.row);
-    const segLen = segLenCol + segLenRow; // Manhattan (path is axis-aligned)
+		const segLenCol = Math.abs(to.col - from.col);
+		const segLenRow = Math.abs(to.row - from.row);
+		const segLen = segLenCol + segLenRow; // Manhattan (path is axis-aligned)
 
-    const progressLeft = 1 - enemy.progress;
-    const progressNeeded = remaining / segLen;
+		const progressLeft = 1 - enemy.progress;
+		const progressNeeded = remaining / segLen;
 
-    if (progressNeeded < progressLeft) {
-      enemy.progress += progressNeeded;
-      remaining = 0;
-    } else {
-      remaining -= progressLeft * segLen;
-      enemy.waypointIndex++;
-      enemy.progress = 0;
+		if (progressNeeded < progressLeft) {
+			enemy.progress += progressNeeded;
+			remaining = 0;
+		} else {
+			remaining -= progressLeft * segLen;
+			enemy.waypointIndex++;
+			enemy.progress = 0;
 
-      if (enemy.waypointIndex >= PATH_WAYPOINTS.length) {
-        return true; // reached end
-      }
-    }
-  }
+			if (enemy.waypointIndex >= PATH_WAYPOINTS.length) {
+				return true; // reached end
+			}
+		}
+	}
 
-  return false;
+	return false;
 }
 
 /**
@@ -100,5 +102,5 @@ export function advanceEnemy(
  * Higher = further along path.
  */
 export function pathProgress(enemy: ActiveEnemy): number {
-  return enemy.waypointIndex + enemy.progress;
+	return enemy.waypointIndex + enemy.progress;
 }

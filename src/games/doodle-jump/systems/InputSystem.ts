@@ -1,73 +1,74 @@
-import type { InputHandler } from '@shared/InputHandler';
-import type { DoodleState } from '../types';
-import { MOVE_SPEED, JUMP_FORCE } from '../types';
+import type { InputHandler } from "@shared/InputHandler";
+import type { DoodleState } from "../types";
+import { MOVE_SPEED, JUMP_FORCE } from "../types";
 
 export class InputSystem implements InputHandler {
-  private state: DoodleState;
-  private onExit: () => void;
-  private onRestart: () => void;
+	private state: DoodleState;
+	private onExit: () => void;
+	private onRestart: () => void;
 
-  private keys: Set<string>;
-  private keyDownHandler: (e: KeyboardEvent) => void;
-  private keyUpHandler: (e: KeyboardEvent) => void;
+	private keys: Set<string>;
+	private keyDownHandler: (e: KeyboardEvent) => void;
+	private keyUpHandler: (e: KeyboardEvent) => void;
 
-  constructor(
-    state: DoodleState,
-    onExit: () => void,
-    onRestart: () => void,
-  ) {
-    this.state = state;
-    this.onExit = onExit;
-    this.onRestart = onRestart;
-    this.keys = new Set();
+	constructor(state: DoodleState, onExit: () => void, onRestart: () => void) {
+		this.state = state;
+		this.onExit = onExit;
+		this.onRestart = onRestart;
+		this.keys = new Set();
 
-    this.keyDownHandler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        this.onExit();
-        return;
-      }
+		this.keyDownHandler = (e: KeyboardEvent) => {
+			if (e.key === "Escape") {
+				this.onExit();
 
-      this.keys.add(e.key.toLowerCase());
+				return;
+			}
 
-      if (this.state.phase === 'idle') {
-        this.state.phase = 'playing';
-        this.state.player.vy = JUMP_FORCE;
-        return;
-      }
+			this.keys.add(e.key.toLowerCase());
 
-      if (this.state.phase === 'dead' && (e.code === 'Space' || e.key === ' ' || e.key === 'Enter')) {
-        this.onRestart();
-      }
-    };
+			if (this.state.phase === "idle") {
+				this.state.phase = "playing";
+				this.state.player.vy = JUMP_FORCE;
 
-    this.keyUpHandler = (e: KeyboardEvent) => {
-      this.keys.delete(e.key.toLowerCase());
-    };
-  }
+				return;
+			}
 
-  /** Called each frame by the engine to apply continuous movement */
-  applyMovement(): void {
-    if (this.state.phase !== 'playing') return;
+			if (
+				this.state.phase === "dead" &&
+				(e.code === "Space" || e.key === " " || e.key === "Enter")
+			) {
+				this.onRestart();
+			}
+		};
 
-    const p = this.state.player;
+		this.keyUpHandler = (e: KeyboardEvent) => {
+			this.keys.delete(e.key.toLowerCase());
+		};
+	}
 
-    if (this.keys.has('arrowleft') || this.keys.has('a')) {
-      p.vx = -MOVE_SPEED;
-      p.facingRight = false;
-    } else if (this.keys.has('arrowright') || this.keys.has('d')) {
-      p.vx = MOVE_SPEED;
-      p.facingRight = true;
-    }
-  }
+	/** Called each frame by the engine to apply continuous movement */
+	applyMovement(): void {
+		if (this.state.phase !== "playing") return;
 
-  attach(): void {
-    window.addEventListener('keydown', this.keyDownHandler);
-    window.addEventListener('keyup', this.keyUpHandler);
-  }
+		const p = this.state.player;
 
-  detach(): void {
-    window.removeEventListener('keydown', this.keyDownHandler);
-    window.removeEventListener('keyup', this.keyUpHandler);
-    this.keys.clear();
-  }
+		if (this.keys.has("arrowleft") || this.keys.has("a")) {
+			p.vx = -MOVE_SPEED;
+			p.facingRight = false;
+		} else if (this.keys.has("arrowright") || this.keys.has("d")) {
+			p.vx = MOVE_SPEED;
+			p.facingRight = true;
+		}
+	}
+
+	attach(): void {
+		window.addEventListener("keydown", this.keyDownHandler);
+		window.addEventListener("keyup", this.keyUpHandler);
+	}
+
+	detach(): void {
+		window.removeEventListener("keydown", this.keyDownHandler);
+		window.removeEventListener("keyup", this.keyUpHandler);
+		this.keys.clear();
+	}
 }

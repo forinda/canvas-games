@@ -1,189 +1,219 @@
-import type { Updatable } from '@shared/Updatable';
-import type {
-  CheckersState,
-  Piece,
-  Cell,
-  Move,
-  PieceColor,
-} from '../types';
-import { BOARD_SIZE, cellsEqual, cloneBoard } from '../types';
+import type { Updatable } from "@shared/Updatable";
+import type { CheckersState, Piece, Cell, Move, PieceColor } from "../types";
+import { BOARD_SIZE, cellsEqual, cloneBoard } from "../types";
 
 export class MoveSystem implements Updatable<CheckersState> {
-  update(state: CheckersState, _dt: number): void {
-    if (!state.legalMovesDirty) return;
-    state.legalMoves = this.getAllLegalMoves(state.board, state.currentTurn, state.mustContinueJump);
-    state.legalMovesDirty = false;
-  }
+	update(state: CheckersState, _dt: number): void {
+		if (!state.legalMovesDirty) return;
 
-  getAllLegalMoves(
-    board: (Piece | null)[][],
-    color: PieceColor,
-    mustContinueFrom: Cell | null
-  ): Move[] {
-    const jumps: Move[] = [];
-    const simple: Move[] = [];
+		state.legalMoves = this.getAllLegalMoves(
+			state.board,
+			state.currentTurn,
+			state.mustContinueJump,
+		);
+		state.legalMovesDirty = false;
+	}
 
-    for (let r = 0; r < BOARD_SIZE; r++) {
-      for (let c = 0; c < BOARD_SIZE; c++) {
-        const piece = board[r][c];
-        if (!piece || piece.color !== color) continue;
-        if (mustContinueFrom && !(mustContinueFrom.row === r && mustContinueFrom.col === c)) continue;
+	getAllLegalMoves(
+		board: (Piece | null)[][],
+		color: PieceColor,
+		mustContinueFrom: Cell | null,
+	): Move[] {
+		const jumps: Move[] = [];
+		const simple: Move[] = [];
 
-        const from: Cell = { row: r, col: c };
-        const pieceJumps = this.getJumpMoves(board, from, piece);
-        const pieceSimple = this.getSimpleMoves(board, from, piece);
+		for (let r = 0; r < BOARD_SIZE; r++) {
+			for (let c = 0; c < BOARD_SIZE; c++) {
+				const piece = board[r][c];
 
-        jumps.push(...pieceJumps);
-        simple.push(...pieceSimple);
-      }
-    }
+				if (!piece || piece.color !== color) continue;
 
-    // Forced capture rule: if any jump is available, must jump
-    if (jumps.length > 0) return jumps;
-    if (mustContinueFrom) return []; // mid-chain but no more jumps
-    return simple;
-  }
+				if (
+					mustContinueFrom &&
+					!(mustContinueFrom.row === r && mustContinueFrom.col === c)
+				)
+					continue;
 
-  getSimpleMoves(
-    board: (Piece | null)[][],
-    from: Cell,
-    piece: Piece
-  ): Move[] {
-    const moves: Move[] = [];
-    const directions = this.getMoveDirections(piece);
+				const from: Cell = { row: r, col: c };
+				const pieceJumps = this.getJumpMoves(board, from, piece);
+				const pieceSimple = this.getSimpleMoves(board, from, piece);
 
-    for (const [dr, dc] of directions) {
-      const nr = from.row + dr;
-      const nc = from.col + dc;
-      if (this.inBounds(nr, nc) && board[nr][nc] === null) {
-        moves.push({ from, to: { row: nr, col: nc }, captures: [] });
-      }
-    }
+				jumps.push(...pieceJumps);
+				simple.push(...pieceSimple);
+			}
+		}
 
-    return moves;
-  }
+		// Forced capture rule: if any jump is available, must jump
+		if (jumps.length > 0) return jumps;
 
-  getJumpMoves(
-    board: (Piece | null)[][],
-    from: Cell,
-    piece: Piece
-  ): Move[] {
-    const allChains: Move[] = [];
-    this.findJumpChains(board, from, from, piece, [], allChains);
-    return allChains;
-  }
+		if (mustContinueFrom) return []; // mid-chain but no more jumps
 
-  private findJumpChains(
-    board: (Piece | null)[][],
-    origin: Cell,
-    current: Cell,
-    piece: Piece,
-    capturedSoFar: Cell[],
-    results: Move[]
-  ): void {
-    const directions = this.getMoveDirections(piece);
-    let foundJump = false;
+		return simple;
+	}
 
-    for (const [dr, dc] of directions) {
-      const midR = current.row + dr;
-      const midC = current.col + dc;
-      const landR = current.row + dr * 2;
-      const landC = current.col + dc * 2;
+	getSimpleMoves(board: (Piece | null)[][], from: Cell, piece: Piece): Move[] {
+		const moves: Move[] = [];
+		const directions = this.getMoveDirections(piece);
 
-      if (!this.inBounds(landR, landC)) continue;
+		for (const [dr, dc] of directions) {
+			const nr = from.row + dr;
+			const nc = from.col + dc;
 
-      const midPiece = board[midR][midC];
-      if (
-        midPiece &&
-        midPiece.color !== piece.color &&
-        !capturedSoFar.some(cap => cap.row === midR && cap.col === midC) &&
-        board[landR][landC] === null
-      ) {
-        const newCaptures = [...capturedSoFar, { row: midR, col: midC }];
-        const landCell: Cell = { row: landR, col: landC };
+			if (this.inBounds(nr, nc) && board[nr][nc] === null) {
+				moves.push({ from, to: { row: nr, col: nc }, captures: [] });
+			}
+		}
 
-        // Simulate the board for continued chain
-        const simBoard = cloneBoard(board);
-        simBoard[current.row][current.col] = null;
-        simBoard[midR][midC] = null;
+		return moves;
+	}
 
-        // Check if piece gets kinged at landing
-        const wouldKing =
-          !piece.isKing &&
-          ((piece.color === 'red' && landR === 0) ||
-           (piece.color === 'black' && landR === BOARD_SIZE - 1));
-        const chainPiece: Piece = wouldKing
-          ? { color: piece.color, isKing: true }
-          : piece;
-        simBoard[landR][landC] = chainPiece;
+	getJumpMoves(board: (Piece | null)[][], from: Cell, piece: Piece): Move[] {
+		const allChains: Move[] = [];
 
-        foundJump = true;
+		this.findJumpChains(board, from, from, piece, [], allChains);
 
-        // If piece just got kinged, stop the chain (standard rules)
-        if (wouldKing) {
-          results.push({ from: origin, to: landCell, captures: newCaptures });
-        } else {
-          // Try to continue the chain
-          const beforeLen = results.length;
-          this.findJumpChains(simBoard, origin, landCell, chainPiece, newCaptures, results);
-          // If no further jumps found, this is a terminal position
-          if (results.length === beforeLen) {
-            results.push({ from: origin, to: landCell, captures: newCaptures });
-          }
-        }
-      }
-    }
+		return allChains;
+	}
 
-    if (!foundJump && capturedSoFar.length > 0) {
-      // Terminal position: handled by caller adding the move
-    }
-  }
+	private findJumpChains(
+		board: (Piece | null)[][],
+		origin: Cell,
+		current: Cell,
+		piece: Piece,
+		capturedSoFar: Cell[],
+		results: Move[],
+	): void {
+		const directions = this.getMoveDirections(piece);
+		let foundJump = false;
 
-  private getMoveDirections(piece: Piece): [number, number][] {
-    if (piece.isKing) {
-      return [[-1, -1], [-1, 1], [1, -1], [1, 1]];
-    }
-    if (piece.color === 'red') {
-      return [[-1, -1], [-1, 1]]; // red moves up
-    }
-    return [[1, -1], [1, 1]]; // black moves down
-  }
+		for (const [dr, dc] of directions) {
+			const midR = current.row + dr;
+			const midC = current.col + dc;
+			const landR = current.row + dr * 2;
+			const landC = current.col + dc * 2;
 
-  private inBounds(r: number, c: number): boolean {
-    return r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE;
-  }
+			if (!this.inBounds(landR, landC)) continue;
 
-  applyMove(state: CheckersState, move: Move): void {
-    const piece = state.board[move.from.row][move.from.col];
-    if (!piece) return;
+			const midPiece = board[midR][midC];
 
-    state.board[move.from.row][move.from.col] = null;
+			if (
+				midPiece &&
+				midPiece.color !== piece.color &&
+				!capturedSoFar.some((cap) => cap.row === midR && cap.col === midC) &&
+				board[landR][landC] === null
+			) {
+				const newCaptures = [...capturedSoFar, { row: midR, col: midC }];
+				const landCell: Cell = { row: landR, col: landC };
 
-    // Remove captured pieces
-    for (const cap of move.captures) {
-      const captured = state.board[cap.row][cap.col];
-      if (captured) {
-        if (captured.color === 'red') {
-          state.capturedRed++;
-        } else {
-          state.capturedBlack++;
-        }
-        state.board[cap.row][cap.col] = null;
-      }
-    }
+				// Simulate the board for continued chain
+				const simBoard = cloneBoard(board);
 
-    state.board[move.to.row][move.to.col] = piece;
-    state.lastMove = move;
+				simBoard[current.row][current.col] = null;
+				simBoard[midR][midC] = null;
 
-    // King promotion
-    if (piece.color === 'red' && move.to.row === 0) {
-      piece.isKing = true;
-    } else if (piece.color === 'black' && move.to.row === BOARD_SIZE - 1) {
-      piece.isKing = true;
-    }
-  }
+				// Check if piece gets kinged at landing
+				const wouldKing =
+					!piece.isKing &&
+					((piece.color === "red" && landR === 0) ||
+						(piece.color === "black" && landR === BOARD_SIZE - 1));
+				const chainPiece: Piece = wouldKing
+					? { color: piece.color, isKing: true }
+					: piece;
 
-  getMovesForCell(state: CheckersState, cell: Cell): Move[] {
-    return state.legalMoves.filter(m => cellsEqual(m.from, cell));
-  }
+				simBoard[landR][landC] = chainPiece;
+
+				foundJump = true;
+
+				// If piece just got kinged, stop the chain (standard rules)
+				if (wouldKing) {
+					results.push({ from: origin, to: landCell, captures: newCaptures });
+				} else {
+					// Try to continue the chain
+					const beforeLen = results.length;
+
+					this.findJumpChains(
+						simBoard,
+						origin,
+						landCell,
+						chainPiece,
+						newCaptures,
+						results,
+					);
+
+					// If no further jumps found, this is a terminal position
+					if (results.length === beforeLen) {
+						results.push({ from: origin, to: landCell, captures: newCaptures });
+					}
+				}
+			}
+		}
+
+		if (!foundJump && capturedSoFar.length > 0) {
+			// Terminal position: handled by caller adding the move
+		}
+	}
+
+	private getMoveDirections(piece: Piece): [number, number][] {
+		if (piece.isKing) {
+			return [
+				[-1, -1],
+				[-1, 1],
+				[1, -1],
+				[1, 1],
+			];
+		}
+
+		if (piece.color === "red") {
+			return [
+				[-1, -1],
+				[-1, 1],
+			]; // red moves up
+		}
+
+		return [
+			[1, -1],
+			[1, 1],
+		]; // black moves down
+	}
+
+	private inBounds(r: number, c: number): boolean {
+		return r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE;
+	}
+
+	applyMove(state: CheckersState, move: Move): void {
+		const piece = state.board[move.from.row][move.from.col];
+
+		if (!piece) return;
+
+		state.board[move.from.row][move.from.col] = null;
+
+		// Remove captured pieces
+		for (const cap of move.captures) {
+			const captured = state.board[cap.row][cap.col];
+
+			if (captured) {
+				if (captured.color === "red") {
+					state.capturedRed++;
+				} else {
+					state.capturedBlack++;
+				}
+
+				state.board[cap.row][cap.col] = null;
+			}
+		}
+
+		state.board[move.to.row][move.to.col] = piece;
+		state.lastMove = move;
+
+		// King promotion
+		if (piece.color === "red" && move.to.row === 0) {
+			piece.isKing = true;
+		} else if (piece.color === "black" && move.to.row === BOARD_SIZE - 1) {
+			piece.isKing = true;
+		}
+	}
+
+	getMovesForCell(state: CheckersState, cell: Cell): Move[] {
+		return state.legalMoves.filter((m) => cellsEqual(m.from, cell));
+	}
 }
