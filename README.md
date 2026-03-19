@@ -1,6 +1,6 @@
 # Canvas Game Arcade
 
-A multi-game arcade platform with **50 playable games** built with TypeScript and HTML5 Canvas (Vite).
+A multi-game arcade platform with **52 playable games** built with TypeScript and HTML5 Canvas (Vite).
 
 ## Tutorial Series
 
@@ -16,7 +16,7 @@ pnpm dev        # http://localhost:3000
 pnpm build      # production build
 ```
 
-## Games (50)
+## Games (52)
 
 ### Arcade (16)
 
@@ -73,7 +73,7 @@ pnpm build      # production build
 | [Gravity Ball](src/games/gravity-ball/) | Toggle gravity direction | [Tutorial (5 steps)](tutorials/36-gravity-ball/README.md) | [Level Progression](tutorials/concepts/game-systems/g04-level-progression.md) |
 | [Hangman](src/games/hangman/) | Guess the word letter by letter | [Tutorial (4 steps)](tutorials/05-hangman/README.md) | [Text Rendering](tutorials/concepts/canvas/c05-text-rendering.md) |
 
-### Strategy (5)
+### Strategy (7)
 
 | Game | Description | Tutorial | Key Concepts |
 |------|-------------|----------|--------------|
@@ -82,6 +82,8 @@ pnpm build      # production build
 | [Ant Colony](src/games/ant-colony/) | Emergent ant simulation | [Tutorial (6 steps)](tutorials/46-ant-colony/README.md) | [Pheromones](tutorials/concepts/game-systems/g09-pheromones.md), [Cellular Automata](tutorials/concepts/algorithms/a11-cellular-automata.md) |
 | [Tic-Tac-Toe](src/games/tic-tac-toe/) | Unbeatable minimax AI | [Tutorial (5 steps)](tutorials/04-tic-tac-toe/README.md) | [Minimax](tutorials/concepts/algorithms/a02-minimax.md) |
 | [Connect Four](src/games/connect-four/) | Drop discs, connect 4 vs AI | [Tutorial (5 steps)](tutorials/28-connect-four/README.md) | [Minimax](tutorials/concepts/algorithms/a02-minimax.md), [Transparency](tutorials/concepts/canvas/c07-transparency-and-compositing.md) |
+| [Chess](src/games/chess/) | Full rules, castling, en passant, promotion UI | — | [Minimax](tutorials/concepts/algorithms/a02-minimax.md), [State Machines](tutorials/concepts/algorithms/a12-state-machines.md) |
+| [Checkers](src/games/checkers/) | Forced captures, multi-jump chains, king promotion | — | [Minimax](tutorials/concepts/algorithms/a02-minimax.md), [Stack (Undo)](tutorials/concepts/algorithms/a15-stack-queue.md) |
 
 ### Chill (6)
 
