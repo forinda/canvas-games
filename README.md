@@ -303,7 +303,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 2. Create a feature branch: `git checkout -b feat/my-new-game`
 3. Add your game following the steps above
 4. Ensure `npx tsc --noEmit` and `pnpm build` pass
-5. Commit with descriptive message: `feat: add My Game (#N) — short description`
+5. Commit following the **Commit Convention** below
 6. Open a pull request
 
 ### Guidelines
@@ -314,6 +314,51 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 - **Help data required** — every game needs `goal`, `controls`, and `tips`
 - **No external dependencies** — pure TypeScript + Canvas API only
 - **Test locally** — run `pnpm dev`, verify the game launches, plays, and exits cleanly
+
+### Commit Convention
+
+We use [Conventional Commits](https://www.conventionalcommits.org/). The release script auto-generates changelogs from these prefixes:
+
+| Prefix | Category | When to use | Example |
+|--------|----------|-------------|---------|
+| `feat:` | New Games & Features | New game, new platform feature, new tutorial | `feat: add Chess game (#51) — full rules, minimax AI` |
+| `fix:` | Bug Fixes | Bug fix, rule correction, UX fix | `fix: first-row game cards not clickable` |
+| `perf:` | Performance | Optimization, code splitting, caching | `perf: code-split all 52 games via dynamic import()` |
+| `docs:` | Documentation | Tutorials, README, concept pages | `docs: write Tetris tutorial (Game 24) — 7 steps` |
+| `refactor:` | Refactoring | Code restructure without behavior change | `refactor: use Record for game registry` |
+| `chore:` | Other Changes | Config, tooling, CI, dependencies | `chore: setup eslint, prettier, husky` |
+
+**Format:**
+
+```
+<prefix>: <short description> (under 72 chars)
+
+Optional longer body explaining the "why" after a blank line.
+
+Co-Authored-By: Name <email>
+```
+
+**Branch naming:**
+
+```
+feat/game-name        # new game
+fix/bug-description   # bug fix
+docs/tutorial-name    # documentation
+perf/optimization     # performance
+chore/config-change   # tooling
+```
+
+### Releases
+
+See [RELEASE.md](./RELEASE.md) for the full release workflow. Quick reference:
+
+```bash
+pnpm release:patch   # 1.0.0 → 1.0.1 (bug fixes)
+pnpm release:minor   # 1.0.0 → 1.1.0 (new games/features)
+pnpm release:major   # 1.0.0 → 2.0.0 (breaking changes)
+```
+
+The release script auto-generates [CHANGELOG.md](./CHANGELOG.md) with clickable commit hashes and author attribution from your commit messages.
 
 ## Tech Stack
 
