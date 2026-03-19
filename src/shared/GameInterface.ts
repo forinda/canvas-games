@@ -26,6 +26,15 @@ export type GameCategory =
 	| "strategy"
 	| "chill";
 
+export type TouchLayout =
+	| "none"
+	| "dpad"
+	| "dpad-jump"
+	| "dpad-action"
+	| "tap-only"
+	| "dual-stick"
+	| "flap";
+
 export interface GameDefinition {
 	id: string;
 	name: string;
@@ -36,6 +45,8 @@ export interface GameDefinition {
 	category?: GameCategory;
 	/** Help info: goals, controls, tips */
 	help?: GameHelp;
+	/** Touch control layout for mobile (defaults to 'tap-only') */
+	touchLayout?: TouchLayout;
 	/** Factory: receives canvas, returns a running game instance (sync or async for lazy loading) */
 	create(
 		canvas: HTMLCanvasElement,

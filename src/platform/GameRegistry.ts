@@ -3,11 +3,12 @@ import type {
 	GameDefinition,
 	GameHelp,
 	GameInstance,
+	TouchLayout,
 } from "@shared/GameInterface";
 
 /**
  * Helper: creates a lazy-loaded GameDefinition.
- * Metadata (name, icon, help) is static for instant menu rendering.
+ * Metadata (name, icon, help, touchLayout) is static for instant menu rendering.
  * The actual game code is loaded via dynamic import() only when played.
  */
 function lazyGame(
@@ -20,6 +21,7 @@ function lazyGame(
 	help: GameHelp,
 	loader: () => Promise<{ default?: GameDefinition; [key: string]: unknown }>,
 	exportName: string,
+	touchLayout: TouchLayout = "tap-only",
 ): GameDefinition {
 	return {
 		id,
@@ -29,6 +31,7 @@ function lazyGame(
 		color,
 		category,
 		help,
+		touchLayout,
 		create(
 			canvas: HTMLCanvasElement,
 			onExit: () => void,
@@ -64,6 +67,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/snake"),
 			"SnakeGame",
+			"dpad",
 		),
 		lazyGame(
 			"breakout",
@@ -102,6 +106,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/asteroids"),
 			"AsteroidsGame",
+			"dpad-action",
 		),
 		lazyGame(
 			"space-invaders",
@@ -120,6 +125,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/space-invaders"),
 			"SpaceInvadersGame",
+			"dpad-action",
 		),
 		lazyGame(
 			"flappy-bird",
@@ -135,6 +141,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/flappy-bird"),
 			"FlappyBirdGame",
+			"flap",
 		),
 		lazyGame(
 			"tetris",
@@ -155,6 +162,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/tetris"),
 			"TetrisGame",
+			"dpad-action",
 		),
 		lazyGame(
 			"whack-a-mole",
@@ -188,6 +196,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/helicopter"),
 			"HelicopterGame",
+			"flap",
 		),
 		lazyGame(
 			"pong",
@@ -221,6 +230,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/pacman"),
 			"PacManGame",
+			"dpad",
 		),
 		lazyGame(
 			"doodle-jump",
@@ -236,6 +246,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/doodle-jump"),
 			"DoodleJumpGame",
+			"dpad-jump",
 		),
 		lazyGame(
 			"rhythm-tap",
@@ -296,6 +307,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/color-switch"),
 			"ColorSwitchGame",
+			"flap",
 		),
 		lazyGame(
 			"typing-speed",
@@ -326,6 +338,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/frogger"),
 			"FroggerGame",
+			"dpad",
 		),
 	],
 	action: [
@@ -368,6 +381,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/platformer"),
 			"PlatformerGame",
+			"dpad-jump",
 		),
 		lazyGame(
 			"topdown-shooter",
@@ -387,6 +401,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/topdown-shooter"),
 			"TopDownShooterGame",
+			"dual-stick",
 		),
 		lazyGame(
 			"zombie-survival",
@@ -406,6 +421,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/zombie-survival"),
 			"ZombieSurvivalGame",
+			"dual-stick",
 		),
 		lazyGame(
 			"racing",
@@ -424,6 +440,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/racing"),
 			"RacingGame",
+			"none",
 		),
 		lazyGame(
 			"fruit-ninja",
@@ -439,6 +456,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/fruit-ninja"),
 			"FruitNinjaGame",
+			"none",
 		),
 		lazyGame(
 			"lava-floor",
@@ -457,6 +475,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/lava-floor"),
 			"LavaFloorGame",
+			"dpad-jump",
 		),
 		lazyGame(
 			"basketball",
@@ -472,6 +491,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/basketball"),
 			"BasketballGame",
+			"none",
 		),
 		lazyGame(
 			"golf",
@@ -487,6 +507,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/golf"),
 			"GolfGame",
+			"none",
 		),
 	],
 	puzzle: [
@@ -559,6 +580,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/game-2048"),
 			"Game2048",
+			"dpad",
 		),
 		lazyGame(
 			"sokoban",
@@ -578,6 +600,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/sokoban"),
 			"SokobanGame",
+			"dpad",
 		),
 		lazyGame(
 			"maze-runner",
@@ -593,6 +616,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/maze-runner"),
 			"MazeRunnerGame",
+			"dpad",
 		),
 		lazyGame(
 			"word-search",
@@ -705,6 +729,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/gravity-ball"),
 			"GravityBallGame",
+			"dpad",
 		),
 		lazyGame(
 			"hangman",
@@ -853,6 +878,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/fishing"),
 			"FishingGame",
+			"none",
 		),
 		lazyGame(
 			"idle-clicker",
