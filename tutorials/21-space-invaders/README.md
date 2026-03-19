@@ -23,12 +23,12 @@ The classic alien-shooting arcade game. Move your ship left and right, fire bull
 
 | # | Title | Time | What You'll Build |
 |---|-------|------|-------------------|
-| 1 | [Project Setup & Ship Rendering](./step-1.md) | ~15min | Draw the player ship and alien grid |
-| 2 | [Ship Movement & Shooting](./step-2.md) | ~15min | Move the ship with keys, fire bullets upward |
-| 3 | [Alien Formation & Marching](./step-3.md) | ~15min | Aliens march side to side and descend |
-| 4 | [Bullet-Alien Collision](./step-4.md) | ~15min | Bullets destroy aliens, aliens shoot back |
-| 5 | [Shields & Lives](./step-5.md) | ~15min | Destructible shields, player lives, alien reach = game over |
-| 6 | [Waves & Polish](./step-6.md) | ~15min | Faster waves, score multipliers, UFO bonus |
+| 1 | [Player Ship & Movement](./step-1.md) | ~15min | Draw player ship, left/right movement, shooting bullets upward |
+| 2 | [Alien Grid & Movement](./step-2.md) | ~15min | 5x11 alien grid, side-to-side movement, step down at edge |
+| 3 | [Bullet-Alien Collision](./step-3.md) | ~15min | Player bullets destroy aliens, score tracking, speed-up |
+| 4 | [Alien Shooting & Shields](./step-4.md) | ~15min | Aliens shoot back randomly, 4 destructible shield barriers |
+| 5 | [UFO Bonus & Waves](./step-5.md) | ~15min | Random UFO for bonus points, wave progression, difficulty scaling |
+| 6 | [Lives, Score & Polish](./step-6.md) | ~15min | 3 lives, high score, pixel-art sprites, pause, overlays |
 
 ## Final Code
 
