@@ -17,6 +17,27 @@ else
   TITLE="Release Notes (Full History)"
 fi
 
+# Detect GitHub repo URL for commit links
+REPO_URL=""
+REMOTE_URL=$(git remote get-url origin 2>/dev/null || echo "")
+if [[ "$REMOTE_URL" == *"github.com"* ]]; then
+  REPO_URL=$(echo "$REMOTE_URL" | sed -E 's|git@github\.com:|https://github.com/|;s|\.git$||')
+fi
+
+# Helper: format entry with hash link + author
+format_entry() {
+  local line="$1"
+  local hash=$(echo "$line" | cut -d' ' -f1)
+  local msg=$(echo "$line" | cut -d' ' -f2-)
+  local author=$(git log -1 --format='%an' "$hash" 2>/dev/null)
+
+  if [ -n "$REPO_URL" ]; then
+    echo "- $msg ([\`$hash\`]($REPO_URL/commit/$hash)) — @$author"
+  else
+    echo "- $msg (\`$hash\`) — @$author"
+  fi
+}
+
 echo "# $TITLE"
 echo ""
 echo "**Date:** $DATE"
@@ -35,9 +56,7 @@ if [ -n "$FEATURES" ]; then
   echo "## New Games & Features"
   echo ""
   echo "$FEATURES" | while read -r line; do
-    hash=$(echo "$line" | cut -d' ' -f1)
-    msg=$(echo "$line" | cut -d' ' -f2-)
-    echo "- $msg (\`$hash\`)"
+    format_entry "$line"
   done
   echo ""
 fi
@@ -48,9 +67,7 @@ if [ -n "$FIXES" ]; then
   echo "## Bug Fixes & Improvements"
   echo ""
   echo "$FIXES" | while read -r line; do
-    hash=$(echo "$line" | cut -d' ' -f1)
-    msg=$(echo "$line" | cut -d' ' -f2-)
-    echo "- $msg (\`$hash\`)"
+    format_entry "$line"
   done
   echo ""
 fi
@@ -61,9 +78,7 @@ if [ -n "$REFACTORS" ]; then
   echo "## Refactoring"
   echo ""
   echo "$REFACTORS" | while read -r line; do
-    hash=$(echo "$line" | cut -d' ' -f1)
-    msg=$(echo "$line" | cut -d' ' -f2-)
-    echo "- $msg (\`$hash\`)"
+    format_entry "$line"
   done
   echo ""
 fi
@@ -74,9 +89,7 @@ if [ -n "$DOCS" ]; then
   echo "## Documentation"
   echo ""
   echo "$DOCS" | while read -r line; do
-    hash=$(echo "$line" | cut -d' ' -f1)
-    msg=$(echo "$line" | cut -d' ' -f2-)
-    echo "- $msg (\`$hash\`)"
+    format_entry "$line"
   done
   echo ""
 fi
@@ -87,25 +100,19 @@ if [ -n "$CHORES" ]; then
   echo "## Chores"
   echo ""
   echo "$CHORES" | while read -r line; do
-    hash=$(echo "$line" | cut -d' ' -f1)
-    msg=$(echo "$line" | cut -d' ' -f2-)
-    echo "- $msg (\`$hash\`)"
+    format_entry "$line"
   done
   echo ""
 fi
 
-# Game list by category
-echo "## Game Roster ($GAME_COUNT games)"
+# Contributors
+echo "## Contributors"
 echo ""
-for category in arcade action puzzle strategy chill; do
-  games=$(grep -A 100 "^  $category:" src/platform/GameRegistry.ts 2>/dev/null | grep "Game\|Game2048" | sed 's/.*\(.*Game\).*/\1/' | head -20)
-  count=$(echo "$games" | grep -c "Game" 2>/dev/null || echo 0)
-  echo "### ${category^} ($count)"
-  echo ""
-  # List game folders in this category
-  grep -B1 "category: '$category'" src/games/*/index.ts 2>/dev/null | grep "name:" | sed "s/.*name: '\(.*\)'.*/- \1/" | sort
-  echo ""
+git log --format='%an' $RANGE 2>/dev/null | sort -u | while read -r author; do
+  COMMITS=$(git log --oneline $RANGE --author="$author" 2>/dev/null | wc -l)
+  echo "- **$author** ($COMMITS commits)"
 done
+echo ""
 
 echo "---"
 echo "*Generated on $DATE*"

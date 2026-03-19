@@ -67,6 +67,32 @@ else
   echo "Changelog range: initial → v$NEW_VERSION"
 fi
 
+# Detect GitHub repo URL for commit links
+REPO_URL=""
+REMOTE_URL=$(git remote get-url origin 2>/dev/null || echo "")
+if [[ "$REMOTE_URL" == *"github.com"* ]]; then
+  # Convert git@github.com:user/repo.git or https://github.com/user/repo.git → https://github.com/user/repo
+  REPO_URL=$(echo "$REMOTE_URL" | sed -E 's|git@github\.com:|https://github.com/|;s|\.git$||')
+fi
+
+# Helper: format a log entry with commit hash, message, and author
+format_entry() {
+  local line="$1"
+  local hash=$(echo "$line" | cut -d' ' -f1)
+  local msg=$(echo "$line" | cut -d' ' -f2-)
+  local author=$(git log -1 --format='%an' "$hash" 2>/dev/null)
+  local short_hash="$hash"
+
+  # Make hash a clickable link if we have a GitHub URL
+  if [ -n "$REPO_URL" ]; then
+    short_hash="[\`$hash\`]($REPO_URL/commit/$hash)"
+  else
+    short_hash="\`$hash\`"
+  fi
+
+  echo "- $msg ($short_hash) — @$author"
+}
+
 # Generate changelog entry
 CHANGELOG_FILE="CHANGELOG.md"
 TEMP_ENTRY=$(mktemp)
@@ -80,14 +106,21 @@ TEMP_ENTRY=$(mktemp)
   echo "**$GAME_COUNT games** | $(find src -name '*.ts' | wc -l) modules"
   echo ""
 
+  # Compare with previous tag
+  if [ -n "$LAST_TAG" ]; then
+    COMMITS_COUNT=$(git log --oneline $RANGE 2>/dev/null | wc -l)
+    FILES_CHANGED=$(git diff --stat $LAST_TAG HEAD 2>/dev/null | tail -1 | sed 's/^ //')
+    echo "**$COMMITS_COUNT commits** since $LAST_TAG | $FILES_CHANGED"
+    echo ""
+  fi
+
   # Features
   FEATURES=$(git log --oneline $RANGE --grep="^feat" 2>/dev/null)
   if [ -n "$FEATURES" ]; then
     echo "### New Games & Features"
     echo ""
     echo "$FEATURES" | while read -r line; do
-      msg=$(echo "$line" | cut -d' ' -f2-)
-      echo "- $msg"
+      format_entry "$line"
     done
     echo ""
   fi
@@ -98,8 +131,7 @@ TEMP_ENTRY=$(mktemp)
     echo "### Bug Fixes"
     echo ""
     echo "$FIXES" | while read -r line; do
-      msg=$(echo "$line" | cut -d' ' -f2-)
-      echo "- $msg"
+      format_entry "$line"
     done
     echo ""
   fi
@@ -110,8 +142,7 @@ TEMP_ENTRY=$(mktemp)
     echo "### Documentation"
     echo ""
     echo "$DOCS" | while read -r line; do
-      msg=$(echo "$line" | cut -d' ' -f2-)
-      echo "- $msg"
+      format_entry "$line"
     done
     echo ""
   fi
@@ -122,11 +153,19 @@ TEMP_ENTRY=$(mktemp)
     echo "### Other Changes"
     echo ""
     echo "$OTHER" | while read -r line; do
-      msg=$(echo "$line" | cut -d' ' -f2-)
-      echo "- $msg"
+      format_entry "$line"
     done
     echo ""
   fi
+
+  # Contributors for this release
+  echo "### Contributors"
+  echo ""
+  git log --format='%an' $RANGE 2>/dev/null | sort -u | while read -r author; do
+    COMMITS=$(git log --oneline $RANGE --author="$author" 2>/dev/null | wc -l)
+    echo "- **$author** ($COMMITS commits)"
+  done
+  echo ""
 
   echo "---"
   echo ""
