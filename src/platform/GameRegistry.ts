@@ -49,6 +49,8 @@ import { ConnectFourGame } from '@games/connect-four';
 import { FroggerGame } from '@games/frogger';
 import { GolfGame } from '@games/golf';
 import { PixelArtGame } from '@games/pixel-art';
+import { CheckersGame } from '@games/checkers';
+import { ChessGame } from '@games/chess';
 
 export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
   arcade: [
@@ -103,6 +105,8 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
     AntColonyGame,
     TicTacToeGame,
     ConnectFourGame,
+    CheckersGame,
+    ChessGame,
   ],
   chill: [
     FishingGame,
