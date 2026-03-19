@@ -1,5 +1,26 @@
 # Changelog
 
+## v1.1.0 (2026-03-19)
+
+**52 games** | 555 modules
+
+**3 commits** since v1.0.0 | 4 files changed, 992 insertions(+), 141 deletions(-)
+
+### Performance
+
+- perf: code-split all 52 games via dynamic import() ([`1f67d36`](https://github.com/forinda/canvas-games/commit/1f67d36)) — @forinda
+
+### Other Changes
+
+- chore: add license to build output, raise chunk size warning limit ([`cc26162`](https://github.com/forinda/canvas-games/commit/cc26162)) — @forinda
+- chore: disable sourcemaps, enable OXC minification ([`ce33548`](https://github.com/forinda/canvas-games/commit/ce33548)) — @forinda
+
+### Contributors
+
+- **forinda** (3 commits)
+
+---
+
 ## v1.0.0 (2026-03-19)
 
 **Date:** 2026-03-19

@@ -72,6 +72,17 @@ if [ -n "$FIXES" ]; then
   echo ""
 fi
 
+# Performance (perf:)
+PERFS=$(git log --oneline $RANGE --grep="^perf" 2>/dev/null)
+if [ -n "$PERFS" ]; then
+  echo "## Performance"
+  echo ""
+  echo "$PERFS" | while read -r line; do
+    format_entry "$line"
+  done
+  echo ""
+fi
+
 # Refactors (refactor:)
 REFACTORS=$(git log --oneline $RANGE --grep="^refactor" 2>/dev/null)
 if [ -n "$REFACTORS" ]; then

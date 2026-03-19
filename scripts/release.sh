@@ -147,6 +147,17 @@ TEMP_ENTRY=$(mktemp)
     echo ""
   fi
 
+  # Performance
+  PERFS=$(git log --oneline $RANGE --grep="^perf" 2>/dev/null)
+  if [ -n "$PERFS" ]; then
+    echo "### Performance"
+    echo ""
+    echo "$PERFS" | while read -r line; do
+      format_entry "$line"
+    done
+    echo ""
+  fi
+
   # Refactors + Chores
   OTHER=$(git log --oneline $RANGE --grep="^refactor\|^chore" 2>/dev/null)
   if [ -n "$OTHER" ]; then
