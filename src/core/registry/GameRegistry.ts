@@ -1078,6 +1078,27 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			"flap",
 			"webgl",
 		),
+		lazyGame(
+			"endless-runner",
+			"Endless Runner",
+			"Dodge, jump, collect coins!",
+			"🏃",
+			"#ff6f00",
+			"3d",
+			{
+				goal: "Run as far as you can! Dodge obstacles, jump over low ones, collect coins.",
+				controls: [
+					{ key: "Left/Right or A/D", action: "Switch lanes" },
+					{ key: "Space / Up / W", action: "Jump" },
+					{ key: "ESC", action: "Exit to menu" },
+				],
+				tips: ["Jump over yellow (low) obstacles", "Speed increases over time"],
+			},
+			() => import("@webgl/games/endless-runner"),
+			"EndlessRunnerGame",
+			"dpad-jump",
+			"webgl",
+		),
 	],
 };
 
