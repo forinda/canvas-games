@@ -980,6 +980,56 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			"tap-only",
 			"webgl",
 		),
+		lazyGame(
+			"marble-roll",
+			"Marble Roll",
+			"Tilt the platform, roll to the goal!",
+			"🔴",
+			"#ff6f00",
+			"3d",
+			{
+				goal: "Tilt the platform to roll the marble to the green goal. Collect all gems first!",
+				controls: [
+					{ key: "Arrow Keys / WASD", action: "Tilt platform" },
+					{ key: "Mouse drag", action: "Orbit camera" },
+					{ key: "R", action: "Restart level" },
+					{ key: "ESC", action: "Exit to menu" },
+				],
+				tips: [
+					"Collect all yellow gems before the goal turns green",
+					"Small tilts give more control",
+				],
+			},
+			() => import("@webgl/games/marble-roll"),
+			"MarbleRollGame",
+			"dpad",
+			"webgl",
+		),
+		lazyGame(
+			"pong-3d",
+			"3D Pong",
+			"Classic Pong in 3D!",
+			"🏓",
+			"#ff6f00",
+			"3d",
+			{
+				goal: "Score 7 points before the AI. Ball speeds up each rally.",
+				controls: [
+					{ key: "Left/Right or A/D", action: "Move paddle" },
+					{ key: "Space", action: "Start / Restart" },
+					{ key: "Mouse drag", action: "Orbit camera" },
+					{ key: "ESC", action: "Exit to menu" },
+				],
+				tips: [
+					"Hit the ball with the paddle edge to angle it",
+					"Ball speeds up with each hit",
+				],
+			},
+			() => import("@webgl/games/pong-3d"),
+			"Pong3DGame",
+			"dpad",
+			"webgl",
+		),
 	],
 };
 
