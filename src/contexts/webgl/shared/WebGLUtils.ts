@@ -111,7 +111,7 @@ export function createProgram(
  */
 export function createBuffer(
 	gl: WebGL2RenderingContext,
-	data: BufferSource,
+	data: AllowSharedBufferSource,
 	target: GLenum = gl.ARRAY_BUFFER,
 	usage: GLenum = gl.STATIC_DRAW,
 ): WebGLBuffer {

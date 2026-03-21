@@ -3,12 +3,13 @@ import type {
 	GameDefinition,
 	GameHelp,
 	GameInstance,
+	RenderContext,
 	TouchLayout,
 } from "@core/GameInterface";
 
 /**
  * Helper: creates a lazy-loaded GameDefinition.
- * Metadata (name, icon, help, touchLayout) is static for instant menu rendering.
+ * Metadata (name, icon, help, touchLayout, renderContext) is static for instant menu rendering.
  * The actual game code is loaded via dynamic import() only when played.
  */
 function lazyGame(
@@ -22,6 +23,7 @@ function lazyGame(
 	loader: () => Promise<{ default?: GameDefinition; [key: string]: unknown }>,
 	exportName: string,
 	touchLayout: TouchLayout = "tap-only",
+	renderContext: RenderContext = "2d",
 ): GameDefinition {
 	return {
 		id,
@@ -32,6 +34,7 @@ function lazyGame(
 		category,
 		help,
 		touchLayout,
+		renderContext,
 		create(
 			canvas: HTMLCanvasElement,
 			onExit: () => void,
@@ -952,7 +955,32 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			"PixelArtGame",
 		),
 	],
-	"3d": [],
+	"3d": [
+		lazyGame(
+			"spinning-cube",
+			"Spinning Cube",
+			"Interactive 3D cube!",
+			"🧊",
+			"#ff6f00",
+			"3d",
+			{
+				goal: "Drag to orbit the camera around a lit, spinning cube. Scroll to zoom.",
+				controls: [
+					{ key: "Mouse drag", action: "Orbit camera" },
+					{ key: "Scroll", action: "Zoom in/out" },
+					{ key: "ESC", action: "Exit to menu" },
+				],
+				tips: [
+					"The cube auto-rotates and shifts color over time",
+					"This is the simplest WebGL demo",
+				],
+			},
+			() => import("@webgl/games/spinning-cube"),
+			"SpinningCubeGame",
+			"tap-only",
+			"webgl",
+		),
+	],
 };
 
 /** Flat list of all games across categories */
