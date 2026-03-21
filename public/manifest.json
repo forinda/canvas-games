@@ -1,7 +1,7 @@
 {
 	"name": "Forinda Games - Canvas Game Arcade",
 	"short_name": "Forinda Games",
-	"description": "Play 52 free HTML5 Canvas games including Snake, Tetris, Pac-Man, Space Invaders, and more. No downloads required!",
+	"description": "Play free HTML5 Canvas & WebGL games including Snake, Tetris, Pac-Man, Space Invaders, and more. No downloads required!",
 	"start_url": "/",
 	"scope": "/",
 	"display": "standalone",
