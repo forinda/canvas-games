@@ -36,13 +36,21 @@ interface TouchZone {
 	icon: string;
 	active: boolean;
 	touchId: number | null;
+	pressTime: number;
 }
 
-const DPAD_SIZE = 140;
-const BTN_SIZE = 60;
-const MARGIN = 20;
-const OPACITY_IDLE = 0.25;
-const OPACITY_ACTIVE = 0.5;
+export type ControlSize = "small" | "medium" | "large";
+
+const SIZE_PRESETS: Record<
+	ControlSize,
+	{ dpad: number; btn: number; margin: number }
+> = {
+	small: { dpad: 110, btn: 50, margin: 15 },
+	medium: { dpad: 140, btn: 60, margin: 20 },
+	large: { dpad: 170, btn: 70, margin: 25 },
+};
+const OPACITY_IDLE = 0.35;
+const OPACITY_ACTIVE = 0.65;
 
 export class TouchControls {
 	private canvas: HTMLCanvasElement;
@@ -50,15 +58,28 @@ export class TouchControls {
 	private zones: TouchZone[] = [];
 	private isTouchDevice: boolean;
 	private state: TouchState;
+	private dpadSize: number;
+	private btnSize: number;
+	private margin: number;
 
 	// Bound handlers
 	private touchStartHandler: (e: TouchEvent) => void;
 	private touchMoveHandler: (e: TouchEvent) => void;
 	private touchEndHandler: (e: TouchEvent) => void;
 
-	constructor(canvas: HTMLCanvasElement, layout: TouchLayout) {
+	constructor(
+		canvas: HTMLCanvasElement,
+		layout: TouchLayout,
+		size: ControlSize = "medium",
+	) {
 		this.canvas = canvas;
 		this.layout = layout;
+
+		const preset = SIZE_PRESETS[size];
+
+		this.dpadSize = preset.dpad;
+		this.btnSize = preset.btn;
+		this.margin = preset.margin;
 		this.isTouchDevice =
 			"ontouchstart" in window || navigator.maxTouchPoints > 0;
 
@@ -121,9 +142,9 @@ export class TouchControls {
 
 		if (this.layout === "none" || this.layout === "tap-only") return;
 
-		const dpadX = MARGIN;
-		const dpadY = H - DPAD_SIZE - MARGIN;
-		const third = DPAD_SIZE / 3;
+		const dpadX = this.margin;
+		const dpadY = H - this.dpadSize - this.margin;
+		const third = this.dpadSize / 3;
 
 		if (
 			this.layout === "dpad" ||
@@ -141,6 +162,7 @@ export class TouchControls {
 				icon: "▲",
 				active: false,
 				touchId: null,
+				pressTime: 0,
 			});
 
 			this.zones.push({
@@ -153,6 +175,7 @@ export class TouchControls {
 				icon: "▼",
 				active: false,
 				touchId: null,
+				pressTime: 0,
 			});
 
 			this.zones.push({
@@ -165,6 +188,7 @@ export class TouchControls {
 				icon: "◄",
 				active: false,
 				touchId: null,
+				pressTime: 0,
 			});
 
 			this.zones.push({
@@ -177,6 +201,7 @@ export class TouchControls {
 				icon: "►",
 				active: false,
 				touchId: null,
+				pressTime: 0,
 			});
 		}
 
@@ -184,14 +209,15 @@ export class TouchControls {
 			// Jump button on right side
 			this.zones.push({
 				id: "action",
-				x: W - BTN_SIZE * 2 - MARGIN,
-				y: H - BTN_SIZE * 2 - MARGIN,
-				w: BTN_SIZE * 1.5,
-				h: BTN_SIZE * 1.5,
+				x: W - this.btnSize * 2 - this.margin,
+				y: H - this.btnSize * 2 - this.margin,
+				w: this.btnSize * 1.5,
+				h: this.btnSize * 1.5,
 				label: "Jump",
 				icon: "⬆",
 				active: false,
 				touchId: null,
+				pressTime: 0,
 			});
 		}
 
@@ -199,27 +225,29 @@ export class TouchControls {
 			// Action button (shoot/rotate) on right
 			this.zones.push({
 				id: "action",
-				x: W - BTN_SIZE * 2 - MARGIN,
-				y: H - BTN_SIZE * 2 - MARGIN,
-				w: BTN_SIZE * 1.5,
-				h: BTN_SIZE * 1.5,
+				x: W - this.btnSize * 2 - this.margin,
+				y: H - this.btnSize * 2 - this.margin,
+				w: this.btnSize * 1.5,
+				h: this.btnSize * 1.5,
 				label: "Action",
 				icon: "●",
 				active: false,
 				touchId: null,
+				pressTime: 0,
 			});
 
 			// Secondary action
 			this.zones.push({
 				id: "action2",
-				x: W - BTN_SIZE * 2 - MARGIN,
-				y: H - BTN_SIZE * 3.5 - MARGIN,
-				w: BTN_SIZE * 1.5,
-				h: BTN_SIZE * 1.5,
+				x: W - this.btnSize * 2 - this.margin,
+				y: H - this.btnSize * 3.5 - this.margin,
+				w: this.btnSize * 1.5,
+				h: this.btnSize * 1.5,
 				label: "Alt",
 				icon: "◆",
 				active: false,
 				touchId: null,
+				pressTime: 0,
 			});
 		}
 
@@ -240,6 +268,7 @@ export class TouchControls {
 				icon: "▲",
 				active: false,
 				touchId: null,
+				pressTime: 0,
 			});
 
 			this.zones.push({
@@ -252,6 +281,7 @@ export class TouchControls {
 				icon: "▼",
 				active: false,
 				touchId: null,
+				pressTime: 0,
 			});
 
 			this.zones.push({
@@ -264,6 +294,7 @@ export class TouchControls {
 				icon: "◄",
 				active: false,
 				touchId: null,
+				pressTime: 0,
 			});
 
 			this.zones.push({
@@ -276,20 +307,28 @@ export class TouchControls {
 				icon: "►",
 				active: false,
 				touchId: null,
+				pressTime: 0,
 			});
 
 			// Right side: fire button
 			this.zones.push({
 				id: "action",
-				x: W - BTN_SIZE * 2 - MARGIN,
-				y: H - BTN_SIZE * 2 - MARGIN,
-				w: BTN_SIZE * 1.5,
-				h: BTN_SIZE * 1.5,
+				x: W - this.btnSize * 2 - this.margin,
+				y: H - this.btnSize * 2 - this.margin,
+				w: this.btnSize * 1.5,
+				h: this.btnSize * 1.5,
 				label: "Fire",
 				icon: "●",
 				active: false,
 				touchId: null,
+				pressTime: 0,
 			});
+		}
+	}
+
+	private vibrate(ms: number): void {
+		if ("vibrate" in navigator) {
+			navigator.vibrate(ms);
 		}
 	}
 
@@ -298,6 +337,7 @@ export class TouchControls {
 
 		if (this.layout === "flap") {
 			this.state.action = true;
+			this.vibrate(10);
 
 			return;
 		}
@@ -310,6 +350,8 @@ export class TouchControls {
 				if (this.hitTest(x, y, zone) && zone.touchId === null) {
 					zone.touchId = touch.identifier;
 					zone.active = true;
+					zone.pressTime = performance.now();
+					this.vibrate(10);
 					this.updateState();
 
 					break;
@@ -347,6 +389,7 @@ export class TouchControls {
 					) {
 						zone.touchId = touch.identifier;
 						zone.active = true;
+						zone.pressTime = performance.now();
 
 						break;
 					}
@@ -411,7 +454,21 @@ export class TouchControls {
 		ctx.save();
 
 		for (const zone of this.zones) {
+			ctx.save();
+
 			const alpha = zone.active ? OPACITY_ACTIVE : OPACITY_IDLE;
+
+			// Press scale animation
+			if (zone.active && zone.pressTime > 0) {
+				const elapsed = performance.now() - zone.pressTime;
+				const scale = 1 - Math.max(0, 0.1 - elapsed / 1000) * 1;
+				const cx = zone.x + zone.w / 2;
+				const cy = zone.y + zone.h / 2;
+
+				ctx.translate(cx, cy);
+				ctx.scale(scale, scale);
+				ctx.translate(-cx, -cy);
+			}
 
 			// Button background
 			ctx.globalAlpha = alpha;
@@ -440,6 +497,8 @@ export class TouchControls {
 				ctx.font = `${Math.min(zone.w, zone.h) * 0.2}px monospace`;
 				ctx.fillText(zone.label, zone.x + zone.w / 2, zone.y + zone.h * 0.8);
 			}
+
+			ctx.restore();
 		}
 
 		ctx.restore();

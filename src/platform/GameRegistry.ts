@@ -215,6 +215,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/pong"),
 			"PongGame",
+			"dpad",
 		),
 		lazyGame(
 			"pacman",
@@ -440,7 +441,7 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			},
 			() => import("@games/racing"),
 			"RacingGame",
-			"none",
+			"dpad",
 		),
 		lazyGame(
 			"fruit-ninja",

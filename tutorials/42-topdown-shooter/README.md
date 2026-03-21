@@ -3,8 +3,8 @@
 Build a complete **Top-Down Shooter** game from scratch using TypeScript and HTML5 Canvas.
 
 **Difficulty:** Advanced
-**Episodes:** 6
-**Time:** ~1h 30min total
+**Episodes:** 7
+**Time:** ~1h 45min total
 **Prerequisites:** [Platformer](../41-platformer/README.md)
 
 ## What You'll Build
@@ -28,7 +28,8 @@ A top-down action game where you move with WASD and aim with the mouse. Fight wa
 | 3 | [Shooting & Bullets](./step-3.md) | ~15min | Click to fire bullets toward the cursor |
 | 4 | [Enemies & Waves](./step-4.md) | ~15min | Enemies spawn in waves and chase the player |
 | 5 | [Weapons & Pickups](./step-5.md) | ~15min | Weapon upgrades, health drops, ammo management |
-| 6 | [Damage, Effects & Polish](./step-6.md) | ~15min | Hit feedback, explosions, wave counter, game-over screen |
+| 6 | [Damage, Effects & Polish](./step-6.md) | ~15min | Hit feedback, explosions, wave counter, pause overlay |
+| 7 | [Start Screen, Game Over & High Scores](./step-7.md) | ~15min | Title screen, game-over screen, restart, persistent high scores |
 
 ## Final Code
 

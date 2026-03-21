@@ -9,6 +9,8 @@ html, body {
   height: 100%;
   overflow: hidden;
   background: #0a140a;
+  overscroll-behavior: none;
+  touch-action: none;
 }
 
 #app {

@@ -1,4 +1,5 @@
 import type { InputHandler } from "@shared/InputHandler";
+import type { TouchControls } from "@shared/TouchControls";
 import type { RacingState } from "../types";
 
 export interface RacingInput {
@@ -20,6 +21,7 @@ export class InputSystem implements InputHandler {
 	private onExit: () => void;
 	private onReset: () => void;
 	private onToggleHelp: () => void;
+	private touchControls: TouchControls | null;
 
 	private keyDownHandler: (e: KeyboardEvent) => void;
 	private keyUpHandler: (e: KeyboardEvent) => void;
@@ -29,11 +31,13 @@ export class InputSystem implements InputHandler {
 		onExit: () => void,
 		onReset: () => void,
 		onToggleHelp: () => void,
+		touchControls?: TouchControls,
 	) {
 		this.state = state;
 		this.onExit = onExit;
 		this.onReset = onReset;
 		this.onToggleHelp = onToggleHelp;
+		this.touchControls = touchControls ?? null;
 
 		this.keyDownHandler = (e: KeyboardEvent) => this.onKeyDown(e);
 		this.keyUpHandler = (e: KeyboardEvent) => this.onKeyUp(e);
@@ -42,11 +46,24 @@ export class InputSystem implements InputHandler {
 	attach(): void {
 		window.addEventListener("keydown", this.keyDownHandler);
 		window.addEventListener("keyup", this.keyUpHandler);
+		this.touchControls?.attach();
 	}
 
 	detach(): void {
 		window.removeEventListener("keydown", this.keyDownHandler);
 		window.removeEventListener("keyup", this.keyUpHandler);
+		this.touchControls?.detach();
+	}
+
+	pollTouch(): void {
+		if (!this.touchControls?.visible) return;
+
+		const t = this.touchControls.getState();
+
+		this.keys.up = this.keys.up || t.up;
+		this.keys.down = this.keys.down || t.down;
+		this.keys.left = this.keys.left || t.left;
+		this.keys.right = this.keys.right || t.right;
 	}
 
 	private mapKey(code: string): keyof RacingInput | null {

@@ -16,6 +16,7 @@ import { CarRenderer } from "./renderers/CarRenderer";
 import { HUDRenderer } from "./renderers/HUDRenderer";
 import type { GameHelp } from "@shared/GameInterface";
 import { HelpOverlay } from "@shared/HelpOverlay";
+import { TouchControls } from "@shared/TouchControls";
 
 export const racingHelp: GameHelp = {
 	goal: "Complete 3 laps around the track before your opponents!",
@@ -55,6 +56,7 @@ export class RacingEngine {
 	private carRenderer: CarRenderer;
 	private hudRenderer: HUDRenderer;
 	private helpOverlay: HelpOverlay;
+	private touchControls: TouchControls;
 
 	private resizeHandler: () => void;
 
@@ -67,12 +69,16 @@ export class RacingEngine {
 
 		this.state = this.createInitialState();
 
+		// Touch controls
+		this.touchControls = new TouchControls(canvas, "dpad");
+
 		// Systems
 		this.inputSystem = new InputSystem(
 			this.state,
 			onExit,
 			() => this.reset(),
 			() => this.helpOverlay.toggle(),
+			this.touchControls,
 		);
 		this.physicsSystem = new PhysicsSystem(this.inputSystem.keys);
 		this.trackSystem = new TrackSystem();
@@ -144,6 +150,7 @@ export class RacingEngine {
 
 		if (this.state.phase === "racing") {
 			this.state.raceTime += dt / 1000;
+			this.inputSystem.pollTouch();
 			this.physicsSystem.update(this.state, dt);
 			this.aiSystem.update(this.state, dt);
 			this.trackSystem.update(this.state, dt);
@@ -169,6 +176,9 @@ export class RacingEngine {
 		this.trackRenderer.render(ctx, this.state);
 		this.carRenderer.render(ctx, this.state);
 		this.hudRenderer.render(ctx, this.state);
+
+		// Touch controls
+		this.touchControls.render(ctx);
 
 		// Help overlay
 		this.helpOverlay.render(ctx, racingHelp, "Racing", "#ff5722");

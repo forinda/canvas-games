@@ -12,6 +12,7 @@ import { AISystem } from "./systems/AISystem";
 import { ScoreSystem } from "./systems/ScoreSystem";
 import { GameRenderer } from "./renderers/GameRenderer";
 import { HUDRenderer } from "./renderers/HUDRenderer";
+import { TouchControls } from "@shared/TouchControls";
 
 export class PongEngine {
 	private ctx: CanvasRenderingContext2D;
@@ -26,6 +27,7 @@ export class PongEngine {
 	private scoreSystem: ScoreSystem;
 	private gameRenderer: GameRenderer;
 	private hudRenderer: HUDRenderer;
+	private touchControls: TouchControls;
 	private resizeHandler: () => void;
 
 	constructor(canvas: HTMLCanvasElement, onExit: () => void) {
@@ -63,6 +65,9 @@ export class PongEngine {
 			showHelp: false,
 		};
 
+		// Touch controls (d-pad for left paddle up/down)
+		this.touchControls = new TouchControls(canvas, "dpad");
+
 		// Systems
 		this.physicsSystem = new PhysicsSystem();
 		this.aiSystem = new AISystem();
@@ -72,6 +77,7 @@ export class PongEngine {
 			onExit,
 			() => this.restart(),
 			() => this.goToModeSelect(),
+			this.touchControls,
 		);
 
 		// Renderers
@@ -129,6 +135,7 @@ export class PongEngine {
 	private render(): void {
 		this.gameRenderer.render(this.ctx, this.state);
 		this.hudRenderer.render(this.ctx, this.state);
+		this.touchControls.render(this.ctx);
 	}
 
 	private restart(): void {

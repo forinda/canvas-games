@@ -1,4 +1,5 @@
 import type { InputHandler } from "@shared/InputHandler";
+import type { TouchControls } from "@shared/TouchControls";
 import type { PongState } from "../types";
 import { PADDLE_SPEED } from "../types";
 
@@ -10,17 +11,20 @@ export class InputSystem implements InputHandler {
 	private onExit: () => void;
 	private onRestart: () => void;
 	private onModeSelect: () => void;
+	private touchControls: TouchControls | null;
 
 	constructor(
 		state: PongState,
 		onExit: () => void,
 		onRestart: () => void,
 		onModeSelect: () => void,
+		touchControls?: TouchControls,
 	) {
 		this.state = state;
 		this.onExit = onExit;
 		this.onRestart = onRestart;
 		this.onModeSelect = onModeSelect;
+		this.touchControls = touchControls ?? null;
 		this.keyDownHandler = (e: KeyboardEvent) => this.onKeyDown(e);
 		this.keyUpHandler = (e: KeyboardEvent) => this.onKeyUp(e);
 	}
@@ -28,22 +32,28 @@ export class InputSystem implements InputHandler {
 	attach(): void {
 		window.addEventListener("keydown", this.keyDownHandler);
 		window.addEventListener("keyup", this.keyUpHandler);
+		this.touchControls?.attach();
 	}
 
 	detach(): void {
 		window.removeEventListener("keydown", this.keyDownHandler);
 		window.removeEventListener("keyup", this.keyUpHandler);
 		this.keys.clear();
+		this.touchControls?.detach();
 	}
 
 	/** Call each frame to apply held-key input to paddle velocities */
 	applyInput(): void {
 		const s = this.state;
 
-		// Left paddle: W / S
-		if (this.keys.has("w") || this.keys.has("W")) {
+		// Left paddle: W / S or d-pad up/down
+		const touch = this.touchControls?.visible
+			? this.touchControls.getState()
+			: null;
+
+		if (this.keys.has("w") || this.keys.has("W") || touch?.up) {
 			s.leftPaddle.dy = -PADDLE_SPEED;
-		} else if (this.keys.has("s") || this.keys.has("S")) {
+		} else if (this.keys.has("s") || this.keys.has("S") || touch?.down) {
 			s.leftPaddle.dy = PADDLE_SPEED;
 		} else {
 			s.leftPaddle.dy = 0;

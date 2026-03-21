@@ -3,8 +3,8 @@
 Build a complete **City Builder** simulation from scratch using TypeScript and HTML5 Canvas.
 
 **Difficulty:** Advanced
-**Episodes:** 6
-**Time:** ~1h 30min total
+**Episodes:** 7
+**Time:** ~1h 45min total
 **Prerequisites:** [Zombie Survival](../44-zombie-survival/README.md)
 
 ## What You'll Build
@@ -28,7 +28,8 @@ A simple city builder where you place residential, commercial, and industrial zo
 | 3 | [Resource System](./step-3.md) | ~15min | Track money, power, and water; buildings consume resources |
 | 4 | [Population & Zones](./step-4.md) | ~15min | Residential zones grow population, commercial generates income |
 | 5 | [Simulation Loop](./step-5.md) | ~15min | Tick-based updates, income/expense cycle, satisfaction score |
-| 6 | [UI & Polish](./step-6.md) | ~15min | Resource bars, building tooltips, demolish tool, save/load |
+| 6 | [UI & Polish](./step-6.md) | ~15min | Resource bars, building tooltips, demolish tool, exit handler |
+| 7 | [Save/Load & Final Integration](./step-7.md) | ~15min | Persist city to localStorage, auto-save, game registration |
 
 ## Final Code
 

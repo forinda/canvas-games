@@ -31,7 +31,7 @@ const CATEGORIES: {
 ];
 
 const HEADER_H = 60;
-const TAB_H = 36;
+const TAB_H = 44;
 const CONTENT_TOP = HEADER_H + TAB_H + 8;
 
 export class PlatformMenu {
@@ -55,6 +55,18 @@ export class PlatformMenu {
 	private moveHandler: (e: MouseEvent) => void;
 	private wheelHandler: (e: WheelEvent) => void;
 	private keyHandler: (e: KeyboardEvent) => void;
+
+	// Touch support
+	private touchStartHandler: (e: TouchEvent) => void;
+	private touchMoveHandler: (e: TouchEvent) => void;
+	private touchEndHandler: (e: TouchEvent) => void;
+	private touchStartY = 0;
+	private lastTouchY = 0;
+	private touchStartX = 0;
+	private isTouching = false;
+	private touchVelocity = 0;
+	private isTouchDrag = false;
+	private longPressTimer: ReturnType<typeof setTimeout> | null = null;
 
 	constructor(
 		canvas: HTMLCanvasElement,
@@ -88,6 +100,10 @@ export class PlatformMenu {
 				this.scrollY = 0;
 			}
 		};
+
+		this.touchStartHandler = (e: TouchEvent) => this.handleTouchStart(e);
+		this.touchMoveHandler = (e: TouchEvent) => this.handleTouchMove(e);
+		this.touchEndHandler = (e: TouchEvent) => this.handleTouchEnd(e);
 	}
 
 	show(
@@ -108,6 +124,14 @@ export class PlatformMenu {
 			passive: false,
 		});
 		window.addEventListener("keydown", this.keyHandler);
+		this.canvas.addEventListener("touchstart", this.touchStartHandler, {
+			passive: false,
+		});
+		this.canvas.addEventListener("touchmove", this.touchMoveHandler, {
+			passive: false,
+		});
+		this.canvas.addEventListener("touchend", this.touchEndHandler);
+		this.canvas.addEventListener("touchcancel", this.touchEndHandler);
 		this.loop();
 	}
 
@@ -118,6 +142,10 @@ export class PlatformMenu {
 		this.canvas.removeEventListener("mousemove", this.moveHandler);
 		this.canvas.removeEventListener("wheel", this.wheelHandler);
 		window.removeEventListener("keydown", this.keyHandler);
+		this.canvas.removeEventListener("touchstart", this.touchStartHandler);
+		this.canvas.removeEventListener("touchmove", this.touchMoveHandler);
+		this.canvas.removeEventListener("touchend", this.touchEndHandler);
+		this.canvas.removeEventListener("touchcancel", this.touchEndHandler);
 	}
 
 	private getFilteredGames(): GameDefinition[] {
@@ -128,6 +156,14 @@ export class PlatformMenu {
 
 	private loop(): void {
 		if (!this.running) return;
+
+		// Apply momentum when not touching
+		if (!this.isTouching && Math.abs(this.touchVelocity) > 0.5) {
+			this.targetScrollY += this.touchVelocity;
+			this.touchVelocity *= 0.92; // friction
+		} else if (!this.isTouching) {
+			this.touchVelocity = 0;
+		}
 
 		this.targetScrollY = Math.max(0, this.targetScrollY);
 		this.scrollY += (this.targetScrollY - this.scrollY) * 0.15;
@@ -322,15 +358,31 @@ export class PlatformMenu {
 			ctx.fill();
 		}
 
+		// "Swipe up" hint for touch users when at top
+		const isTouchDevice =
+			"ontouchstart" in window || navigator.maxTouchPoints > 0;
+
+		if (isTouchDevice && totalContentH > H && this.scrollY < 5) {
+			const pulse = 0.4 + Math.sin(performance.now() * 0.003) * 0.2;
+
+			ctx.globalAlpha = pulse;
+			ctx.fillStyle = "#a855f7";
+			ctx.font = "12px monospace";
+			ctx.textAlign = "center";
+			ctx.textBaseline = "middle";
+			ctx.fillText("▲ Swipe up to browse ▲", W / 2, H - 24);
+			ctx.globalAlpha = 1;
+		}
+
 		// Footer
 		ctx.font = `${Math.min(10, W * 0.013)}px monospace`;
 		ctx.fillStyle = "#1a1a2a";
 		ctx.textAlign = "center";
-		ctx.fillText(
-			"[H] in-game for help  |  [1-6] category shortcuts  |  Scroll to browse",
-			W / 2,
-			H - 8,
-		);
+		const footerText = isTouchDevice
+			? "[H] in-game for help  |  Tap to play  |  Swipe to browse"
+			: "[H] in-game for help  |  [1-6] category shortcuts  |  Scroll to browse";
+
+		ctx.fillText(footerText, W / 2, H - 8);
 	}
 
 	private renderCard(
@@ -624,5 +676,136 @@ export class PlatformMenu {
 			x: (e.clientX - rect.left) * (this.canvas.width / rect.width),
 			y: (e.clientY - rect.top) * (this.canvas.height / rect.height),
 		};
+	}
+
+	private getTouchCoords(touch: Touch): { x: number; y: number } {
+		const rect = this.canvas.getBoundingClientRect();
+
+		return {
+			x: (touch.clientX - rect.left) * (this.canvas.width / rect.width),
+			y: (touch.clientY - rect.top) * (this.canvas.height / rect.height),
+		};
+	}
+
+	private clearLongPress(): void {
+		if (this.longPressTimer !== null) {
+			clearTimeout(this.longPressTimer);
+			this.longPressTimer = null;
+		}
+	}
+
+	private handleTouchStart(e: TouchEvent): void {
+		if (e.touches.length !== 1) return;
+
+		e.preventDefault();
+		const { x, y } = this.getTouchCoords(e.touches[0]);
+
+		this.isTouching = true;
+		this.isTouchDrag = false;
+		this.touchStartX = x;
+		this.touchStartY = y;
+		this.lastTouchY = y;
+		this.touchVelocity = 0;
+
+		// Long-press: show info panel for the card under finger
+		this.clearLongPress();
+		this.longPressTimer = setTimeout(() => {
+			if (!this.isTouchDrag) {
+				const { cards } = this.getGridLayout();
+
+				for (let i = 0; i < cards.length; i++) {
+					const card = cards[i];
+
+					if (
+						x >= card.x &&
+						x <= card.x + card.w &&
+						y >= card.y &&
+						y <= card.y + card.h &&
+						card.y >= CONTENT_TOP - 1
+					) {
+						this.hoveredIndex = i;
+
+						return;
+					}
+				}
+			}
+		}, 400);
+	}
+
+	private handleTouchMove(e: TouchEvent): void {
+		if (!this.isTouching || e.touches.length !== 1) return;
+
+		e.preventDefault();
+		const { x, y } = this.getTouchCoords(e.touches[0]);
+		const deltaY = this.lastTouchY - y;
+
+		// If moved more than 10px, it's a scroll not a tap
+		if (
+			Math.abs(y - this.touchStartY) > 10 ||
+			Math.abs(x - this.touchStartX) > 10
+		) {
+			this.isTouchDrag = true;
+			this.clearLongPress();
+			this.hoveredIndex = -1;
+		}
+
+		this.targetScrollY += deltaY;
+		this.touchVelocity = deltaY;
+		this.lastTouchY = y;
+	}
+
+	private handleTouchEnd(e: TouchEvent): void {
+		if (!this.isTouching) return;
+
+		this.isTouching = false;
+		this.clearLongPress();
+
+		// If minimal movement, treat as a tap
+		if (!this.isTouchDrag && e.changedTouches.length > 0) {
+			const { x, y } = this.getTouchCoords(e.changedTouches[0]);
+
+			this.hoveredIndex = -1;
+			this.handleTap(x, y);
+		}
+
+		// touchVelocity carries into the loop for momentum
+	}
+
+	private handleTap(x: number, y: number): void {
+		// Check tab taps
+		const tabs = this.getTabLayout();
+
+		for (const tab of tabs) {
+			if (
+				x >= tab.x &&
+				x <= tab.x + tab.w &&
+				y >= tab.y &&
+				y <= tab.y + tab.h
+			) {
+				this.activeCategory = tab.key;
+				this.targetScrollY = 0;
+				this.scrollY = 0;
+				this.hoveredIndex = -1;
+
+				return;
+			}
+		}
+
+		// Check card taps
+		const { cards } = this.getGridLayout();
+
+		for (const card of cards) {
+			if (
+				x >= card.x &&
+				x <= card.x + card.w &&
+				y >= card.y &&
+				y <= card.y + card.h &&
+				card.y >= CONTENT_TOP - 1
+			) {
+				this.onSelect(card.game);
+
+				return;
+			}
+		}
 	}
 }
