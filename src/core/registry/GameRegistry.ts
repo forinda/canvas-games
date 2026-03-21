@@ -1030,6 +1030,54 @@ export const GAME_REGISTRY: Record<GameCategory, GameDefinition[]> = {
 			"dpad",
 			"webgl",
 		),
+		lazyGame(
+			"maze-3d",
+			"3D Maze",
+			"First-person maze escape!",
+			"🏗️",
+			"#ff6f00",
+			"3d",
+			{
+				goal: "Navigate the maze in first-person to find the glowing exit.",
+				controls: [
+					{ key: "WASD", action: "Move" },
+					{ key: "Mouse", action: "Look around" },
+					{ key: "Space", action: "Next level" },
+					{ key: "ESC", action: "Exit to menu" },
+				],
+				tips: [
+					"Click to lock the mouse for looking",
+					"Follow the right wall to find the exit",
+				],
+			},
+			() => import("@webgl/games/maze-3d"),
+			"Maze3DGame",
+			"dual-stick",
+			"webgl",
+		),
+		lazyGame(
+			"tower-stacker",
+			"Tower Stacker",
+			"Time your drops, stack high!",
+			"🏗️",
+			"#ff6f00",
+			"3d",
+			{
+				goal: "Stack blocks by timing your drop. Overhanging parts get cut off.",
+				controls: [
+					{ key: "Space / Tap", action: "Drop block" },
+					{ key: "ESC", action: "Exit to menu" },
+				],
+				tips: [
+					"Perfect placements keep the full block width",
+					"The block swings faster as you go higher",
+				],
+			},
+			() => import("@webgl/games/tower-stacker"),
+			"TowerStackerGame",
+			"flap",
+			"webgl",
+		),
 	],
 };
 
