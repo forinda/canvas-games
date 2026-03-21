@@ -1,0 +1,20 @@
+import type { GameDefinition } from "@core/GameInterface";
+import { PlatformAdapter } from "./adapters/PlatformAdapter";
+import { racingHelp } from "./RacingEngine";
+
+export const RacingGame: GameDefinition = {
+	id: "racing",
+	category: "action" as const,
+	name: "Racing",
+	description: "Top-down racing with AI opponents!",
+	icon: "\uD83C\uDFCE\uFE0F",
+	color: "#ff5722",
+	help: racingHelp,
+	create(canvas, onExit) {
+		const instance = new PlatformAdapter(canvas, onExit);
+
+		instance.start();
+
+		return instance;
+	},
+};

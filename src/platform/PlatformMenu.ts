@@ -1,4 +1,4 @@
-import type { GameCategory, GameDefinition } from "@shared/GameInterface";
+import type { GameCategory, GameDefinition } from "@core/GameInterface";
 
 interface CardLayout {
 	x: number;
@@ -28,6 +28,7 @@ const CATEGORIES: {
 	{ key: "puzzle", label: "Puzzle", color: "#00bcd4" },
 	{ key: "strategy", label: "Strategy", color: "#4caf50" },
 	{ key: "chill", label: "Chill", color: "#0288d1" },
+	{ key: "3d", label: "3D", color: "#ff6f00" },
 ];
 
 const HEADER_H = 60;

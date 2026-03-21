@@ -1,24 +1,22 @@
-import type { GameDefinition, GameInstance } from "@shared/GameInterface";
-import { GAME_REGISTRY, getAllGames } from "./GameRegistry";
+import type { GameDefinition, GameInstance } from "@core/GameInterface";
+import { GAME_REGISTRY, getAllGames } from "@core/registry/GameRegistry";
 import { PlatformMenu } from "./PlatformMenu";
-
-const EXIT_BTN_SIZE = 44;
-const EXIT_BTN_MARGIN = 8;
 
 export class GameLauncher {
 	private canvas: HTMLCanvasElement;
+	private app: HTMLElement;
 	private currentGame: GameInstance | null = null;
 	private menu: PlatformMenu;
 	private resizeHandler: () => void;
 
-	// Mobile exit button
+	// DOM overlays (work with any canvas context)
+	private exitBtn: HTMLButtonElement | null = null;
+	private loadingOverlay: HTMLDivElement | null = null;
 	private isTouchDevice: boolean;
-	private exitTouchHandler: ((e: TouchEvent) => void) | null = null;
-	private exitRafId = 0;
-	private showExitButton = false;
 
 	constructor(canvas: HTMLCanvasElement) {
 		this.canvas = canvas;
+		this.app = canvas.parentElement ?? document.body;
 		this.menu = new PlatformMenu(canvas, (game) => this.launchGame(game));
 		this.resizeHandler = () => this.handleResize();
 		this.isTouchDevice =
@@ -37,7 +35,8 @@ export class GameLauncher {
 	}
 
 	private showMenu(): void {
-		this.detachExitButton();
+		this.removeExitButton();
+		this.removeLoadingOverlay();
 
 		if (this.currentGame) {
 			this.currentGame.destroy();
@@ -51,132 +50,113 @@ export class GameLauncher {
 
 	private launchGame(game: GameDefinition): void {
 		this.menu.hide();
+
+		// If switching rendering contexts, replace the canvas
+		const needsWebGL = game.renderContext === "webgl";
+		const currentIs2D =
+			this.canvas.getContext("2d") !== null ||
+			!this.canvas.getContext("webgl2");
+
+		if (needsWebGL && currentIs2D) {
+			this.replaceCanvas();
+		} else if (!needsWebGL) {
+			// Ensure we have a 2D-compatible canvas
+			// If previous game was WebGL, we need a fresh canvas
+			const gl = (this.canvas as HTMLCanvasElement & { __webgl?: boolean })
+				.__webgl;
+
+			if (gl) {
+				this.replaceCanvas();
+			}
+		}
+
 		this.handleResize();
 		this.canvas.style.cursor = "crosshair";
 
-		// Show loading indicator
-		const ctx = this.canvas.getContext("2d");
-
-		if (ctx) {
-			ctx.fillStyle = "#0a0a1a";
-			ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-			ctx.font = "bold 24px monospace";
-			ctx.fillStyle = game.color;
-			ctx.textAlign = "center";
-			ctx.textBaseline = "middle";
-			ctx.fillText(
-				`${game.icon} Loading ${game.name}...`,
-				this.canvas.width / 2,
-				this.canvas.height / 2,
-			);
-		}
+		// Show DOM loading overlay (works with any context)
+		this.showLoadingOverlay(game);
 
 		const result = game.create(this.canvas, () => this.showMenu());
 
 		if (result instanceof Promise) {
 			result.then((instance) => {
 				this.currentGame = instance;
-				this.attachExitButton();
+				this.removeLoadingOverlay();
+				this.addExitButton();
 			});
 		} else {
 			this.currentGame = result;
-			this.attachExitButton();
+			this.removeLoadingOverlay();
+			this.addExitButton();
 		}
 	}
 
-	// ── Mobile exit button ───────────────────────────────────────────────
+	// ── Canvas management ────────────────────────────────────────────────
 
-	private attachExitButton(): void {
+	private replaceCanvas(): void {
+		const newCanvas = document.createElement("canvas");
+
+		newCanvas.id = "gameCanvas";
+		newCanvas.style.display = "block";
+		this.canvas.replaceWith(newCanvas);
+		this.canvas = newCanvas;
+
+		// Re-bind menu to new canvas
+		this.menu = new PlatformMenu(newCanvas, (game) => this.launchGame(game));
+	}
+
+	// ── DOM loading overlay ──────────────────────────────────────────────
+
+	private showLoadingOverlay(game: GameDefinition): void {
+		this.removeLoadingOverlay();
+
+		const overlay = document.createElement("div");
+
+		overlay.style.cssText = `
+			position: fixed; inset: 0; z-index: 100;
+			display: flex; align-items: center; justify-content: center;
+			background: #0a0a1a; color: ${game.color};
+			font: bold 24px monospace;
+		`;
+		overlay.textContent = `${game.icon} Loading ${game.name}...`;
+		this.app.appendChild(overlay);
+		this.loadingOverlay = overlay;
+	}
+
+	private removeLoadingOverlay(): void {
+		this.loadingOverlay?.remove();
+		this.loadingOverlay = null;
+	}
+
+	// ── DOM exit button (works with any canvas context) ──────────────────
+
+	private addExitButton(): void {
 		if (!this.isTouchDevice) return;
 
-		this.showExitButton = true;
+		this.removeExitButton();
 
-		this.exitTouchHandler = (e: TouchEvent) => {
-			if (e.touches.length !== 1) return;
+		const btn = document.createElement("button");
 
-			const touch = e.touches[0];
-			const rect = this.canvas.getBoundingClientRect();
-			const x = (touch.clientX - rect.left) * (this.canvas.width / rect.width);
-			const y = (touch.clientY - rect.top) * (this.canvas.height / rect.height);
-
-			if (
-				x >= EXIT_BTN_MARGIN &&
-				x <= EXIT_BTN_MARGIN + EXIT_BTN_SIZE &&
-				y >= EXIT_BTN_MARGIN &&
-				y <= EXIT_BTN_MARGIN + EXIT_BTN_SIZE
-			) {
-				e.preventDefault();
-				e.stopPropagation();
-				this.showMenu();
-			}
-		};
-
-		// Use capture phase so it fires before game touch handlers
-		this.canvas.addEventListener("touchstart", this.exitTouchHandler, {
-			capture: true,
-		});
-
-		this.renderExitButton();
+		btn.textContent = "\u2715"; // ✕
+		btn.setAttribute("aria-label", "Exit game");
+		btn.style.cssText = `
+			position: fixed; top: 8px; left: 8px; z-index: 50;
+			width: 44px; height: 44px;
+			background: rgba(0, 0, 0, 0.5);
+			border: 1.5px solid rgba(255, 255, 255, 0.4);
+			border-radius: 8px;
+			color: rgba(255, 255, 255, 0.7);
+			font-size: 20px; font-weight: bold;
+			cursor: pointer; touch-action: manipulation;
+			-webkit-tap-highlight-color: transparent;
+		`;
+		btn.addEventListener("click", () => this.showMenu());
+		this.app.appendChild(btn);
+		this.exitBtn = btn;
 	}
 
-	private detachExitButton(): void {
-		this.showExitButton = false;
-		cancelAnimationFrame(this.exitRafId);
-
-		if (this.exitTouchHandler) {
-			this.canvas.removeEventListener("touchstart", this.exitTouchHandler, {
-				capture: true,
-			});
-			this.exitTouchHandler = null;
-		}
-	}
-
-	private renderExitButton(): void {
-		if (!this.showExitButton || !this.currentGame) return;
-
-		const ctx = this.canvas.getContext("2d");
-
-		if (ctx) {
-			const x = EXIT_BTN_MARGIN;
-			const y = EXIT_BTN_MARGIN;
-			const size = EXIT_BTN_SIZE;
-
-			// Button background
-			ctx.save();
-			ctx.globalAlpha = 0.5;
-			ctx.fillStyle = "#000";
-			ctx.beginPath();
-			ctx.roundRect(x, y, size, size, 8);
-			ctx.fill();
-
-			// Border
-			ctx.globalAlpha = 0.4;
-			ctx.strokeStyle = "#fff";
-			ctx.lineWidth = 1.5;
-			ctx.beginPath();
-			ctx.roundRect(x, y, size, size, 8);
-			ctx.stroke();
-
-			// "X" icon
-			ctx.globalAlpha = 0.7;
-			ctx.strokeStyle = "#fff";
-			ctx.lineWidth = 2.5;
-			ctx.lineCap = "round";
-			const pad = 14;
-
-			ctx.beginPath();
-			ctx.moveTo(x + pad, y + pad);
-			ctx.lineTo(x + size - pad, y + size - pad);
-			ctx.stroke();
-
-			ctx.beginPath();
-			ctx.moveTo(x + size - pad, y + pad);
-			ctx.lineTo(x + pad, y + size - pad);
-			ctx.stroke();
-
-			ctx.restore();
-		}
-
-		this.exitRafId = requestAnimationFrame(() => this.renderExitButton());
+	private removeExitButton(): void {
+		this.exitBtn?.remove();
+		this.exitBtn = null;
 	}
 }

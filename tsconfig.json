@@ -25,9 +25,12 @@
     /* Path aliases */
     "baseUrl": ".",
     "paths": {
-      "@shared/*": ["src/shared/*"],
+      "@core/*": ["src/core/*"],
       "@platform/*": ["src/platform/*"],
-      "@games/*": ["src/games/*"]
+      "@canvas2d/*": ["src/contexts/canvas2d/*"],
+      "@webgl/*": ["src/contexts/webgl/*"],
+      "@shared/*": ["src/contexts/canvas2d/shared/*"],
+      "@games/*": ["src/contexts/canvas2d/games/*"]
     }
   },
   "include": ["src"]
